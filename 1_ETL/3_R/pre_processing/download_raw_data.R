@@ -36,5 +36,5 @@ if (!file.exists("2_Data/0_raw_data/wc2.1_30s/wc2.1_30s_bio.zip")) {
   download.file("https://geodata.ucdavis.edu/climate/worldclim/2_1/base/wc2.1_30s_bio.zip", 
                 destfile = "2_Data/0_raw_data/wc2.1_30s/wc2.1_30s_bio.zip")
 }
-## TO DO: write unzip with utils
-
+utils::unzip(zipfile="2_Data/0_raw_data/wc2.1_30s/wc2.1_30s_bio.zip",
+             exdir="2_Data/0_raw_data/wc2.1_30s/")
