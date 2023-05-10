@@ -6,7 +6,7 @@ if(!require(librarian)) install.packages("librarian")
 library(librarian)
 shelf(tidyverse, sf, osmdata, stars, raster, snow, hrbrthemes, geodata, jsonlite, tmap, readxl,janitor)
 
-tree_dbs <- read_xlsx("../0_Doku/opendata_trees.xlsx") %>% 
+tree_dbs <- read_xlsx("2_Data/0_raw_data/opendata_trees.xlsx") %>% 
   janitor::clean_names() %>% 
   filter(suitable == "y" & epsg == "4326") %>% 
   mutate(location = janitor::make_clean_names(location)) %>% 
