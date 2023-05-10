@@ -35,6 +35,7 @@ if (!file.exists("2_Data/0_raw_data/CHELSA/CHELSA_bio12_2041-2070_gfdl-esm4_ssp3
 if (!file.exists("2_Data/0_raw_data/wc2.1_30s/wc2.1_30s_bio.zip")) {
   download.file("https://geodata.ucdavis.edu/climate/worldclim/2_1/base/wc2.1_30s_bio.zip", 
                 destfile = "2_Data/0_raw_data/wc2.1_30s/wc2.1_30s_bio.zip")
+  utils::unzip(zipfile="2_Data/0_raw_data/wc2.1_30s/wc2.1_30s_bio.zip",
+               exdir="2_Data/0_raw_data/wc2.1_30s/")
 }
-utils::unzip(zipfile="2_Data/0_raw_data/wc2.1_30s/wc2.1_30s_bio.zip",
-             exdir="2_Data/0_raw_data/wc2.1_30s/")
+
