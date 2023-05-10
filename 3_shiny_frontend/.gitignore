@@ -1,0 +1,9 @@
+.Rproj.user
+.Rhistory
+.Rdata
+.httr-oauth
+.DS_Store
+/data/
+*.tar.gz
+/data/tree_db.csv
+tree_db.csv
