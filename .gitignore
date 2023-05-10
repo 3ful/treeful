@@ -1,10 +1,14 @@
+.DS_Store
 # History files
 .Rhistory
 .Rapp.history
 1_ETL/2_Data/1_output/*
 1_ETL/2_Data/0_raw_data/copernicus
+!*1_ETL/2_Data/0_raw_data/copernicus/README.md
 1_ETL/2_Data/0_raw_data/tree_cadastres
+!*1_ETL/2_Data/0_raw_data/tree_cadastres/README.md
 1_ETL/2_Data/1_output/*
+!*1_ETL/2_Data/1_output/README.md
 3_shiny_frontend/data/*
 3_shiny_frontend/data-raw/*
 
