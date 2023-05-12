@@ -4,7 +4,9 @@
 
 if(!require(librarian)) install.packages("librarian")
 library(librarian)
-shelf(tidyverse, sf, osmdata, stars, raster, snow, hrbrthemes, geodata, jsonlite, tmap, readxl,janitor)
+shelf(tidyverse, sf, osmdata, stars, raster, snow, hrbrthemes, geodata, jsonlite, tmap, readxl,janitor,xlsx,data.table)
+
+
 
 tree_dbs <- read_xlsx("2_Data/0_raw_data/opendata_trees.xlsx") %>% 
   janitor::clean_names() %>% 
@@ -15,15 +17,20 @@ tree_dbs <- read_xlsx("2_Data/0_raw_data/opendata_trees.xlsx") %>%
   # mutate(lat_col = janitor::make_clean_names(lat_col)) 
 
 
+tree_dbs <- data.table(tree_dbs)
+for (i in tree_dbs[,file_name]) {
+  utils::unzip(zipfile=paste("2_Data/0_raw_data/tree_cadastres/zip/",i,".zip",sep=""))
+}
+
 for (i in 1:nrow(tree_dbs)) {
-  
-  ifelse(str_detect(tree_dbs$file_name[i], "csv"), 
-         assign(tolower(tree_dbs$location[i]), 
+
+  ifelse(str_detect(tree_dbs$file_name[i], "csv"),
+         assign(tolower(tree_dbs$location[i]),
                 janitor::clean_names(read_delim(paste0("2_Data/0_raw_data/tree_cadastres/", tree_dbs$file_name[i])))),
-         assign(tolower(tree_dbs$location[i]), 
+         assign(tolower(tree_dbs$location[i]),
                 janitor::clean_names(bind_cols(jsonlite::read_json(paste0("2_Data/0_raw_data/tree_cadastres/", tree_dbs$file_name[i]), simplifyVector = TRUE)$features$properties,
                                      jsonlite::read_json(paste0("2_Data/0_raw_data/tree_cadastres/", tree_dbs$file_name[i]), simplifyVector = TRUE)$features$geometry)
-                                     ) 
+                                     )
                 )
   )
   print(i)
@@ -31,7 +38,24 @@ for (i in 1:nrow(tree_dbs)) {
 
 
 
+# # Compress all the csv files with gzip
+# tree_dbs <- data.table(tree_dbs)
+# for (i in tree_dbs[,file_name]) {
+#      db <- fread(paste("2_Data/0_raw_data/tree_cadastres/",i,sep=""))
+#      fwrite(db,paste("2_Data/0_raw_data/tree_cadastres/",i,".gz",sep=""),compress="gzip")
+# }
 
+# tree_dbs[,file_name:=paste(file_name,".gz",sep="")]
+# write.xlsx2(tree_dbs, "2_Data/0_raw_data/opendata_trees.xlsx", sheetName = "Sheet1", 
+#             col.names = TRUE, row.names = TRUE, append = FALSE)
+
+# 
+# tree_dbs <- data.table(tree_dbs)
+# for (i in tree_dbs[,location]) {
+#     print(i)
+#     assign(tolower(i), paste(fread(paste("2_Data/0_raw_data/tree_cadastres/",tree_dbs[location==i,file_name],sep=""))))
+# }
+              
 # too small data to automate. manually merge mutate
 #split_species <- filter(tree_dbs, str_detect(botanical_col, "\\+"))
 #mutate(tourcoing, merged_species = paste0(genre, " ", espece)) %>% write_csv(file = "data/opentrees/tourcoing.csv")
