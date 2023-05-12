@@ -2,7 +2,7 @@
 import cdsapi
 import os
 
-c = cdsapi.Client(url='https://cds.climate.copernicus.eu/api/v2', key='your-api-key-from-CDS')
+c = cdsapi.Client(url='https://cds.climate.copernicus.eu/api/v2', key=os.environ.get('COPERNICUS_KEY'))
 
 # Specify path
 path = '2_Data/0_raw_data/copernicus/BIO01_era5-to-1km_1979-2018-mean_v1.0.nc'
