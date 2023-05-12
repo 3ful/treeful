@@ -6,6 +6,8 @@ if(!require(librarian)) install.packages("librarian")
 library(librarian)
 shelf(tidyverse, sf, osmdata, stars, raster, snow, hrbrthemes, geodata, jsonlite, tmap, readxl,janitor,xlsx,data.table)
 
+
+
 tree_dbs <- read_xlsx("2_Data/0_raw_data/opendata_trees.xlsx") %>% 
   janitor::clean_names() %>% 
   filter(suitable == "y" & epsg == "4326") %>% 
@@ -15,6 +17,10 @@ tree_dbs <- read_xlsx("2_Data/0_raw_data/opendata_trees.xlsx") %>%
   # mutate(lat_col = janitor::make_clean_names(lat_col)) 
 
 
+tree_dbs <- data.table(tree_dbs)
+for (i in tree_dbs[,file_name]) {
+  utils::unzip(zipfile=paste("2_Data/0_raw_data/tree_cadastres/zip/",i,".zip",sep=""))
+}
 
 for (i in 1:nrow(tree_dbs)) {
 
@@ -29,6 +35,8 @@ for (i in 1:nrow(tree_dbs)) {
   )
   print(i)
 }
+
+
 
 # # Compress all the csv files with gzip
 # tree_dbs <- data.table(tree_dbs)

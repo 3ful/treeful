@@ -6,9 +6,7 @@
 1_ETL/2_Data/1_output/*
 1_ETL/2_Data/0_raw_data/copernicus
 !*1_ETL/2_Data/0_raw_data/copernicus/README.md
-1_ETL/2_Data/0_raw_data/tree_cadastres
-!*1_ETL/2_Data/0_raw_data/tree_cadastres/README.md
-
+1_ETL/2_Data/0_raw_data/tree_cadastres/*.csv
 1_ETL/2_Data/0_raw_data/tree_georef_3.txt
 
 1_ETL/2_Data/1_output/*
