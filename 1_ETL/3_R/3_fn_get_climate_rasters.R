@@ -17,14 +17,17 @@ getpastclimate <- function(source = "copernicus", bioclim = "bio01") {
   if (source == "copernicus") {
     # Get bioclimate data from copernicus. Download bioclimate file with login at https://cds.climate.copernicus.eu/
     
-    bio_path <- case_when(bioclim == "bio01" ~ "BIO01",
-                          bioclim == "bio12" ~ "BIO12"
-    )
+    bio_path <- toupper(bioclim)
 
     bio_raster <- raster(paste0("2_Data/0_raw_data/copernicus/", bio_path, "_era5-to-1km_1979-2018-mean_v1.0.nc"))
     # convert bioclim as per copernicus documentation. for some reasone case_when does not work here.     
-    if (bioclim == "bio01") {bio_raster <- calc(bio_raster, function(x) {x - 273.15})
-    } else if (bioclim == "bio12") {bio_raster <- calc(bio_raster, function(x) {x*3600*24*365*1000})}
+    if (bioclim %in% c("bio02", "bio02", "bio04", "bio05", "bio06", "bio07", "bio08", "bio09", "bio10", "bio11")) 
+    {bio_raster <- calc(bio_raster, function(x) {x - 273.15})
+    } else if (bioclim == "bio12") {bio_raster <- calc(bio_raster, function(x) {x*3600*24*365*1000})
+    } else if (bioclim %in% c("bio13", "bio14")) {bio_raster <- calc(bio_raster, function(x) {x*3600*24*30.5*1000})
+    } else if (bioclim %in% c("bio16", "bio17", "bio18", "bio19")) {bio_raster <- calc(bio_raster, function(x) {x*3600*24*91.3*1000})
+    }
+    # a bit unclear if bio13-bio19 can and should also be comverted like bio12. probably not as theyre not on annual reference period
 
     
   }
