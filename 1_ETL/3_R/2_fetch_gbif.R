@@ -20,18 +20,18 @@ tree_master_list <- tree_master_list %>%
   mutate(gbif_taxo_id = name_backbone_checklist(name=.$name)$usageKey) %>% 
   # remove  unmatched or genus level taxo matches
   filter(str_length(gbif_taxo_id) > 5 & !is.na(gbif_taxo_id))
-
-# this is a dumb implementation to fetch german vernacular names. does not work for all, needs refining
-for (i in 1:nrow(tree_master_list)) {
-  name_de <- name_usage(key=tree_master_list$gbif_taxo_id[i], data='vernacularNames', language = "GERMAN")$data %>%  
-    filter(language == "deu") %>% 
-    slice(1) %>% 
-    .$vernacularName
-  
-  if (is_empty(name_de)) {tree_master_list$name_de[i] <- as.character(NA)} else {tree_master_list$name_de[i] <- name_de}
-  
-  print(tree_master_list$name_de[i])
-}
+# 
+# # this is a dumb implementation to fetch german vernacular names. does not work for all, needs refining
+# for (i in 1:nrow(tree_master_list)) {
+#   name_de <- name_usage(key=tree_master_list$gbif_taxo_id[i], data='vernacularNames', language = "GERMAN")$data %>%  
+#     filter(language == "deu") %>% 
+#     slice(1) %>% 
+#     .$vernacularName
+#   
+#   if (is_empty(name_de)) {tree_master_list$name_de[i] <- as.character(NA)} else {tree_master_list$name_de[i] <- name_de}
+#   
+#   print(tree_master_list$name_de[i])
+# }
 
 if (!file.exists("2_Data/1_output/gbif_eu_trees.csv")) {
 

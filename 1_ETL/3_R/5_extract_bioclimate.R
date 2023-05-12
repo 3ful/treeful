@@ -1,35 +1,6 @@
 #################### LOad DBs, merge, turn into SF, extract bioclim #############################
 
 
-bio01_copernicus <- getpastclimate(source = "copernicus", bioclim = "bio01")
-bio12_copernicus <- getpastclimate(source = "copernicus", bioclim = "bio12")
-bio01_chelsa <- getpastclimate(source = "chelsa", bioclim = "bio01")
-bio12_chelsa <- getpastclimate(source = "chelsa", bioclim = "bio12")
-bio01_worldclim <- getpastclimate(source = "worldclim", bioclim = "bio01")
-bio12_worldclim <- getpastclimate(source = "worldclim", bioclim = "bio12")
-print("I just obtained some bio rasters")
-
-# bio02 <- getpastclimate(source = "worldclim", bioclim = "bio02")
-# bio03 <- getpastclimate(source = "worldclim", bioclim = "bio03")
-# bio04 <- getpastclimate(source = "worldclim", bioclim = "bio04")
-# bio05 <- getpastclimate(source = "worldclim", bioclim = "bio05")
-# bio06 <- getpastclimate(source = "worldclim", bioclim = "bio06")
-# bio07 <- getpastclimate(source = "worldclim", bioclim = "bio07")
-# bio08 <- getpastclimate(source = "worldclim", bioclim = "bio08")
-# bio09 <- getpastclimate(source = "worldclim", bioclim = "bio09")
-# bio10 <- getpastclimate(source = "worldclim", bioclim = "bio10")
-# bio11 <- getpastclimate(source = "worldclim", bioclim = "bio11")
-
-# bio13 <- getpastclimate(source = "worldclim", bioclim = "bio13")
-# bio14 <- getpastclimate(source = "worldclim", bioclim = "bio14")
-# bio15 <- getpastclimate(source = "worldclim", bioclim = "bio15")
-# bio16 <- getpastclimate(source = "worldclim", bioclim = "bio16")
-# bio17 <- getpastclimate(source = "worldclim", bioclim = "bio17")
-# bio18 <- getpastclimate(source = "worldclim", bioclim = "bio18")
-# bio19 <- getpastclimate(source = "worldclim", bioclim = "bio19")
-
-
-
 ######################## turn name-matched data.tables into SF ###################
 
 trees4f_sf <- trees4f_db_selection %>% 
@@ -76,13 +47,26 @@ print(paste0("starting extraction from rasters for ", nrow(tree_dbs), " tree occ
 
 tree_dbs <- tree_dbs %>% 
   st_as_sf(crs = 4326) %>% 
-  mutate(bio01_copernicus_1979_2018 = raster::extract(bio01_copernicus, .)) %>% 
-  mutate(bio12_copernicus_1979_2018 = raster::extract(bio12_copernicus, .)) %>% 
-  mutate(bio01_chelsa_1981_2010 = raster::extract(bio01_chelsa, .)) %>% 
-  mutate(bio12_chelsa_1981_2010 = raster::extract(bio12_chelsa, .)) %>% 
-  mutate(bio01_worldclim_1970_2000 = raster::extract(bio01_worldclim, .)) %>% 
-  mutate(bio12_worldclim_1970_2000 = raster::extract(bio12_worldclim, .)) 
-
+  mutate(bio01_copernicus_1979_2018 = raster::extract(getpastclimate(source = "copernicus", bioclim = "bio01"), .)) %>% 
+  mutate(bio02_copernicus_1979_2018 = raster::extract(getpastclimate(source = "copernicus", bioclim = "bio02"), .)) %>% 
+  mutate(bio03_copernicus_1979_2018 = raster::extract(getpastclimate(source = "copernicus", bioclim = "bio03"), .)) %>% 
+  mutate(bio04_copernicus_1979_2018 = raster::extract(getpastclimate(source = "copernicus", bioclim = "bio04"), .)) %>% 
+  mutate(bio05_copernicus_1979_2018 = raster::extract(getpastclimate(source = "copernicus", bioclim = "bio05"), .)) %>% 
+  mutate(bio06_copernicus_1979_2018 = raster::extract(getpastclimate(source = "copernicus", bioclim = "bio06"), .)) %>% 
+  mutate(bio07_copernicus_1979_2018 = raster::extract(getpastclimate(source = "copernicus", bioclim = "bio07"), .)) %>% 
+  mutate(bio08_copernicus_1979_2018 = raster::extract(getpastclimate(source = "copernicus", bioclim = "bio08"), .)) %>% 
+  mutate(bio09_copernicus_1979_2018 = raster::extract(getpastclimate(source = "copernicus", bioclim = "bio09"), .)) %>% 
+  mutate(bio10_copernicus_1979_2018 = raster::extract(getpastclimate(source = "copernicus", bioclim = "bio10"), .)) %>% 
+  mutate(bio11_copernicus_1979_2018 = raster::extract(getpastclimate(source = "copernicus", bioclim = "bio11"), .)) %>% 
+  mutate(bio12_copernicus_1979_2018 = raster::extract(getpastclimate(source = "copernicus", bioclim = "bio12"), .)) %>% 
+  mutate(bio13_copernicus_1979_2018 = raster::extract(getpastclimate(source = "copernicus", bioclim = "bio13"), .)) %>% 
+  mutate(bio14_copernicus_1979_2018 = raster::extract(getpastclimate(source = "copernicus", bioclim = "bio14"), .)) %>% 
+  mutate(bio15_copernicus_1979_2018 = raster::extract(getpastclimate(source = "copernicus", bioclim = "bio15"), .)) %>% 
+  mutate(bio16_copernicus_1979_2018 = raster::extract(getpastclimate(source = "copernicus", bioclim = "bio16"), .)) %>% 
+  mutate(bio17_copernicus_1979_2018 = raster::extract(getpastclimate(source = "copernicus", bioclim = "bio17"), .)) %>% 
+  mutate(bio18_copernicus_1979_2018 = raster::extract(getpastclimate(source = "copernicus", bioclim = "bio18"), .)) %>% 
+  mutate(bio19_copernicus_1979_2018 = raster::extract(getpastclimate(source = "copernicus", bioclim = "bio19"), .)) %>% 
+  mutate(across(.cols = starts_with("bio"), ~ round(.x, digits = 2), .names = "{.col}"))
 
 tree_dbs <- tree_dbs %>% 
   st_drop_geometry()
