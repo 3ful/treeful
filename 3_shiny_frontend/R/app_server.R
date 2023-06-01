@@ -124,8 +124,8 @@ app_server <- function(input, output, session) {
   output$species_plot <- renderPlot({
     ggplot2::ggplot(data = tree_occurrence()) +
     ggplot2::geom_point(aes(x = bio12_copernicus_1979_2018, y = bio01_copernicus_1979_2018, color = db), alpha = 0.1, lwd = 0) +
-    ggplot2::geom_point(data = user_climate1(), aes(x = bio12_hist, y = bio01_hist), color = "darkolivegreen4") +
-    ggplot2::geom_point(data = user_climate1(), aes(x = bio12_future, y = bio01_future), color = "darkolivegreen") +
+    ggplot2::geom_point(data = user_climate1(), aes(x = bio12_hist, y = bio01_hist), color = "darkolivegreen4", size = 4) +
+    ggplot2::geom_point(data = user_climate1(), aes(x = bio12_future, y = bio01_future), color = "darkolivegreen", size = 4) +
     scale_color_paletteer_d("wesanderson::Royal1") +
     ggplot2::facet_wrap(~master_list_name) +
     hrbrthemes::theme_ipsum() +

@@ -13,7 +13,7 @@ system2("docker", docker_cmd, stdout = TRUE, stderr = TRUE)
 
 con <- DBI::dbConnect(RPostgres::Postgres(), 
                  dbname = "postgres",
-                 host= "localhost", 
+                 host= "192.168.178.110", 
                  port="5432",
                  user="postgres",
                  password="mysecretpassword")
@@ -32,6 +32,7 @@ ne_world %>%
 
 sf::st_write(ne_world, dsn = con, layer = "ne_world",
          append = FALSE)
+
 
 
 
@@ -65,4 +66,41 @@ DBI::dbDisconnect(con)
 # system2("docker", "rm --force some-postgis")
 # # Verify docker
 # system2("docker", "ps -a")
+
+
+
+sf::st_write(tree_dbs, dsn = con, table = "trees",
+             append = FALSE)
+
+
+test_trees <- sf::st_read(con, layer = "obj")
+
+library(rpostgis)
+# you need to enable raster support on the postgis container as per 
+# https://sheeyphone.github.io/2023/02/26/p20230226/
+# execute this query:
+# CREATE EXTENSION postgis_raster;
+# SET postgis.gdal_enabled_drivers = 'ENABLE_ALL';
+# SELECT name, default_version,installed_version
+# FROM pg_available_extensions WHERE name LIKE 'postgis%' or name LIKE 'address%';
+
+
+con_raster <- RPostgreSQL::dbConnect("PostgreSQL",
+                                     host = "192.168.178.110", dbname = "postgres",
+                                     user = "postgres", password = "mysecretpassword", port = 5432
+)
+
+# check if the database has PostGIS
+pgPostGIS(con_raster)
+## [1] TRUE
+
+# load future raster
+source("3_R/3_fn_get_climate_rasters.R")
+future <- getfutureclimate(source = "copernicus")
+
+pgWriteRast(con_raster,
+            name = "copernicus", raster = future, overwrite = TRUE
+)
+# query raster values 
+# https://postgis.net/docs/RT_ST_Value.html
 
