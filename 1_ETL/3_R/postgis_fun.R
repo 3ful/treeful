@@ -84,6 +84,10 @@ library(rpostgis)
 # SELECT name, default_version,installed_version
 # FROM pg_available_extensions WHERE name LIKE 'postgis%' or name LIKE 'address%';
 
+# run a pgadmin container to see if all ends up in DB
+# docker run -p 80:80     -e 'PGADMIN_DEFAULT_EMAIL=user@domain.com'     -e 'PGADMIN_DEFAULT_PASSWORD=SuperSecret'     -d dpage/pgadmin4
+
+
 
 con_raster <- RPostgreSQL::dbConnect("PostgreSQL",
                                      host = "192.168.178.110", dbname = "postgres",
@@ -98,9 +102,30 @@ pgPostGIS(con_raster)
 source("3_R/3_fn_get_climate_rasters.R")
 future <- getfutureclimate(source = "copernicus")
 
+pastbio01 <- getpastclimate(source = "copernicus", bioclim = "bio01")
+crs(pastbio01) <- "+proj=longlat +datum=WGS84 +no_defs +type=crs"
+# we set this proj here and it seems to stick to R raster object. 
+# when writing into postgis, there SRID appears to be 3395
+
+
 pgWriteRast(con_raster,
-            name = "copernicus", raster = future, overwrite = TRUE
+            name = "copernicus", raster = pastbio01, overwrite = TRUE
 )
+# probably a functionaing query finally
+# SELECT g.pt_geom, ST_Value(r.rast, g.pt_geom) AS elev
+# FROM public.copernicus AS r
+# INNER JOIN
+# (SELECT ST_Transform(ST_SetSRID(ST_MakePoint(11,51), 4326),4326) As pt_geom) AS g
+# ON r.rast && g.pt_geom;
+# inspired from here https://postgis.net/workshops/postgis-intro/rasters.html
+
+# here is how we will query for user locations.
+RPostgreSQL::dbGetQuery(con_raster, "SELECT g.pt_geom, ST_Value(r.rast, g.pt_geom) AS biovar
+FROM public.copernicus AS r
+INNER JOIN
+(SELECT ST_Transform(ST_SetSRID(ST_MakePoint(7,43), 4326),4326) As pt_geom) AS g
+ON r.rast && g.pt_geom;")
+
 # query raster values 
 # https://postgis.net/docs/RT_ST_Value.html
 
