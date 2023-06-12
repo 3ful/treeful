@@ -3,14 +3,7 @@ if(!require(librarian)) install.packages("librarian")
 library(librarian)
 shelf(data.table,stringr, sf, tidyverse, raster, hrbrthemes, paletteer, hexbin, RSQLite, DBI, fuzzyjoin)
 
-################## get raster files from copernicus ###########
-# set your api key in start.py
 
-# tell reticulate to use venv in this repo
-reticulate::virtualenv_python("4_venv/")
-# run python script to check if raster files exist locally, otherwise will be fetchen from CDS. 
-# They need to be generated from CDS for a while. and then will be downloaded. 
-reticulate::py_run_file("start.py")
 if (file.exists("2_Data/0_raw_data/copernicus/download.zip")) {
   utils::unzip("2_Data/0_raw_data/copernicus/download.zip")
 }

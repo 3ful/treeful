@@ -6,7 +6,9 @@
 # docker stuff to spin postgis container, in ssame network and reachable by frontend and rstudio
 # also with raster extensions enabled. 
 
-
+## For dockerfile
+# postgres container
+# r container: rocker geospatial. download cds. stick into postgres
 
 source("3_R/3_fn_get_climate_rasters.R")
 

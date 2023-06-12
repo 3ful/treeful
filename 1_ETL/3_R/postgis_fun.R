@@ -121,10 +121,11 @@ pgWriteRast(con_raster,
 
 # here is how we will query for user locations.
 RPostgreSQL::dbGetQuery(con_raster, "SELECT g.pt_geom, ST_Value(r.rast, g.pt_geom) AS biovar
-FROM public.copernicus AS r
+FROM public.pastbio01 AS r
 INNER JOIN
-(SELECT ST_Transform(ST_SetSRID(ST_MakePoint(7,43), 4326),4326) As pt_geom) AS g
+(SELECT ST_Transform(ST_SetSRID(ST_MakePoint(11,51), 4326),4326) As pt_geom) AS g
 ON r.rast && g.pt_geom;")
+
 
 # query raster values 
 # https://postgis.net/docs/RT_ST_Value.html

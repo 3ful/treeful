@@ -1,0 +1,16 @@
+version: '3'
+services:
+  db:
+  # need to figure from official docs how wxactly to enable raster extension
+      image: "postgis:postgis"
+      ports:
+        - "5432:5432"
+      environment:
+        POSTGRES_PASSWORD: "mysecretpassword"
+  etl:
+    # building container to fetch tree dbs and raster data and stick into postgres
+    build: ./3_R/
+    volumes:
+     - ./3_R:/code
+  
+  
