@@ -10,7 +10,7 @@ services:
 
   etl:
     # building container to fetch tree dbs and raster data and stick into postgres
-    build: ./3_R/
+    build: ./
     volumes:
       - ./3_R:/code
     secrets: 
