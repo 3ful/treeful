@@ -4,12 +4,22 @@ library(librarian)
 shelf(data.table,stringr, sf, tidyverse, raster, hrbrthemes, paletteer, hexbin, RSQLite, DBI, fuzzyjoin)
 
 
-if (file.exists("2_Data/0_raw_data/copernicus/download.zip")) {
-  utils::unzip("2_Data/0_raw_data/copernicus/download.zip")
+# setting docker secrets as env variables to be availabe to R scripts
+Sys.setenv("COPERNICUS_KEY" = read_lines("/run/secrets/copernicus_key"))
+Sys.setenv("COPERNICUS_UID" = read_lines("/run/secrets/copernicus_uid"))
+Sys.setenv("GBIF_EMAIL" = read_lines("/run/secrets/gbif_email"))
+Sys.setenv("GBIF_PWD" = read_lines("/run/secrets/gbif_pw"))
+Sys.setenv("GBIF_USER" = read_lines("/run/secrets/gbif_uid"))
+Sys.setenv("POSTGRES_PW" = read_lines("/run/secrets/postgres_pw"))
+
+# download raw data files, including large rasters from CDS
+if (!file.exists("2_Data/0_raw_data/past/BIO01_era5-to-1km_1979-2018-mean_v1.0.nc")) {
+  source("3_R/1_download_raw.R")
 }
-if (file.exists("2_Data/0_raw_data/copernicus/future/download.zip")) {
-  utils::unzip("2_Data/0_raw_data/copernicus/future/download.zip")
-}
+
+# build list of three dozen tree cadastres of european cities
+source("3_R/pre_processing/0_eu_native_tree_master_list.R")
+source("3_R/pre_processing/1_harmonize_cadastres.R")
 
 
 ################### get cadasters, try, trees4f and name match against master_list ####################
@@ -19,14 +29,10 @@ source("3_R/2_fetch_gbif.R")
 ################### def fun climate rasters #####################
 source("3_R/3_fn_get_climate_rasters.R")
 
-################### get user input location climate ####################
-# source("3_R/4_fn_user_location.R")
-# user_climate1 <- get_user_climate()
-# user_climate2 <- get_user_climate(lat = 53.1180, lon = 8.8261)
 
 ################### merge all dbs into one, extract bioclimate vars for all trees and write to sqlite #####################
 # this will write trees and biovars to large csv
 source("3_R/5_extract_bioclimate.R")
 
 # to plot, run some charts in 
-rstudioapi::navigateToFile(file = "3_R/6_cross_check_climate_hulls.R")
+#rstudioapi::navigateToFile(file = "3_R/6_cross_check_climate_hulls.R")

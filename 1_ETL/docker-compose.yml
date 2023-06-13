@@ -5,12 +5,32 @@ services:
       image: "postgis:postgis"
       ports:
         - "5432:5432"
-      environment:
-        POSTGRES_PASSWORD: "mysecretpassword"
+      secrets:
+        - postgres_pw
+
   etl:
     # building container to fetch tree dbs and raster data and stick into postgres
     build: ./3_R/
     volumes:
-     - ./3_R:/code
-  
-  
+      - ./3_R:/code
+    secrets: 
+      - postgres_pw
+      - copernicus_key
+      - copernicus_uid
+      - gbif_email
+      - gbif_pw
+      - gbif_uid
+    secrets:
+      postgres_pw:
+        file: ./postgres_pw.txt
+      copernicus_key:
+        file: ./copernicus_key.txt
+      copernicus_uid:
+        file: ./copernicus_uid.txt
+      gbif_email:
+        file: ./gbif_email.txt
+      gbif_pw:
+        file: ./gbif_pw.txt
+      gbif_uid:
+        file: ./gbif_uid.txt
+      

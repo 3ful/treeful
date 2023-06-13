@@ -1,16 +1,18 @@
-# For a good walkthrough see here:
-# https://cran.r-project.org/web/packages/ecmwfr/vignettes/cds_vignette.html
 
 if(!require(librarian)) install.packages("librarian")
 library(librarian)
 shelf(data.table,ecmwfr,keyring)
 
+#################### Trees4F from figshare ###################
+if (!file.exists("2_Data/0_raw_data/EUforestspecies_AMauri.csv")) {
+  download.file("https://springernature.figshare.com/ndownloader/files/6662535", destfile = "2_Data/0_raw_data/EUforestspecies_AMauri.csv")
+}
+
+#################### COPERNICUS CDS Download ###################
 # REGISTER YOURSELF AND ENTER DETAILS FROM HERE:
 # https://cds.climate.copernicus.eu/user/register
 # Beware the user is the UID at the bottom of your user page.
-# keyring::key_set(service = "cds",
-#                   username = "UID")
-# keyring::key_get("cds", "UID")[1]
+
 uid <- Sys.getenv("COPERNICUS_UID")
 
 wf_set_key(user=uid, # 
@@ -22,7 +24,7 @@ request <- list(
   region = "europe",
   origin = "era5",
   variable = c("annual_mean_temperature", "annual_precipitation", "isothermality", "maximum_temperature_of_warmest_month", "mean_diurnal_range", "mean_temperature_of_coldest_quarter", "mean_temperature_of_driest_quarter", "mean_temperature_of_warmest_quarter", "mean_temperature_of_wettest_quarter", "minimum_temperature_of_coldest_month", "precipitation_of_coldest_quarter", "precipitation_of_driest_month", "precipitation_of_driest_quarter", "precipitation_of_warmest_quarter", "precipitation_of_wettest_month", 
-"precipitation_of_wettest_quarter", "precipitation_seasonality", "temperature_annual_range", "temperature_seasonality", "volumetric_soil_water"),
+               "precipitation_of_wettest_quarter", "precipitation_seasonality", "temperature_annual_range", "temperature_seasonality", "volumetric_soil_water"),
   derived_variable = "annual_mean",
   statistic = "mean",
   version = "1.0",
@@ -35,7 +37,7 @@ ncfile <- wf_request(
   user = uid,
   request = request,   
   transfer = TRUE,  
-  path = "2_Data/0_raw_data/copernicus/future/",
+  path = "2_Data/0_raw_data/future/",
   verbose = FALSE
 )
 
@@ -62,6 +64,15 @@ ncfile <- wf_request(
   user = uid,
   request = request,   
   transfer = TRUE,  
-  path = "2_Data/0_raw_data/copernicus/",
+  path = "2_Data/0_raw_data/past/",
   verbose = FALSE
 )
+
+
+if (file.exists("2_Data/0_raw_data/copernicus/download.zip")) {
+  utils::unzip("2_Data/0_raw_data/copernicus/download.zip")
+}
+if (file.exists("2_Data/0_raw_data/copernicus/future/download.zip")) {
+  utils::unzip("2_Data/0_raw_data/copernicus/future/download.zip")
+}
+

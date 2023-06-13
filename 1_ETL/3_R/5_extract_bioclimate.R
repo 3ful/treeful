@@ -74,6 +74,19 @@ tree_dbs <- tree_dbs %>%
 
 data.table::fwrite(x = tree_dbs, file = "2_Data/1_output/tree_db.csv")
 
+
+# writing trees to postgres DB
+con <- DBI::dbConnect(RPostgres::Postgres(), 
+                      dbname = "postgres",
+                      host= "192.168.178.110", 
+                      port="5432",
+                      user="postgres",
+                      password=Sys.getenv("POSTGRES_PW"))
+sf::st_write(tree_dbs, dsn = con, table = "trees",
+             append = FALSE)
+
+
+
 ############# somehow sqlite doesnt write a table into DB###################
 # if(!exists("con")){
 #   con <- dbConnect(RSQLite::SQLite("2_Data/1_output/tree_db.sqlite"))

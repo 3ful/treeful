@@ -6,10 +6,14 @@
 ## Prerequisites
 
 * You must set Env variables for API keys. Use `usethis::edit_r_environ()` and restart your r session. 
+
+
 ```
 GBIF_USER="your-gbif-user"
 GBIF_PWD="your-gbif-pw"
 GBIF_EMAIL="your-gbif-mail"
 COPERNICUS_KEY="your-copernicus-key"
+COPERNICUS_UID="your-copernicus-UID"
+POSTGRES_PW="your-postgres-pw"
 
 ```
