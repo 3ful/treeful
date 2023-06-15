@@ -37,7 +37,7 @@ ncfile <- wf_request(
   user = uid,
   request = request,   
   transfer = TRUE,  
-  path = "2_Data/0_raw_data/future/",
+  path = "2_Data/0_raw_data/future",
   verbose = FALSE
 )
 
@@ -45,13 +45,8 @@ ncfile <- wf_request(
 request <- list(
   region = "europe",
   origin = "era5",
-  variable = c('annual_mean_temperature', 'annual_precipitation', 'isothermality',
-               'maximum_temperature_of_warmest_month', 'mean_diurnal_range', 'mean_temperature_of_coldest_quarter',
-               'mean_temperature_of_driest_quarter', 'mean_temperature_of_warmest_quarter', 'mean_temperature_of_wettest_quarter',
-               'minimum_temperature_of_coldest_month', 'precipitation_of_coldest_quarter', 'precipitation_of_driest_month',
-               'precipitation_of_driest_quarter', 'precipitation_of_warmest_quarter', 'precipitation_of_wettest_month',
-               'precipitation_of_wettest_quarter', 'precipitation_seasonality', 'temperature_annual_range',
-               'temperature_seasonality', 'volumetric_soil_water',),
+  variable = c("annual_mean_temperature", "annual_precipitation", "isothermality", "maximum_temperature_of_warmest_month", "mean_diurnal_range", "mean_temperature_of_coldest_quarter", "mean_temperature_of_driest_quarter", "mean_temperature_of_warmest_quarter", "mean_temperature_of_wettest_quarter", "minimum_temperature_of_coldest_month", "precipitation_of_coldest_quarter", "precipitation_of_driest_month", "precipitation_of_driest_quarter", "precipitation_of_warmest_quarter", "precipitation_of_wettest_month", 
+               "precipitation_of_wettest_quarter", "precipitation_seasonality", "temperature_annual_range", "temperature_seasonality", "volumetric_soil_water"),
   derived_variable = "annual_mean",
   statistic = "mean",
   version = "1.0",
@@ -64,15 +59,16 @@ ncfile <- wf_request(
   user = uid,
   request = request,   
   transfer = TRUE,  
-  path = "2_Data/0_raw_data/past/",
+  path = "2_Data/0_raw_data/past",
   verbose = FALSE
 )
 
 
-if (file.exists("2_Data/0_raw_data/copernicus/download.zip")) {
-  utils::unzip("2_Data/0_raw_data/copernicus/download.zip")
+if (file.exists("2_Data/0_raw_data/copernicus/past/download.zip")) {
+  utils::unzip("2_Data/0_raw_data/copernicus/past/download.zip")
 }
 if (file.exists("2_Data/0_raw_data/copernicus/future/download.zip")) {
   utils::unzip("2_Data/0_raw_data/copernicus/future/download.zip")
 }
+
 

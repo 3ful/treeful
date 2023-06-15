@@ -2,7 +2,8 @@ version: '3'
 services:
   db:
   # need to figure from official docs how wxactly to enable raster extension
-      image: "postgis:postgis"
+      build: "4_postgres/."
+      image: "postgis/postgis"
       ports:
         - "5432:5432"
       secrets:
@@ -20,7 +21,7 @@ services:
       - gbif_email
       - gbif_pw
       - gbif_uid
-    secrets:
+secrets:
       postgres_pw:
         file: ./postgres_pw.txt
       copernicus_key:
