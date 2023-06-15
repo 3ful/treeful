@@ -21,17 +21,20 @@ services:
       - gbif_email
       - gbif_pw
       - gbif_uid
+      - keyring_pw
 secrets:
       postgres_pw:
-        file: ./postgres_pw.txt
+        file: ./0_secrets/postgres_pw.txt
       copernicus_key:
-        file: ./copernicus_key.txt
+        file: ./0_secrets/copernicus_key.txt
       copernicus_uid:
-        file: ./copernicus_uid.txt
+        file: ./0_secrets/copernicus_uid.txt
       gbif_email:
-        file: ./gbif_email.txt
+        file: ./0_secrets/gbif_email.txt
       gbif_pw:
-        file: ./gbif_pw.txt
+        file: ./0_secrets/gbif_pw.txt
       gbif_uid:
-        file: ./gbif_uid.txt
+        file: ./0_secrets/gbif_uid.txt
+      keyring_pw:
+        file: ./0_secrets/keyring_pw.txt
       
