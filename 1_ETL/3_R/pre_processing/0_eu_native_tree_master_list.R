@@ -31,6 +31,6 @@ try_species <- try_species[,.(id=AccSpeciesID,name=AccSpeciesName,flat_name=flat
 tree_list_master <- try_species[flat_name %in% eu_trees[,flat_name]]
 # Sort by most observed trees
 tree_list_master <- setorder(tree_list_master,-obsv)
-fwrite(tree_list_master,"2_Data/1_Output/try_eu_native_trees_master.csv")
+fwrite(tree_list_master,"2_Data/1_output/try_eu_native_trees_master.csv")
 
 #EOF

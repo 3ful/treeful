@@ -4,7 +4,7 @@
 
 if(!require(librarian)) install.packages("librarian")
 library(librarian)
-shelf(tidyverse, sf, osmdata, stars, raster, snow, hrbrthemes, geodata, jsonlite, tmap, readxl,janitor,xlsx,data.table)
+shelf(tidyverse, sf, osmdata, stars, raster, snow, geodata, jsonlite, readxl,janitor,data.table)
 
 
 

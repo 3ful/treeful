@@ -13,7 +13,7 @@ services:
     # building container to fetch tree dbs and raster data and stick into postgres
     build: ./
     volumes:
-      - ./3_R:/code
+      - .:/home/rstudio
     secrets: 
       - postgres_pw
       - copernicus_key
