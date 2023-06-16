@@ -40,7 +40,7 @@ tree_master_list <- tree_master_list %>%
   # set up GBIF creds like this https://docs.ropensci.org/rgbif/articles/gbif_credentials.html
   
   gbif_download <- occ_download(
-    pred_in("taxonKey", common_trees$gbif_taxo_id),
+    pred_in("taxonKey", tree_master_list$gbif_taxo_id),
     #pred("taxonKey", 5284884),
     # this is the bounding box of europe
     pred_within("POLYGON((-15 75,-15 30,40 30,40 75,-15 75))"), 

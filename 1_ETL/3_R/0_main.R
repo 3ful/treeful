@@ -35,12 +35,15 @@ if (!file.exists("2_Data/1_output/all_merged.csv")) {
 }
 
 ################### get cadasters, try, trees4f and name match against master_list ####################
+cat("Matching names now from various tree sources")
 source("3_R/1_name_matching.R")
 ################### fetch GBIF #####################
 if (!file.exists("2_Data/1_output/gbif_eu_trees.csv")) {
   source("3_R/2_fetch_gbif.R")
+  cat("Fetched trees from GBIF")
 } else {
   gbif_trees <- fread("2_Data/1_output/gbif_eu_trees.csv")
+  cay("Read GBIF trees from disk")
 }
 ################### def fun climate rasters #####################
 source("3_R/3_fn_get_climate_rasters.R")
@@ -48,6 +51,7 @@ source("3_R/3_fn_get_climate_rasters.R")
 
 ################### merge all dbs into one, extract bioclimate vars for all trees and write to postgres #####################
 # this will write trees and biovars to large csv
+cat("Merging all tree locations")
 source("3_R/5_extract_bioclimate.R")
 
 # to plot, run some charts in 
