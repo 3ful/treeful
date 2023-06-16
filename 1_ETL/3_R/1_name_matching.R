@@ -73,23 +73,29 @@ open_trees_db_selection <- open_trees_db[open_trees_matching_table_selection[,.(
 # open_trees_db_selection2 <- open_trees_db[latin_name %in% open_trees_matching_table_selection[,data_set_name]]
 
 ############ TRY DATA BASE ############ 
-# Load and prepare database
-
 # Load database
-try_trees <- data.table::fread("2_Data/0_raw_data/tree_georef_3.txt") %>% 
-  janitor::clean_names()
-
-setnames(try_trees,"acc_species_name","latin_name")
-try_trees <- na.omit(try_trees)
-
-
-# Match db names
-max_string_dist = 1 
-try_trees_matching_table<- get_fuzzy_plant_names(try_trees, master_list, max_string_dist)
-try_trees_matching_table_selection <- try_trees_matching_table[distance<=1,]
-# Filter database
-try_trees_selection <- try_trees[try_trees_matching_table_selection[,.(data_set_name,master_list_name)], on = c(latin_name = "data_set_name"), nomatch = NULL]
-# open_trees_db_selection2 <- open_trees_db[latin_name %in% open_trees_matching_table_selection[,data_set_name]]
+if (file.exists("2_Data/0_raw_data/tree_georef_3.txt")) {
+  try_trees <- data.table::fread("2_Data/0_raw_data/tree_georef_3.txt") %>% 
+    janitor::clean_names()
+  
+  setnames(try_trees,"acc_species_name","latin_name")
+  try_trees <- na.omit(try_trees)
+  
+  
+  # Match db names
+  max_string_dist = 1 
+  try_trees_matching_table<- get_fuzzy_plant_names(try_trees, master_list, max_string_dist)
+  try_trees_matching_table_selection <- try_trees_matching_table[distance<=1,]
+  # Filter database
+  try_trees_selection <- try_trees[try_trees_matching_table_selection[,.(data_set_name,master_list_name)], on = c(latin_name = "data_set_name"), nomatch = NULL]
+  # open_trees_db_selection2 <- open_trees_db[latin_name %in% open_trees_matching_table_selection[,data_set_name]]
+  
+  
+} else {
+  try_trees_selection <- tibble(master_list_name = character(), 
+                                tree_georef_1_std_value = numeric(),
+                                obs_data_std_value = numeric())
+}
 
 
 ############ Trees4F DATA BASE ############ 

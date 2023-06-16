@@ -33,8 +33,6 @@ tree_master_list <- tree_master_list %>%
 #   print(tree_master_list$name_de[i])
 # }
 
-if (!file.exists("2_Data/1_output/gbif_eu_trees.csv")) {
-
     
   
   #################### Get all common trees as per master list from GBIF  ###################
@@ -67,7 +65,3 @@ if (!file.exists("2_Data/1_output/gbif_eu_trees.csv")) {
     cc_sea() %>% # remove from ocean, this test needs rnaturalearth dev version from github https://github.com/ropensci/rnaturalearth
     distinct(decimallongitude,decimallatitude,specieskey,datasetkey, .keep_all = TRUE) %>%
     data.table::fwrite(file = "2_Data/1_output/gbif_eu_trees.csv")
-
-} else {
-  gbif_trees <- fread("2_Data/1_output/gbif_eu_trees.csv")
-}
