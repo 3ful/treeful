@@ -65,11 +65,11 @@ ncfile <- wf_request(
 )
 
 
-if (file.exists("2_Data/0_raw_data/copernicus/past/download.zip")) {
-  utils::unzip("2_Data/0_raw_data/copernicus/past/download.zip")
+if (file.exists("2_Data/0_raw_data/past/download.zip")) {
+  utils::unzip("2_Data/0_raw_data/past/download.zip", exdir = "2_Data/0_raw_data/past/")
 }
-if (file.exists("2_Data/0_raw_data/copernicus/future/download.zip")) {
-  utils::unzip("2_Data/0_raw_data/copernicus/future/download.zip")
+if (file.exists("2_Data/0_raw_data/future/download.zip")) {
+  utils::unzip("2_Data/0_raw_data/future/download.zip", exdir = "2_Data/0_raw_data/future/")
 }
 
 
