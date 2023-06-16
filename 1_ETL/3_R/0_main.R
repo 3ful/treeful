@@ -43,7 +43,7 @@ if (!file.exists("2_Data/1_output/gbif_eu_trees.csv")) {
   cat("Fetched trees from GBIF")
 } else {
   gbif_trees <- fread("2_Data/1_output/gbif_eu_trees.csv")
-  cay("Read GBIF trees from disk")
+  cat("Read GBIF trees from disk")
 }
 ################### def fun climate rasters #####################
 source("3_R/3_fn_get_climate_rasters.R")
