@@ -1,5 +1,5 @@
 #################### LOad DBs, merge, turn into SF, extract bioclim #############################
-
+data.table::fread(file = "2_Data/1_output/gbif_eu_trees.csv")
 
 ######################## turn name-matched data.tables into SF ###################
 
