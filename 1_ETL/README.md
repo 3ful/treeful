@@ -7,8 +7,8 @@
 
 * Hardware requirements: 
   * especially the GBIF dataset is large and memory intensive with 7 million occurrences. You probably need over 8GB RAM to run this. 
-  * Copernicus raster files are also large and will need over 30GB disk space. 
-* You must create the following credential files in 0_secrets
+  * Copernicus raster files are also large, the VM should have over 100GB disk space. 
+* You must create the following credential files in 0_secrets directory
   * copernicus_key.txt
   * copernicus_uid.txt
   * gbif_email.txt

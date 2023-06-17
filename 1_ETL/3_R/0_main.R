@@ -37,6 +37,7 @@ if (!file.exists("2_Data/1_output/all_merged.csv")) {
 ################### get cadasters, try, trees4f and name match against master_list ####################
 cat("Matching names now from various tree sources")
 source("3_R/1_name_matching.R")
+gc()
 ################### fetch GBIF #####################
 if (!file.exists("2_Data/1_output/gbif_eu_trees.csv")) {
   source("3_R/2_fetch_gbif.R")
@@ -45,6 +46,7 @@ if (!file.exists("2_Data/1_output/gbif_eu_trees.csv")) {
   gbif_trees <- fread("2_Data/1_output/gbif_eu_trees.csv")
   cat("Read GBIF trees from disk")
 }
+gc()
 ################### def fun climate rasters #####################
 source("3_R/3_fn_get_climate_rasters.R")
 
