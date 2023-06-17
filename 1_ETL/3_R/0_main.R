@@ -13,6 +13,7 @@ Sys.setenv("GBIF_EMAIL" = read_lines("/run/secrets/gbif_email"))
 Sys.setenv("GBIF_PWD" = read_lines("/run/secrets/gbif_pw"))
 Sys.setenv("GBIF_USER" = read_lines("/run/secrets/gbif_uid"))
 Sys.setenv("POSTGRES_PW" = read_lines("/run/secrets/postgres_pw"))
+Sys.setenv("POSTGRES_DB" = "treeful-test")
 
 
 # so that keyring works headless we set backend to encrypted file. twice for good measure. 
