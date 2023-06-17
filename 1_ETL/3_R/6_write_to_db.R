@@ -12,9 +12,6 @@ crs(future) <- "+proj=longlat +datum=WGS84 +no_defs +type=crs"
 pastbio01 <- getpastclimate(source = "copernicus", bioclim = "bio01")
 crs(pastbio01) <- "+proj=longlat +datum=WGS84 +no_defs +type=crs"
 
-pastbio01 <- raster(paste0("2_Data/0_raw_data/copernicus/", "BIO01", "_era5-to-1km_1979-2018-mean_v1.0.nc"))
-
-
 pastbio12 <- getpastclimate(source = "copernicus", bioclim = "bio12")
 crs(pastbio12) <- "+proj=longlat +datum=WGS84 +no_defs +type=crs"
 # we set this proj here and it seems to stick to R raster object. 
