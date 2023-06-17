@@ -2,11 +2,6 @@
 # This script will load various tree location data into one. 
 # Goal: have all in one db with harmonized botanical species name, X and Y coordinate in EPSG 4326
 
-if(!require(librarian)) install.packages("librarian")
-library(librarian)
-shelf(tidyverse, sf, osmdata, stars, raster, snow, geodata, jsonlite, readxl,janitor,data.table)
-
-
 
 tree_dbs <- read_xlsx("2_Data/0_raw_data/opendata_trees.xlsx") %>% 
   janitor::clean_names() %>% 

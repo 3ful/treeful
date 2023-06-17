@@ -1,7 +1,9 @@
 ############ Load Packages ############ 
 if(!require(librarian)) install.packages("librarian")
 library(librarian)
-shelf(data.table,stringr, sf, tidyverse, raster, hrbrthemes, paletteer, hexbin, RSQLite, DBI, fuzzyjoin, keyring)
+shelf(data.table,stringr, sf, tidyverse, raster, 
+      paletteer, RSQLite, DBI, fuzzyjoin, keyring, janitor, rgbif, ecmwfr, CoordinateCleaner, 
+      osmdata, stars, snow, geodata, jsonlite, readxl)
 
 # setting docker secrets as env variables to be availabe to R scripts
 Sys.setenv("COPERNICUS_KEY" = read_lines("/run/secrets/copernicus_key"))

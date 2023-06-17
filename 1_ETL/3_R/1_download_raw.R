@@ -1,8 +1,3 @@
-
-if(!require(librarian)) install.packages("librarian")
-library(librarian)
-shelf(data.table,ecmwfr,keyring)
-
 #################### Trees4F from figshare ###################
 if (!file.exists("2_Data/0_raw_data/EUforestspecies_AMauri.csv")) {
   download.file("https://springernature.figshare.com/ndownloader/files/6662535", destfile = "2_Data/0_raw_data/EUforestspecies_AMauri.csv")
