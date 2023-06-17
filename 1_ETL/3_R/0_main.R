@@ -16,7 +16,9 @@ Sys.setenv("POSTGRES_PW" = read_lines("/run/secrets/postgres_pw"))
 options(keyring_backend = "file")
 Sys.setenv(R_KEYRING_KEYRING = "file")
 # ensure no ecmwfr keyring xists
-file.remove("~/.config/r-keyring/ecmwfr.keyring")
+if (file.exists("~/.config/r-keyring/ecmwfr.keyring")) {
+  file.remove("~/.config/r-keyring/ecmwfr.keyring")
+}
 # and create keyring for ecmwfr so that keyring creation later does not prompt for password
 keyring::keyring_create("ecmwfr", password = read_lines("/run/secrets/keyring_pw"))
 
