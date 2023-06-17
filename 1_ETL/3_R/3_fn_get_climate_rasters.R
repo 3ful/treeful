@@ -103,8 +103,8 @@ getfutureclimate <- function(source = "chelsa") {
     names(future_raster)[1] <- "bio01"
     names(future_raster)[12] <- "bio12"
   } else if (source == "copernicus") {
-    future_raster_bio01 <- raster::stack("2_Data/0_raw_data/future/BIO01_ipsl-cm5a-mr_rcp45_r1i1p1_1960-2099-mean_v1.0.nc")$X2030.01.01
-    future_raster_bio12 <- raster::stack("2_Data/0_raw_data/future/BIO12_ipsl-cm5a-mr_rcp45_r1i1p1_1960-2099-mean_v1.0.nc")$X2030.01.01
+    future_raster_bio01 <- raster::stack("2_Data/0_raw_data/future/BIO01_hadgem2-cc_rcp45_r1i1p1_1960-2099-mean_v1.0.nc")$X2050.01.01
+    future_raster_bio12 <- raster::stack("2_Data/0_raw_data/future/BIO12_hadgem2-cc_rcp45_r1i1p1_1960-2099-mean_v1.0.nc")$X2050.01.01
     
     future_raster_bio01 <- calc(future_raster_bio01, function(x) {x - 273.15})
     future_raster_bio12 <- calc(future_raster_bio12, function(x) {x*3600*24*365*1000})  
