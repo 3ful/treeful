@@ -4,13 +4,6 @@
 # the goal is to enlarge the pool of climate variations.
 # these are then saved on disk and later on merged into one GBIF file. 
 # we only take trees that are flagged as present and with accuracy of <1000m
-
-library(librarian)
-shelf(tidyverse,
-      sf, 
-      rgbif, 
-      data.table,
-      CoordinateCleaner)
 # 
 # # this is a dumb implementation to fetch german vernacular names. does not work for all, needs refining
 # for (i in 1:nrow(tree_master_list)) {

@@ -1,8 +1,10 @@
 
-con_raster <- RPostgreSQL::dbConnect("PostgreSQL",
-                                     host = "192.168.178.148", dbname = Sys.getenv("POSTGRES_DB"),
-                                     user = "postgres", password = Sys.getenv("POSTGRES_PW"), port = 5432
-)
+con <- DBI::dbConnect(RPostgres::Postgres(), 
+                      dbname = Sys.getenv("POSTGRES_DB"),
+                      host= "192.168.178.148", 
+                      port="5432",
+                      user="postgres",
+                      password=Sys.getenv("POSTGRES_PW"))
 
 future <- getfutureclimate(source = "copernicus")
 crs(future) <- "+proj=longlat +datum=WGS84 +no_defs +type=crs"
@@ -10,19 +12,25 @@ crs(future) <- "+proj=longlat +datum=WGS84 +no_defs +type=crs"
 pastbio01 <- getpastclimate(source = "copernicus", bioclim = "bio01")
 crs(pastbio01) <- "+proj=longlat +datum=WGS84 +no_defs +type=crs"
 
+pastbio01 <- raster(paste0("2_Data/0_raw_data/copernicus/", "BIO01", "_era5-to-1km_1979-2018-mean_v1.0.nc"))
+
+
 pastbio12 <- getpastclimate(source = "copernicus", bioclim = "bio12")
 crs(pastbio12) <- "+proj=longlat +datum=WGS84 +no_defs +type=crs"
 # we set this proj here and it seems to stick to R raster object. 
 # when writing into postgis, there SRID appears to be 3395
 
 
-pgWriteRast(con_raster,
+rpostgis::pgWriteRast(con,
             name = "pastbio01", raster = pastbio01, overwrite = TRUE
 )
 
-pgWriteRast(con_raster,
+rpostgis::pgWriteRast(con,
             name = "pastbio12", raster = pastbio12, overwrite = TRUE
 )
-pgWriteRast(con_raster,
+rpostgis::pgWriteRast(con,
             name = "future", raster = future, overwrite = TRUE
 )
+
+
+DBI::dbDisconnect(conn = con)

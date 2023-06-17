@@ -2,8 +2,9 @@
 if(!require(librarian)) install.packages("librarian")
 library(librarian)
 shelf(data.table,stringr, sf, tidyverse, raster, 
-      paletteer, RSQLite, DBI, fuzzyjoin, keyring, janitor, rgbif, ecmwfr, CoordinateCleaner, 
-      osmdata, stars, snow, geodata, jsonlite, readxl)
+      paletteer, RSQLite, RPostgreSQL, DBI, fuzzyjoin, keyring, janitor, rgbif, ecmwfr, CoordinateCleaner, 
+      osmdata, stars, snow, geodata, jsonlite, readxl, 
+      rpostgis)
 
 # setting docker secrets as env variables to be availabe to R scripts
 Sys.setenv("COPERNICUS_KEY" = read_lines("/run/secrets/copernicus_key"))
@@ -56,10 +57,12 @@ source("3_R/3_fn_get_climate_rasters.R")
 
 
 ################### merge all dbs into one, extract bioclimate vars for all trees and write to postgres #####################
-# this will write trees and biovars to large csv
+# this will write trees and biovars to large csv and to postgres
 cat("Merging all tree locations")
 source("3_R/5_extract_bioclimate.R")
+gc()
 
+## writing rasters to postgres
 cat("writing all to postgres")
 source("3_R/6_write_to_db.R")
 
