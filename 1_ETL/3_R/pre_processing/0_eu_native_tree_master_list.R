@@ -28,9 +28,10 @@ try_species <- try_species[,.(id=AccSpeciesID,name=AccSpeciesName,flat_name=flat
 
 ############ Create master tree list ############ 
 # Now match all the species names in the TRY database names
-tree_list_master <- try_species[flat_name %in% eu_trees[,flat_name]]
+tree_master_list <- try_species[flat_name %in% eu_trees[,flat_name]]
 # Sort by most observed trees
-tree_list_master <- setorder(tree_list_master,-obsv)
-fwrite(tree_list_master,"2_Data/1_output/try_eu_native_trees_master.csv")
+tree_master_list <- setorder(tree_master_list,-obsv)
+fwrite(tree_master_list,"2_Data/1_output/try_eu_native_trees_master.csv")
+tree_master_list <- fread("2_Data/1_output/try_eu_native_trees_master.csv") 
 
 #EOF

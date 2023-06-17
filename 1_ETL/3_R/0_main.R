@@ -56,5 +56,8 @@ source("3_R/3_fn_get_climate_rasters.R")
 cat("Merging all tree locations")
 source("3_R/5_extract_bioclimate.R")
 
+cat("writing all to postgres")
+source("3_R/6_write_to_db.R")
+
 # to plot, run some charts in 
 #rstudioapi::navigateToFile(file = "3_R/6_cross_check_climate_hulls.R")

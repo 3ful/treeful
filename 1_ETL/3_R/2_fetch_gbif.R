@@ -12,10 +12,6 @@ shelf(tidyverse,
       data.table,
       CoordinateCleaner)
 
-################### Get prep datasets ready #########################
-# master list names of trees to query for
-tree_master_list <- fread("2_Data/1_output/try_eu_native_trees_master.csv") 
-
 tree_master_list <- tree_master_list %>% 
   mutate(gbif_taxo_id = name_backbone_checklist(name=.$name)$usageKey) %>% 
   # remove  unmatched or genus level taxo matches
