@@ -71,8 +71,8 @@ if (!file.exists("2_Data/1_output/tree_db.csv")) {
     mutate(bio19_copernicus_1979_2018 = raster::extract(getpastclimate(source = "copernicus", bioclim = "bio19"), .)) %>% 
     mutate(across(.cols = starts_with("bio"), ~ round(.x, digits = 2), .names = "{.col}"))
   
-  tree_dbs <- tree_dbs %>% 
-    st_drop_geometry()
+  # tree_dbs <- tree_dbs %>% 
+  #   st_drop_geometry()
   ################################ write it all to csv #################################
   data.table::fwrite(x = tree_dbs, file = "2_Data/1_output/tree_db.csv")
 } else {

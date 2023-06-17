@@ -1,23 +1,9 @@
-FROM postgres:15-bullseye
+from postgis/postgis
+# need to enable raster extentions
 
-LABEL maintainer="PostGIS Project - https://postgis.net" \
-      org.opencontainers.image.description="PostGIS 3.3.3+dfsg-1~exp1.pgdg110+1 spatial database extension with PostgreSQL 15 bullseye" \
-      org.opencontainers.image.source="https://github.com/postgis/docker-postgis"
 
-ENV POSTGIS_MAJOR 3
-ENV POSTGIS_VERSION 3.3.3+dfsg-1~exp1.pgdg110+1
-
-RUN apt-get update \
-      && apt-cache showpkg postgresql-$PG_MAJOR-postgis-$POSTGIS_MAJOR \
-      && apt-get install -y --no-install-recommends \
-           # ca-certificates: for accessing remote raster files;
-           #   fix: https://github.com/postgis/docker-postgis/issues/307
-           ca-certificates \
-           \
-           postgresql-$PG_MAJOR-postgis-$POSTGIS_MAJOR=$POSTGIS_VERSION \
-           postgresql-$PG_MAJOR-postgis-$POSTGIS_MAJOR-scripts \
-      && rm -rf /var/lib/apt/lists/*
-
-RUN mkdir -p /docker-entrypoint-initdb.d
-COPY ./initdb-postgis.sh /docker-entrypoint-initdb.d/10_postgis.sh
-COPY ./update-postgis.sh /usr/local/bin
+COPY ./initialize-raster.sh /docker-entrypoint-initdb.d/initialize-raster.sh
+# CREATE EXTENSION postgis_raster;
+# SET postgis.gdal_enabled_drivers = 'ENABLE_ALL';
+# SELECT name, default_version,installed_version
+# FROM pg_available_extensions WHERE name LIKE 'postgis%' or name LIKE 'address%';

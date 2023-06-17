@@ -3,7 +3,7 @@ services:
   db:
   # need to figure from official docs how wxactly to enable raster extension
       build: "4_postgres/."
-      image: "postgis/postgis"
+      #image: "postgis/postgis"
       ports:
         - "5432:5432"
       secrets:
