@@ -19,7 +19,7 @@ getpastclimate <- function(source = "copernicus", bioclim = "bio01") {
     
     bio_path <- toupper(bioclim)
 
-    bio_raster <- raster(paste0("2_Data/0_raw_data/copernicus/", bio_path, "_era5-to-1km_1979-2018-mean_v1.0.nc"))
+    bio_raster <- raster(paste0("2_Data/0_raw_data/past/", bio_path, "_era5-to-1km_1979-2018-mean_v1.0.nc"))
     # convert bioclim as per copernicus documentation. for some reasone case_when does not work here.     
     if (bioclim %in% c("bio01", "bio02", "bio04", "bio05", "bio06", "bio07", "bio08", "bio09", "bio10", "bio11")) 
     {bio_raster <- calc(bio_raster, function(x) {x - 273.15})
@@ -103,8 +103,8 @@ getfutureclimate <- function(source = "chelsa") {
     names(future_raster)[1] <- "bio01"
     names(future_raster)[12] <- "bio12"
   } else if (source == "copernicus") {
-    future_raster_bio01 <- raster::stack("2_Data/0_raw_data/copernicus/future/BIO01_ipsl-cm5a-mr_rcp45_r1i1p1_1960-2099-mean_v1.0.nc")$X2030.01.01
-    future_raster_bio12 <- raster::stack("2_Data/0_raw_data/copernicus/future/BIO12_ipsl-cm5a-mr_rcp45_r1i1p1_1960-2099-mean_v1.0.nc")$X2030.01.01
+    future_raster_bio01 <- raster::stack("2_Data/0_raw_data/future/BIO01_ipsl-cm5a-mr_rcp45_r1i1p1_1960-2099-mean_v1.0.nc")$X2030.01.01
+    future_raster_bio12 <- raster::stack("2_Data/0_raw_data/future/BIO12_ipsl-cm5a-mr_rcp45_r1i1p1_1960-2099-mean_v1.0.nc")$X2030.01.01
     
     future_raster_bio01 <- calc(future_raster_bio01, function(x) {x - 273.15})
     future_raster_bio12 <- calc(future_raster_bio12, function(x) {x*3600*24*365*1000})  

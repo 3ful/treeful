@@ -8,6 +8,14 @@ services:
         - "5432:5432"
       secrets:
         - postgres_pw
+      environment:
+        POSTGRES_DB: treeful-test
+        PGDATA: /var/lib/postgresql/data/pgdata
+      volumes:
+        -
+          type: bind
+          source: ./4_postgres
+          target: /var/lib/postgresql/data
 
   etl:
     # building container to fetch tree dbs and raster data and stick into postgres

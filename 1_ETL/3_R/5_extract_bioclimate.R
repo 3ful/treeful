@@ -77,8 +77,8 @@ data.table::fwrite(x = tree_dbs, file = "2_Data/1_output/tree_db.csv")
 
 # writing trees to postgres DB
 con <- DBI::dbConnect(RPostgres::Postgres(), 
-                      dbname = "postgres",
-                      host= "192.168.178.110", 
+                      dbname = Sys.getenv("POSTGRES_DB"),
+                      host= "192.168.178.148", 
                       port="5432",
                       user="postgres",
                       password=Sys.getenv("POSTGRES_PW"))
