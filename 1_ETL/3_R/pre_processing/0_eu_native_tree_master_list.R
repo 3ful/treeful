@@ -1,7 +1,7 @@
 ############ Load Packages ############ 
 if(!require(librarian)) install.packages("librarian")
 library(librarian)
-shelf(data.table,stringr)
+shelf(data.table,stringr, rgbif)
 
 ############ Flatten Latin tree name function ############ 
 # To match the names it is better to completely flatten the strings
@@ -31,7 +31,15 @@ try_species <- try_species[,.(id=AccSpeciesID,name=AccSpeciesName,flat_name=flat
 tree_master_list <- try_species[flat_name %in% eu_trees[,flat_name]]
 # Sort by most observed trees
 tree_master_list <- setorder(tree_master_list,-obsv)
+
+tree_master_list <- tree_master_list %>% 
+  mutate(gbif_taxo_id = name_backbone_checklist(name=.$name)$usageKey) %>% 
+  # remove  unmatched or genus level taxo matches
+  filter(str_length(gbif_taxo_id) > 5 & !is.na(gbif_taxo_id))
+
 fwrite(tree_master_list,"2_Data/1_output/try_eu_native_trees_master.csv")
 tree_master_list <- fread("2_Data/1_output/try_eu_native_trees_master.csv") 
+
+
 
 #EOF

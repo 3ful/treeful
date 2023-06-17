@@ -11,11 +11,6 @@ shelf(tidyverse,
       rgbif, 
       data.table,
       CoordinateCleaner)
-
-tree_master_list <- tree_master_list %>% 
-  mutate(gbif_taxo_id = name_backbone_checklist(name=.$name)$usageKey) %>% 
-  # remove  unmatched or genus level taxo matches
-  filter(str_length(gbif_taxo_id) > 5 & !is.na(gbif_taxo_id))
 # 
 # # this is a dumb implementation to fetch german vernacular names. does not work for all, needs refining
 # for (i in 1:nrow(tree_master_list)) {
