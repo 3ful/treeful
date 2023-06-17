@@ -1,8 +1,8 @@
 from postgis/postgis
 # need to enable raster extentions
 
-COPY initialize.sh /docker-entrypoint-initdb.d/
 
+COPY ./initialize.sh /docker-entrypoint-initdb.d/initialize.sh
 # CREATE EXTENSION postgis_raster;
 # SET postgis.gdal_enabled_drivers = 'ENABLE_ALL';
 # SELECT name, default_version,installed_version
