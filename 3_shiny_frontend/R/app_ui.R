@@ -39,7 +39,7 @@ app_ui <- function(request) {
                icon  = icon("chart-column"),
         # make species plot start ############################################################'
         fluidRow(column(3,
-                        selectInput('select_species', 'Baumart', choices = NULL, multiple = TRUE),
+                        selectInput('select_species', 'Baumart', choices = NULL, multiple = F),
                         p(textOutput("selected_species_control"))
         ), column(width = 9,
                   h3(textOutput("select_species")),

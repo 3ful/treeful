@@ -11,6 +11,8 @@
 #' @import DT
 #' @import sf
 #' @import raster
+#' @import rpostgis
+#' @import DBI
 #' @noRd
 
 # library(tidyverse)
@@ -27,6 +29,14 @@ app_server <- function(input, output, session) {
 
   username <- Sys.getenv("SHINYPROXY_USERNAME")
   Sys.setlocale("LC_TIME","de_DE.UTF-8")
+
+  conn <- DBI::dbConnect(RPostgres::Postgres(),
+                        dbname = "treeful-test",
+                        host= "192.168.178.148",
+                        port="5432",
+                        user="postgres",
+                        password="mysecretpassword")
+  on.exit(DBI::dbDisconnect(con), add = TRUE)
 
   output$map <- renderLeaflet({leaflet()%>% addTiles()})
 
@@ -75,17 +85,26 @@ app_server <- function(input, output, session) {
 
 
 
-  future_raster <- getfutureclimate(source = "copernicus")
-  bio01_copernicus <- getpastclimate(source = "copernicus", bioclim = "bio01")
-  bio12_copernicus <- getpastclimate(source = "copernicus", bioclim = "bio12")
+  #future_raster <- getfutureclimate(source = "copernicus")
 
-  get_user_climate <- function(lat = input$map_click$lat, lon = input$map_click$lng) {
-    map_point <- sf::st_as_sf(tibble(lat = lat, lon = lon), coords = c("lon", "lat"), crs = 4326)
-    #get future at map location
-    bio01_hist <- raster::extract(bio01_copernicus, map_point)
-    bio12_hist <- raster::extract(bio12_copernicus, map_point)
-    bio01_future <- raster::extract(future_raster$bio01, map_point)
-    bio12_future <- raster::extract(future_raster$bio12, map_point)
+  make_query <- function(map_point, layer = "", band = 1) {
+    return(paste0("SELECT g.pt_geom, ST_Value(ST_Band(r.rast, ARRAY[", band, "]), g.pt_geom) AS biovar
+      FROM public.", layer, " AS r
+      INNER JOIN
+      (SELECT ST_Transform(ST_SetSRID(ST_MakePoint(", map_point$lon, ",", map_point$lat, "), 4326),4326) As pt_geom) AS g
+      ON r.rast && g.pt_geom;"))
+  }
+
+  get_user_climate <- function(con = conn, lat = input$map_click$lat, lon = input$map_click$lng) {
+    map_point <- sf::st_as_sf(tibble(lat = lat, lon = lon), coords = c("lon", "lat"), crs = 4326, remove =FALSE)
+
+    #get past at map location
+    bio01_hist <- RPostgreSQL::dbGetQuery(con,make_query(map_point, layer = "pastbio01", band = 1))$biovar
+    bio12_hist <- RPostgreSQL::dbGetQuery(con,make_query(map_point, layer = "pastbio12", band = 1))$biovar
+
+
+    bio01_future <- RPostgreSQL::dbGetQuery(con,make_query(map_point, layer = "future", band = 1))$biovar
+    bio12_future <-  RPostgreSQL::dbGetQuery(con,make_query(map_point, layer = "future", band = 2))$biovar
 
     return(tibble(bio01_future, bio12_future,
                   bio01_hist, bio12_hist
@@ -102,9 +121,15 @@ app_server <- function(input, output, session) {
   tree_db <- data.table::fread("data/tree_db.csv")
   species <- unique(tree_db$master_list_name)
 
-  updateSelectInput(session, "select_species", choices = species, selected = NULL)
+  updateSelectInput(session, "select_species", choices = species, selected = "Sorbus torminalis")
 
-  tree_occurrence <- reactive(tree_db[master_list_name %in% c(input$select_species), ]
+  # tree_occurrence <- reactive(tree_db[master_list_name %in% c(input$select_species), ]
+  # )
+  #selection <- reactive(input$select_species)
+
+  tree_occurrence <- reactive(
+    DBI::dbGetQuery(conn, paste0(
+      "SELECT * FROM tree_dbs WHERE master_list_name ='", input$select_species, "';"))
   )
 
   output$selected_species_control <- renderText({ paste0(nrow(tree_occurrence()), " Baumstandorte gefunden") })
