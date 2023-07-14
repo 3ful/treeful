@@ -1,0 +1,23 @@
+# About this Book {.unnumbered}
+
+This book is the documentation for Treeful, an R Shiny application helping people plant trees based on species distribution modelling.  
+
+## Contribute {.unnumbered}
+
+## Who is behind this {.unnumbered}
+
+* Jakob Kutsch
+* Christoph Trost
+
+# Getting Tree Location Data
+
+This section is for everyone in this delegation. It contains some useful digital tips and tricks, even for non-technical staff. 
+
+# Getting Bioclimatic Variables
+
+# Merging Tree Locations and Bioclimatic Variables
+
+# Writing to PostGIS DB
+
+
+

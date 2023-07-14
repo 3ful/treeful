@@ -1,0 +1,100 @@
+---
+title: "How it works"
+format: html
+---
+
+## Quarto
+
+Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+
+## Running Code
+
+When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
+
+```{r}
+ conn <- DBI::dbConnect(RPostgres::Postgres(),
+                        dbname = "treeful-test",
+                        host= "192.168.178.148",
+                        port="5432",
+                        user="postgres",
+                        password="mysecretpassword")
+
+tree_db <- data.table::fread("../../../data/tree_db.csv")
+
+tree_occurrence <- DBI::dbGetQuery(conn, paste0(
+      "SELECT * FROM tree_dbs;"))
+
+tree_occurrence <- sf::st_read(conn, layer = "tree_dbs")
+```
+
+
+```{r}
+options(scipen=100000000)
+eu_grid <- sf::st_make_grid(sf::st_bbox(tree_occurrence),
+  n = c(100,100),
+  what = 'polygons',
+  square = FALSE,
+  flat_topped = TRUE) %>%
+  sf::st_as_sf() %>% 
+  tibble::rownames_to_column(var = "grid_id")
+
+tree_occurrence <- sf::st_join(tree_occurrence, eu_grid, join = st_within)
+tree_grid <- tree_occurrence %>%  
+  sf::st_drop_geometry() %>% 
+  dplyr::select(master_list_name, db, grid_id)
+tree_count <- tree_grid %>% 
+  dplyr::group_by(grid_id) %>% 
+  dplyr::count()
+
+eu_grid <- eu_grid %>% 
+  dplyr::left_join(tree_count)
+
+tmap::tm_shape(eu_grid) + tmap::tm_polygons(col = "n", alpha = 0.5, id = "n", style = "log10_pretty")
+  
+neutralocre <- "#f5efe2ff"
+
+  ggplot2::ggplot() +
+  ggplot2::geom_sf(data = eu_grid, aes(fill = n), color = "white", lwd = 0) +
+  viridis::scale_fill_viridis(direction = -1, option = "D", na.value = NA, trans = "log", breaks = c(10,100,1000,10000,100000)) +
+  ggplot2::labs(title = paste0(nrow(tree_occurrence), " Tree Locations"), fill = "") +
+  ggplot2::theme_void() +
+  ggplot2::theme(legend.position = "bottom", 
+        legend.direction = "horizontal", legend.key.width = ggplot2::unit(2, "cm"))
+```
+
+
+
+```{r}
+library(raster)
+
+source("../1_ETL/3_R/3_fn_get_climate_rasters.R")
+getpastclimate(source = "copernicus", bioclim = "bio01")
+bio_path <- "BIO01"
+bio01 <- raster(paste0("../1_ETL/2_Data/0_raw_data/copernicus/", bio_path, "_era5-to-1km_1979-2018-mean_v1.0.nc"))
+bio01 <- calc(bio01, function(x) {x - 273.15})
+harz <- osmdata::opq_osm_id(id = 3734731, type = "relation") %>%
+  osmdata::osmdata_sf()
+harz <- st_make_valid(harz$osm_multipolygons)
+
+harz_bio <- raster::crop(bio01, extent(harz))
+harz_bio <- as.data.frame(harz_bio, xy = TRUE) 
+
+ggplot() +
+  geom_raster(data = harz_bio, aes(x = x, y = y, fill = layer)) + 
+  scale_fill_viridis() +
+  theme_light() +
+  coord_quickmap() +
+  theme(legend.position = "bottom", legend.direction = "horizontal", axis.ticks = element_blank(), axis.text = element_blank(), axis.title = element_blank()) +
+  labs(fill = "Durchschnittstemperatur 1979 - 2018", title = "Copernicus Temperatur am Harz 1979 - 2018")
+
+```
+
+
+You can add options to executable code like this 
+
+```{r}
+#| echo: false
+2 * 2
+```
+
+The `echo: false` option disables the printing of code (only output is displayed).

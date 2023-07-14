@@ -1,0 +1,26 @@
+project:
+  type: book
+
+book:
+  title: "Treeful Docs"
+  author: "Christoph Trost"
+  date: "2023-06-20"
+  reader-mode: true
+  chapters:
+    - index.qmd
+
+format:
+  html:
+    toc: true
+    toc-location: left
+    theme: 
+      light: sandstone
+      dark: darkly
+    mainfont: "sans-serif"
+    embed-resources: true
+    split_by: none
+  pdf:
+    documentclass: scrreprt
+
+
+
