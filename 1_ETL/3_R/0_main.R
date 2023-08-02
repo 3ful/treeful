@@ -67,5 +67,4 @@ gc()
 cat("writing all to postgres")
 source("3_R/6_write_to_db.R")
 
-# to plot, run some charts in 
-#rstudioapi::navigateToFile(file = "3_R/6_cross_check_climate_hulls.R")
+###### EOF ####

@@ -1,4 +1,6 @@
 #################### LOad DBs, merge, turn into SF, extract bioclim #############################
+pipe_message = function(.data, status) {message(status); .data}
+
 
 if (!file.exists("2_Data/1_output/tree_db.csv")) {
   
@@ -65,6 +67,7 @@ if (!file.exists("2_Data/1_output/tree_db.csv")) {
   tree_dbs <- tree_dbs %>% 
     st_as_sf(crs = 4326) %>% 
     mutate(bio01_copernicus_1979_2018 = raster::extract(getpastclimate(source = "copernicus", bioclim = "bio01"), .)) %>% 
+    pipe_message("gotten BIO01 from Copernicus/n") %>%
     mutate(bio02_copernicus_1979_2018 = raster::extract(getpastclimate(source = "copernicus", bioclim = "bio02"), .)) %>% 
     mutate(bio03_copernicus_1979_2018 = raster::extract(getpastclimate(source = "copernicus", bioclim = "bio03"), .)) %>% 
     mutate(bio04_copernicus_1979_2018 = raster::extract(getpastclimate(source = "copernicus", bioclim = "bio04"), .)) %>% 
@@ -73,6 +76,7 @@ if (!file.exists("2_Data/1_output/tree_db.csv")) {
     mutate(bio07_copernicus_1979_2018 = raster::extract(getpastclimate(source = "copernicus", bioclim = "bio07"), .)) %>% 
     mutate(bio08_copernicus_1979_2018 = raster::extract(getpastclimate(source = "copernicus", bioclim = "bio08"), .)) %>% 
     mutate(bio09_copernicus_1979_2018 = raster::extract(getpastclimate(source = "copernicus", bioclim = "bio09"), .)) %>% 
+    pipe_message("Finished BIO09") %>%
     mutate(bio10_copernicus_1979_2018 = raster::extract(getpastclimate(source = "copernicus", bioclim = "bio10"), .)) %>% 
     mutate(bio11_copernicus_1979_2018 = raster::extract(getpastclimate(source = "copernicus", bioclim = "bio11"), .)) %>% 
     mutate(bio12_copernicus_1979_2018 = raster::extract(getpastclimate(source = "copernicus", bioclim = "bio12"), .)) %>% 
@@ -83,11 +87,15 @@ if (!file.exists("2_Data/1_output/tree_db.csv")) {
     mutate(bio17_copernicus_1979_2018 = raster::extract(getpastclimate(source = "copernicus", bioclim = "bio17"), .)) %>% 
     mutate(bio18_copernicus_1979_2018 = raster::extract(getpastclimate(source = "copernicus", bioclim = "bio18"), .)) %>% 
     mutate(bio19_copernicus_1979_2018 = raster::extract(getpastclimate(source = "copernicus", bioclim = "bio19"), .)) %>% 
+    pipe_message("Finished BIO19") %>%
     mutate(soil_depth_roots = raster::extract(raster::projectRaster(raster::raster("2_Data/0_raw_data/soil/STU_EU_DEPTH_ROOTS.rst", crs = esdac_crs), crs = "+proj=longlat +datum=WGS84 +no_defs"), .)) %>% 
+    pipe_message("Root depth done") %>%
     mutate(soil_clay_topsoil = raster::extract(raster::projectRaster(raster::raster("2_Data/0_raw_data/soil/STU_EU_T_CLAY.rst", crs = esdac_crs), crs = "+proj=longlat +datum=WGS84 +no_defs"), .)) %>% 
     mutate(soil_clay_subsoil = raster::extract(raster::projectRaster(raster::raster("2_Data/0_raw_data/soil/STU_EU_S_CLAY.rst", crs = esdac_crs), crs = "+proj=longlat +datum=WGS84 +no_defs"), .)) %>% 
+    pipe_message("Clay extraction done") %>%
     mutate(soil_sand_topsoil = raster::extract(raster::projectRaster(raster::raster("2_Data/0_raw_data/soil/STU_EU_T_SAND.rst", crs = esdac_crs), crs = "+proj=longlat +datum=WGS84 +no_defs"), .)) %>% 
     mutate(soil_sand_subsoil = raster::extract(raster::projectRaster(raster::raster("2_Data/0_raw_data/soil/STU_EU_S_SAND.rst", crs = esdac_crs), crs = "+proj=longlat +datum=WGS84 +no_defs"), .)) %>% 
+    pipe_message("Sand extraction done") %>%
     mutate(soil_silt_topsoil = raster::extract(raster::projectRaster(raster::raster("2_Data/0_raw_data/soil/STU_EU_T_SILT.rst", crs = esdac_crs), crs = "+proj=longlat +datum=WGS84 +no_defs"), .)) %>% 
     mutate(soil_silt_subsoil = raster::extract(raster::projectRaster(raster::raster("2_Data/0_raw_data/soil/STU_EU_S_SILT.rst", crs = esdac_crs), crs = "+proj=longlat +datum=WGS84 +no_defs"), .)) %>% 
     mutate(soil_organic_carbon_topsoil = raster::extract(raster::projectRaster(raster::raster("2_Data/0_raw_data/soil/STU_EU_T_OC.rst", crs = esdac_crs), crs = "+proj=longlat +datum=WGS84 +no_defs"), .)) %>% 
@@ -96,6 +104,7 @@ if (!file.exists("2_Data/1_output/tree_db.csv")) {
     mutate(soil_bulk_density_subsoil = raster::extract(raster::projectRaster(raster::raster("2_Data/0_raw_data/soil/STU_EU_S_BD.rst", crs = esdac_crs), crs = "+proj=longlat +datum=WGS84 +no_defs"), .)) %>% 
     mutate(soil_gravel_topsoil = raster::extract(raster::projectRaster(raster::raster("2_Data/0_raw_data/soil/STU_EU_T_GRAVEL.rst", crs = esdac_crs), crs = "+proj=longlat +datum=WGS84 +no_defs"), .)) %>% 
     mutate(soil_gravel_subsoil = raster::extract(raster::projectRaster(raster::raster("2_Data/0_raw_data/soil/STU_EU_S_GRAVEL.rst", crs = esdac_crs), crs = "+proj=longlat +datum=WGS84 +no_defs"), .)) %>% 
+    pipe_message("Gravel extraction done") %>%
     mutate(soil_water_ptr_topsoil = raster::extract(raster::projectRaster(raster::raster("2_Data/0_raw_data/soil/SMU_EU_T_TAWC.rst", crs = esdac_crs), crs = "+proj=longlat +datum=WGS84 +no_defs"), .)) %>% 
     mutate(soil_water_ptr_subsoil = raster::extract(raster::projectRaster(raster::raster("2_Data/0_raw_data/soil/SMU_EU_S_TAWC.rst", crs = esdac_crs), crs = "+proj=longlat +datum=WGS84 +no_defs"), .)) %>% 
     mutate(soil_water_ptf_topsoil = raster::extract(raster::projectRaster(raster::raster("2_Data/0_raw_data/soil/STU_EU_T_TAWC.rst", crs = esdac_crs), crs = "+proj=longlat +datum=WGS84 +no_defs"), .)) %>% 
@@ -107,30 +116,20 @@ if (!file.exists("2_Data/1_output/tree_db.csv")) {
   ################################ write it all to csv #################################
   data.table::fwrite(x = tree_dbs, file = "2_Data/1_output/tree_db.csv")
 } else {
-  cat("tree db exists, reading from disk")
+  cat("tree db exists, reading from disk/n")
   tree_dbs <- fread("2_Data/1_output/tree_db.csv")
 }
 
 # writing trees to postgres DB
 cat("writing tree db to postgres")
 con <- DBI::dbConnect(RPostgres::Postgres(), 
-                      dbname = "treeful-test",
+                      dbname = Sys.getenv("POSTGRES_DB"),
                       host= "192.168.178.148", 
                       port="5432",
                       user="postgres",
-                      password="mysecretpassword")
+                      password=Sys.getenv("POSTGRES_PW"))
 sf::st_write(tree_dbs, dsn = con, table = "trees",
              append = FALSE)
 DBI::dbDisconnect(conn = con)
 
-
-############# somehow sqlite doesnt write a table into DB###################
-# if(!exists("con")){
-#   con <- dbConnect(RSQLite::SQLite("2_Data/1_output/tree_db.sqlite"))
-# }
-# print("saving all that jazz into sqlite DB")
-# RSQLite::dbWriteTable(conn = con,  name = "tree_occurrence", value = tree_dbs, 
-#                       dplyr::select(tree_dbs, master_list_name, db, geometry, bio01_worldclim_1970_2000, bio12_worldclim_1970_2000,
-#                                     bio01_chelsa_1981_2010, bio12_chelsa_1981_2010, 
-#                                     bio01_copernicus_1979_2018, bio12_copernicus_1979_2018
-#                       ), overwrite = TRUE)
+##### EOF ####
