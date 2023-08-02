@@ -65,13 +65,13 @@ if (!file.exists("2_Data/1_output/tree_db.csv")) {
     tree_dbs <- tree_dbs %>% 
       mutate(terra::extract(getpastclimate(source = "copernicus", bioclim = bio_vars[i]), ., ID = F)) %>% 
       mutate(across(.cols = starts_with(c("BIO", "STU", "SMU")), ~ round(.x, digits = 2), .names = "{.col}")) 
-    print(aste0("Finished extraction of ", bio_vars[i]))
+    print(paste0("Finished extraction of ", bio_vars[i]))
   }
   for (i in 1:length(soil_vars)) {
     tree_dbs <- tree_dbs %>% 
       mutate(terra::extract(getsoilproperties(variable = soil_vars[i]), ., ID = F)) %>% 
       mutate(across(.cols = starts_with(c("BIO", "STU", "SMU")), ~ round(.x, digits = 2), .names = "{.col}")) 
-    print(aste0("Finished extraction of ", soil_vars[i]))
+    print(paste0("Finished extraction of ", soil_vars[i]))
   }
   
   # tree_dbs <- tree_dbs %>% 
