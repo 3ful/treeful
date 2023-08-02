@@ -215,8 +215,95 @@ soil_stack <- c(getsoilproperties("STU_EU_DEPTH_ROOTS"),
 
 
 
-tst <- tree_dbs %>% 
+exact_extract(soil_stack, slice(st_as_sf(tree_dbs, crs = 4326), 1:100))
+
+bio_raster <- stars::read_stars(paste0("2_Data/0_raw_data/past/", bio_path, "_era5-to-1km_1979-2018-mean_v1.0.nc"))
+soil_stack <- stars::read_stars(c("2_Data/0_raw_data/soil/STU_EU_DEPTH_ROOTS.rst", 
+                                "2_Data/0_raw_data/soil/STU_EU_S_CLAY.rst", 
+                                "2_Data/0_raw_data/soil/STU_EU_S_GRAVEL.rst"), crs = 3035)
+st_crs(soil_stack) <- 3035
+soil_stack <- st_transform(soil_stack, crs = 4326)
+soil_stack <- st_warp(soil_stack, crs = 4326)
+
+stars::st_extract(bio_raster, slice(st_as_sf(tree_dbs, crs = 4326), 1:100))
+
+# last try at making this extraction efficient: for-looping it all
+
+bio_vars <- c("bio01", "bio02", "bio03", "bio04", "bio05", "bio06", "bio07", "bio08", 
+              "bio09", "bio10", "bio11", "bio12", "bio13", "bio14", "bio15", "bio16", "bio17", "bio18", "bio19")
+
+soil_vars <- c("STU_EU_DEPTH_ROOTS","STU_EU_T_CLAY","STU_EU_S_CLAY","STU_EU_T_SAND","STU_EU_S_SAND","STU_EU_T_SILT","STU_EU_S_SILT",
+               "STU_EU_T_OC","STU_EU_S_OC","STU_EU_T_BD","STU_EU_S_BD","STU_EU_T_GRAVEL","STU_EU_S_GRAVEL",
+               "SMU_EU_T_TAWC","SMU_EU_S_TAWC","STU_EU_T_TAWC", "STU_EU_S_TAWC")
+
+tree_dbs <- tree_dbs %>% 
+  st_as_sf(crs = 4326)
+
+for (i in 1:length(bio_vars)) {
+  tree_dbs <- tree_dbs %>% 
+    slice(1:100) %>% 
+    mutate(terra::extract(getpastclimate(source = "copernicus", bioclim = bio_vars[i]), ., ID = F)) %>% 
+    mutate(across(.cols = starts_with(c("BIO", "STU", "SMU")), ~ round(.x, digits = 2), .names = "{.col}")) 
+    gc()
+    print(aste0("Finished extraction of ", bio_vars[i]))
+}
+for (i in 1:length(soil_vars)) {
+  tree_dbs <- tree_dbs %>% 
+    slice(1:100) %>% 
+    mutate(terra::extract(getsoilproperties(variable = soil_vars[i]), ., ID = F)) %>% 
+    mutate(across(.cols = starts_with(c("BIO", "STU", "SMU")), ~ round(.x, digits = 2), .names = "{.col}")) 
+  gc()
+  print(aste0("Finished extraction of ", soil_vars[i]))
+}
+
+
+####### Cemetery of abandoned approaches for efficient raster extracion 
+# stack it all together. too large for memory
+bioclim_stack <- c(
+  getpastclimate(source = "copernicus", bioclim = "bio01"),
+  getpastclimate(source = "copernicus", bioclim = "bio02"),
+  getpastclimate(source = "copernicus", bioclim = "bio03"),
+  getpastclimate(source = "copernicus", bioclim = "bio04"),
+  getpastclimate(source = "copernicus", bioclim = "bio05"),
+  getpastclimate(source = "copernicus", bioclim = "bio06"),
+  getpastclimate(source = "copernicus", bioclim = "bio07"),
+  getpastclimate(source = "copernicus", bioclim = "bio08"),
+  getpastclimate(source = "copernicus", bioclim = "bio09"),
+  getpastclimate(source = "copernicus", bioclim = "bio10"),
+  getpastclimate(source = "copernicus", bioclim = "bio11"),
+  getpastclimate(source = "copernicus", bioclim = "bio12"),
+  getpastclimate(source = "copernicus", bioclim = "bio13"),
+  getpastclimate(source = "copernicus", bioclim = "bio14"),
+  getpastclimate(source = "copernicus", bioclim = "bio15"),
+  getpastclimate(source = "copernicus", bioclim = "bio16"),
+  getpastclimate(source = "copernicus", bioclim = "bio17"),
+  getpastclimate(source = "copernicus", bioclim = "bio18"),
+  getpastclimate(source = "copernicus", bioclim = "bio19")
+)
+
+soil_stack <- c(getsoilproperties("STU_EU_DEPTH_ROOTS"),
+                getsoilproperties("STU_EU_T_CLAY"),
+                getsoilproperties("STU_EU_S_CLAY"),
+                getsoilproperties("STU_EU_T_SAND"),
+                getsoilproperties("STU_EU_S_SAND"),
+                getsoilproperties("STU_EU_T_SILT"),
+                getsoilproperties("STU_EU_S_SILT"),
+                getsoilproperties("STU_EU_T_OC"),
+                getsoilproperties("STU_EU_S_OC"),
+                getsoilproperties("STU_EU_T_BD"),
+                getsoilproperties("STU_EU_S_BD"),
+                getsoilproperties("STU_EU_T_GRAVEL"),
+                getsoilproperties("STU_EU_S_GRAVEL"),
+                getsoilproperties("SMU_EU_T_TAWC"),
+                getsoilproperties("SMU_EU_S_TAWC"),
+                getsoilproperties("STU_EU_T_TAWC"),
+                getsoilproperties("STU_EU_S_TAWC"))
+
+
+tree_dbs <- tree_dbs %>% 
   st_as_sf(crs = 4326) %>% 
-  slice(1:1000) %>% 
-  mutate(terra::extract(soil_stack, ., ID = F))
-  
+  mutate(terra::extract(soil_stack, ., ID = F)) %>% 
+  mutate(terra::extract(bioclim_stack, ., ID = F)) %>% 
+  mutate(across(.cols = starts_with(c("BIO", "STU", "SMU")), ~ round(.x, digits = 2), .names = "{.col}"))
+
+

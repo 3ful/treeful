@@ -47,56 +47,32 @@ if (!file.exists("2_Data/1_output/tree_db.csv")) {
   
   ######################### The heart of it all: getting bioclimatic vars for each tree ##########
   # ATTENTION with namespaces here. stringdist and raster both have an extract function. took me only an hour to figure out. 
-
-  cat(paste0("Stacking bioclim and soil rasters together"))
-  
-  bioclim_stack <- c(
-    getpastclimate(source = "copernicus", bioclim = "bio01"),
-    getpastclimate(source = "copernicus", bioclim = "bio02"),
-    getpastclimate(source = "copernicus", bioclim = "bio03"),
-    getpastclimate(source = "copernicus", bioclim = "bio04"),
-    getpastclimate(source = "copernicus", bioclim = "bio05"),
-    getpastclimate(source = "copernicus", bioclim = "bio06"),
-    getpastclimate(source = "copernicus", bioclim = "bio07"),
-    getpastclimate(source = "copernicus", bioclim = "bio08"),
-    getpastclimate(source = "copernicus", bioclim = "bio09"),
-    getpastclimate(source = "copernicus", bioclim = "bio10"),
-    getpastclimate(source = "copernicus", bioclim = "bio11"),
-    getpastclimate(source = "copernicus", bioclim = "bio12"),
-    getpastclimate(source = "copernicus", bioclim = "bio13"),
-    getpastclimate(source = "copernicus", bioclim = "bio14"),
-    getpastclimate(source = "copernicus", bioclim = "bio15"),
-    getpastclimate(source = "copernicus", bioclim = "bio16"),
-    getpastclimate(source = "copernicus", bioclim = "bio17"),
-    getpastclimate(source = "copernicus", bioclim = "bio18"),
-    getpastclimate(source = "copernicus", bioclim = "bio19")
-  )
-  
-  soil_stack <- c(getsoilproperties("STU_EU_DEPTH_ROOTS"),
-                  getsoilproperties("STU_EU_T_CLAY"),
-                  getsoilproperties("STU_EU_S_CLAY"),
-                  getsoilproperties("STU_EU_T_SAND"),
-                  getsoilproperties("STU_EU_S_SAND"),
-                  getsoilproperties("STU_EU_T_SILT"),
-                  getsoilproperties("STU_EU_S_SILT"),
-                  getsoilproperties("STU_EU_T_OC"),
-                  getsoilproperties("STU_EU_S_OC"),
-                  getsoilproperties("STU_EU_T_BD"),
-                  getsoilproperties("STU_EU_S_BD"),
-                  getsoilproperties("STU_EU_T_GRAVEL"),
-                  getsoilproperties("STU_EU_S_GRAVEL"),
-                  getsoilproperties("SMU_EU_T_TAWC"),
-                  getsoilproperties("SMU_EU_S_TAWC"),
-                  getsoilproperties("STU_EU_T_TAWC"),
-                  getsoilproperties("STU_EU_S_TAWC"))
   
   cat(paste0("Starting extraction for ", nrow(tree_dbs), " tree occurrences"))
   
+  
+  bio_vars <- c("bio01", "bio02", "bio03", "bio04", "bio05", "bio06", "bio07", "bio08", 
+                "bio09", "bio10", "bio11", "bio12", "bio13", "bio14", "bio15", "bio16", "bio17", "bio18", "bio19")
+  
+  soil_vars <- c("STU_EU_DEPTH_ROOTS","STU_EU_T_CLAY","STU_EU_S_CLAY","STU_EU_T_SAND","STU_EU_S_SAND","STU_EU_T_SILT","STU_EU_S_SILT",
+                 "STU_EU_T_OC","STU_EU_S_OC","STU_EU_T_BD","STU_EU_S_BD","STU_EU_T_GRAVEL","STU_EU_S_GRAVEL",
+                 "SMU_EU_T_TAWC","SMU_EU_S_TAWC","STU_EU_T_TAWC", "STU_EU_S_TAWC")
+  
   tree_dbs <- tree_dbs %>% 
-    st_as_sf(crs = 4326) %>% 
-    mutate(terra::extract(soil_stack, ., ID = F)) %>% 
-    mutate(terra::extract(bioclim_stack, ., ID = F)) %>% 
-    mutate(across(.cols = starts_with(c("BIO", "STU", "SMU")), ~ round(.x, digits = 2), .names = "{.col}"))
+    st_as_sf(crs = 4326)
+  
+  for (i in 1:length(bio_vars)) {
+    tree_dbs <- tree_dbs %>% 
+      mutate(terra::extract(getpastclimate(source = "copernicus", bioclim = bio_vars[i]), ., ID = F)) %>% 
+      mutate(across(.cols = starts_with(c("BIO", "STU", "SMU")), ~ round(.x, digits = 2), .names = "{.col}")) 
+    print(aste0("Finished extraction of ", bio_vars[i]))
+  }
+  for (i in 1:length(soil_vars)) {
+    tree_dbs <- tree_dbs %>% 
+      mutate(terra::extract(getsoilproperties(variable = soil_vars[i]), ., ID = F)) %>% 
+      mutate(across(.cols = starts_with(c("BIO", "STU", "SMU")), ~ round(.x, digits = 2), .names = "{.col}")) 
+    print(aste0("Finished extraction of ", soil_vars[i]))
+  }
   
   # tree_dbs <- tree_dbs %>% 
   #   st_drop_geometry()
