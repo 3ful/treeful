@@ -4,7 +4,7 @@
 
 if(!require(librarian)) install.packages("librarian")
 library(librarian)
-librarian::shelf(DBI,RPostgres,sf,dplyr,dbplyr,rnaturalearth,ggplot2)
+librarian::shelf(DBI,RPostgres,sf,dplyr,dbplyr,rnaturalearth,ggplot2, raster)
 
 
 docker_cmd <- "run --detach --name some-postgis --publish 5432:5432 --env POSTGRES_PASSWORD=mysecretpassword -d postgis/postgis"
@@ -85,7 +85,7 @@ library(rpostgis)
 # FROM pg_available_extensions WHERE name LIKE 'postgis%' or name LIKE 'address%';
 
 # run a pgadmin container to see if all ends up in DB
-# docker run -p 80:80     -e 'PGADMIN_DEFAULT_EMAIL=user@domain.com'     -e 'PGADMIN_DEFAULT_PASSWORD=SuperSecret'     -d dpage/pgadmin4
+# docker run -p 80:80     -e 'PGADMIN_DEFAULT_EMAIL=user@domain.com'     -e 'PGADMIN_DEFAULT_PASSWORD=ortant: set TTN mapper port filter to '4SuperSecret'     -d dpage/pgadmin4
 
 
 
@@ -129,4 +129,18 @@ ON r.rast && g.pt_geom;")
 
 # query raster values 
 # https://postgis.net/docs/RT_ST_Value.html
+
+#esdac_crs <- "+proj=laea +lat_0=52 +lon_0=10 +x_0=4321000 +y_0=3210000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs +type=crs"
+esdac_crs <- "+proj=laea +lat_0=52 +lon_0=10 +x_0=4321000 +y_0=3210000 +ellps=GRS80 +units=m"
+roots <- stars::read_stars("2_Data/0_raw_data/soil/STU_EU_DEPTH_ROOTS.rst") %>%  st_transform(crs = 3035)
+roots <- raster::projectRaster(raster::raster("2_Data/0_raw_data/soil/STU_EU_DEPTH_ROOTS.rst", crs = esdac_crs), crs = "+proj=longlat +datum=WGS84 +no_defs")
+plot(roots)
+stars::
+stars::st_transform_proj(roots, crs = st_crs(stars::st_as_stars(getpastclimate(source = "copernicus", bioclim = "bio01"))))
+raster::extract(raster::raster("2_Data/0_raw_data/soil/STU_EU_DEPTH_ROOTS.rst", crs = esdac_crs), filter(st_as_sf(tree_dbs, crs = 4326), is.na(st_dimension(.)) == FALSE))
+
+tree_dbs_laea <- tree_dbs %>% 
+  st_as_sf(crs = 4326) %>% 
+  st_transform(crs = esdac_crs)
+  
 
