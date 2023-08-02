@@ -23,14 +23,13 @@ getpastclimate <- function(source = "copernicus", bioclim = "bio01") {
     
     bio_path <- toupper(bioclim)
 
-    bio_raster <- raster(paste0("2_Data/0_raw_data/past/", bio_path, "_era5-to-1km_1979-2018-mean_v1.0.nc"), 
-                         crs = "+proj=longlat +datum=WGS84 +no_defs +type=crs")
+    bio_raster <- terra::rast(paste0("2_Data/0_raw_data/past/", bio_path, "_era5-to-1km_1979-2018-mean_v1.0.nc"))
     # convert bioclim as per copernicus documentation. for some reasone case_when does not work here.     
     if (bioclim %in% c("bio01", "bio02", "bio04", "bio05", "bio06", "bio07", "bio08", "bio09", "bio10", "bio11")) 
-    {bio_raster <- calc(bio_raster, function(x) {x - 273.15})
-    } else if (bioclim == "bio12") {bio_raster <- calc(bio_raster, function(x) {x*3600*24*365*1000})
-    } else if (bioclim %in% c("bio13", "bio14")) {bio_raster <- calc(bio_raster, function(x) {x*3600*24*30.5*1000})
-    } else if (bioclim %in% c("bio16", "bio17", "bio18", "bio19")) {bio_raster <- calc(bio_raster, function(x) {x*3600*24*91.3*1000})
+    {bio_raster <- bio_raster - 273.15
+    } else if (bioclim == "bio12") {bio_raster <- bio_raster*3600*24*365*1000
+    } else if (bioclim %in% c("bio13", "bio14")) {bio_raster <- bio_raster*3600*24*30.5*1000
+    } else if (bioclim %in% c("bio16", "bio17", "bio18", "bio19")) {bio_raster <- bio_raster*3600*24*91.3*1000
     }
     # a bit unclear if bio13-bio19 can and should also be comverted like bio12. probably not as theyre not on annual reference period
 
@@ -93,7 +92,7 @@ getpastclimate <- function(source = "copernicus", bioclim = "bio01") {
 #################### Get Future Climate ##################
 # for now using climate projection model MPI-ESM1-2-LR and socio-econ pathway 245 
 
-getfutureclimate <- function(source = "chelsa", bioclim = "bio01") {
+getfutureclimate <- function(source = "copernicus", bioclim = "bio01") {
   if(source == "chelsa") {
     future_raster <- raster::stack(c("2_Data/1_output/CHELSA_cropped/CHELSA_bio1_2041-2070_gfdl-esm4_ssp370_V.2.1.tif", 
                     "2_Data/1_output/CHELSA_cropped/CHELSA_bio12_2041-2070_gfdl-esm4_ssp370_V.2.1.tif"))
@@ -110,14 +109,16 @@ getfutureclimate <- function(source = "chelsa", bioclim = "bio01") {
   } else if (source == "copernicus") {
 
     bio_path <- toupper(bioclim)
-    
-    bio_raster <- raster::stack(paste0("2_Data/0_raw_data/future/", bio_path, "_hadgem2-cc_rcp45_r1i1p1_1960-2099-mean_v1.0.nc"))$X2050.01.01
-    # convert bioclim as per copernicus documentation. for some reasone case_when does not work here.     
+
+    bio_raster <- terra::rast(paste0("2_Data/0_raw_data/future/", bio_path, "_hadgem2-cc_rcp45_r1i1p1_1960-2099-mean_v1.0.nc"))
+    names(bio_raster) <- terra::time(bio_raster)
+    bio_raster <- bio_raster$`2050-01-01`
+    # convert bioclim as per copernicus documentation. for some reason case_when does not work here.     
     if (bioclim %in% c("bio01", "bio02", "bio04", "bio05", "bio06", "bio07", "bio08", "bio09", "bio10", "bio11")) 
-    {bio_raster <- calc(bio_raster, function(x) {x - 273.15})
-    } else if (bioclim == "bio12") {bio_raster <- calc(bio_raster, function(x) {x*3600*24*365*1000})
-    } else if (bioclim %in% c("bio13", "bio14")) {bio_raster <- calc(bio_raster, function(x) {x*3600*24*30.5*1000})
-    } else if (bioclim %in% c("bio16", "bio17", "bio18", "bio19")) {bio_raster <- calc(bio_raster, function(x) {x*3600*24*91.3*1000})
+    {bio_raster <- bio_raster - 273.15
+    } else if (bioclim == "bio12") {bio_raster <- bio_raster*3600*24*365*1000
+    } else if (bioclim %in% c("bio13", "bio14")) {bio_raster <- bio_raster*3600*24*30.5*1000
+    } else if (bioclim %in% c("bio16", "bio17", "bio18", "bio19")) {bio_raster <- bio_raster*3600*24*91.3*1000
     }
     
   }
@@ -125,3 +126,10 @@ getfutureclimate <- function(source = "chelsa", bioclim = "bio01") {
   return(bio_raster)
 }
 
+getsoilproperties <- function(variable = "STU_EU_DEPTH_ROOTS") {
+  esdac_crs <- "+proj=laea +lat_0=52 +lon_0=10 +x_0=4321000 +y_0=3210000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs +type=crs"
+  soil_layer <- terra::rast(paste0("2_Data/0_raw_data/soil/", variable, ".rst"))
+  terra::crs(soil_layer) <- esdac_crs
+  soil_layer <- terra::project(soil_layer, "epsg:4326")  
+  return(soil_layer)
+}

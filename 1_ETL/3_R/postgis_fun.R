@@ -130,10 +130,13 @@ ON r.rast && g.pt_geom;")
 # query raster values 
 # https://postgis.net/docs/RT_ST_Value.html
 
-#esdac_crs <- "+proj=laea +lat_0=52 +lon_0=10 +x_0=4321000 +y_0=3210000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs +type=crs"
-esdac_crs <- "+proj=laea +lat_0=52 +lon_0=10 +x_0=4321000 +y_0=3210000 +ellps=GRS80 +units=m"
+esdac_crs <- "+proj=laea +lat_0=52 +lon_0=10 +x_0=4321000 +y_0=3210000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs +type=crs"
+
 roots <- stars::read_stars("2_Data/0_raw_data/soil/STU_EU_DEPTH_ROOTS.rst") %>%  st_transform(crs = 3035)
+
+beginCluster()
 roots <- raster::projectRaster(raster::raster("2_Data/0_raw_data/soil/STU_EU_DEPTH_ROOTS.rst", crs = esdac_crs), crs = "+proj=longlat +datum=WGS84 +no_defs")
+endCluster()
 plot(roots)
 stars::
 stars::st_transform_proj(roots, crs = st_crs(stars::st_as_stars(getpastclimate(source = "copernicus", bioclim = "bio01"))))
@@ -143,4 +146,22 @@ tree_dbs_laea <- tree_dbs %>%
   st_as_sf(crs = 4326) %>% 
   st_transform(crs = esdac_crs)
   
+roots <- terra::rast("2_Data/0_raw_data/soil/STU_EU_DEPTH_ROOTS.rst")
+roots <- terra::project(roots)
+terra::crs(roots) <- esdac_crs
+
+roots <- terra::project(roots, "epsg:4326")
+# trying to find a more memory efficient solution to raster extract. exactextractr sounds promising, velox too but seems unmaintained. 
+
+exact_extract(roots, slice(st_as_sf(tree_dbs, crs  = 4326) , 1:100), 'mean')
+
+getsoilproperties <- function(variable = "STU_EU_DEPTH_ROOTS") {
+  esdac_crs <- "+proj=laea +lat_0=52 +lon_0=10 +x_0=4321000 +y_0=3210000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs +type=crs"
+  soil_layer <- terra::rast(paste0("2_Data/0_raw_data/soil/", variable, ".rst"))
+  terra::crs(soil_layer) <- esdac_crs
+  soil_layer <- terra::project(soil_layer, "epsg:4326")  
+}
+
+
+
 
