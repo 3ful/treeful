@@ -43,73 +43,60 @@ if (!file.exists("2_Data/1_output/tree_db.csv")) {
   )
   
   rm(gbif_trees_sf, open_trees_sf, try_trees_sf, trees4f_sf)
-  
-  ####### Soil data Prep for ESDAC rasters
-  esdac_crs <- 'PROJCS["ETRS_1989_LAEA",
-    GEOGCS["GCS_ETRS_1989",
-        DATUM["D_ETRS_1989",
-            SPHEROID["GRS_1980",6378137.0,298.257222101]],
-        PRIMEM["Greenwich",0.0],
-        UNIT["Degree",0.0174532925199433]],
-    PROJECTION["Lambert_Azimuthal_Equal_Area"],
-    PARAMETER["False_Easting",4321000.0],
-    PARAMETER["False_Northing",3210000.0],
-    PARAMETER["Central_Meridian",10.0],
-    PARAMETER["Latitude_Of_Origin",52.0],
-    UNIT["Meter",1.0]]'
-  
+
   
   ######################### The heart of it all: getting bioclimatic vars for each tree ##########
   # ATTENTION with namespaces here. stringdist and raster both have an extract function. took me only an hour to figure out. 
 
-  print(paste0("starting extraction from rasters for ", nrow(tree_dbs), " tree occurrences"))
+  cat(paste0("Stacking bioclim and soil rasters together"))
+  
+  bioclim_stack <- c(
+    getpastclimate(source = "copernicus", bioclim = "bio01"),
+    getpastclimate(source = "copernicus", bioclim = "bio02"),
+    getpastclimate(source = "copernicus", bioclim = "bio03"),
+    getpastclimate(source = "copernicus", bioclim = "bio04"),
+    getpastclimate(source = "copernicus", bioclim = "bio05"),
+    getpastclimate(source = "copernicus", bioclim = "bio06"),
+    getpastclimate(source = "copernicus", bioclim = "bio07"),
+    getpastclimate(source = "copernicus", bioclim = "bio08"),
+    getpastclimate(source = "copernicus", bioclim = "bio09"),
+    getpastclimate(source = "copernicus", bioclim = "bio10"),
+    getpastclimate(source = "copernicus", bioclim = "bio11"),
+    getpastclimate(source = "copernicus", bioclim = "bio12"),
+    getpastclimate(source = "copernicus", bioclim = "bio13"),
+    getpastclimate(source = "copernicus", bioclim = "bio14"),
+    getpastclimate(source = "copernicus", bioclim = "bio15"),
+    getpastclimate(source = "copernicus", bioclim = "bio16"),
+    getpastclimate(source = "copernicus", bioclim = "bio17"),
+    getpastclimate(source = "copernicus", bioclim = "bio18"),
+    getpastclimate(source = "copernicus", bioclim = "bio19")
+  )
+  
+  soil_stack <- c(getsoilproperties("STU_EU_DEPTH_ROOTS"),
+                  getsoilproperties("STU_EU_T_CLAY"),
+                  getsoilproperties("STU_EU_S_CLAY"),
+                  getsoilproperties("STU_EU_T_SAND"),
+                  getsoilproperties("STU_EU_S_SAND"),
+                  getsoilproperties("STU_EU_T_SILT"),
+                  getsoilproperties("STU_EU_S_SILT"),
+                  getsoilproperties("STU_EU_T_OC"),
+                  getsoilproperties("STU_EU_S_OC"),
+                  getsoilproperties("STU_EU_T_BD"),
+                  getsoilproperties("STU_EU_S_BD"),
+                  getsoilproperties("STU_EU_T_GRAVEL"),
+                  getsoilproperties("STU_EU_S_GRAVEL"),
+                  getsoilproperties("SMU_EU_T_TAWC"),
+                  getsoilproperties("SMU_EU_S_TAWC"),
+                  getsoilproperties("STU_EU_T_TAWC"),
+                  getsoilproperties("STU_EU_S_TAWC"))
+  
+  cat(paste0("Starting extraction for ", nrow(tree_dbs), " tree occurrences"))
   
   tree_dbs <- tree_dbs %>% 
     st_as_sf(crs = 4326) %>% 
-    mutate(bio01_copernicus_1979_2018 = terra::extract(getpastclimate(source = "copernicus", bioclim = "bio01"), ., ID = F)[,1]) %>% 
-    pipe_message("gotten BIO01 from Copernicus/n") %>%
-    mutate(bio02_copernicus_1979_2018 = terra::extract(getpastclimate(source = "copernicus", bioclim = "bio02"), ., ID = F)[,1]) %>% 
-    mutate(bio03_copernicus_1979_2018 = terra::extract(getpastclimate(source = "copernicus", bioclim = "bio03"), ., ID = F)[,1]) %>% 
-    mutate(bio04_copernicus_1979_2018 = terra::extract(getpastclimate(source = "copernicus", bioclim = "bio04"), ., ID = F)[,1]) %>% 
-    mutate(bio05_copernicus_1979_2018 = terra::extract(getpastclimate(source = "copernicus", bioclim = "bio05"), ., ID = F)[,1]) %>% 
-    mutate(bio06_copernicus_1979_2018 = terra::extract(getpastclimate(source = "copernicus", bioclim = "bio06"), ., ID = F)[,1]) %>% 
-    mutate(bio07_copernicus_1979_2018 = terra::extract(getpastclimate(source = "copernicus", bioclim = "bio07"), ., ID = F)[,1]) %>% 
-    mutate(bio08_copernicus_1979_2018 = terra::extract(getpastclimate(source = "copernicus", bioclim = "bio08"), ., ID = F)[,1]) %>% 
-    mutate(bio09_copernicus_1979_2018 = terra::extract(getpastclimate(source = "copernicus", bioclim = "bio09"), ., ID = F)[,1]) %>% 
-    pipe_message("Finished BIO09") %>%
-    mutate(bio10_copernicus_1979_2018 = terra::extract(getpastclimate(source = "copernicus", bioclim = "bio10"), ., ID = F)[,1]) %>% 
-    mutate(bio11_copernicus_1979_2018 = terra::extract(getpastclimate(source = "copernicus", bioclim = "bio11"), ., ID = F)[,1]) %>% 
-    mutate(bio12_copernicus_1979_2018 = terra::extract(getpastclimate(source = "copernicus", bioclim = "bio12"), ., ID = F)[,1]) %>% 
-    mutate(bio13_copernicus_1979_2018 = terra::extract(getpastclimate(source = "copernicus", bioclim = "bio13"), ., ID = F)[,1]) %>% 
-    mutate(bio14_copernicus_1979_2018 = terra::extract(getpastclimate(source = "copernicus", bioclim = "bio14"), ., ID = F)[,1]) %>% 
-    mutate(bio15_copernicus_1979_2018 = terra::extract(getpastclimate(source = "copernicus", bioclim = "bio15"), ., ID = F)[,1]) %>% 
-    mutate(bio16_copernicus_1979_2018 = terra::extract(getpastclimate(source = "copernicus", bioclim = "bio16"), ., ID = F)[,1]) %>% 
-    mutate(bio17_copernicus_1979_2018 = terra::extract(getpastclimate(source = "copernicus", bioclim = "bio17"), ., ID = F)[,1]) %>% 
-    mutate(bio18_copernicus_1979_2018 = terra::extract(getpastclimate(source = "copernicus", bioclim = "bio18"), ., ID = F)[,1]) %>% 
-    mutate(bio19_copernicus_1979_2018 = terra::extract(getpastclimate(source = "copernicus", bioclim = "bio19"), ., ID = F)[,1]) %>% 
-    pipe_message("Finished BIO19") %>%
-    mutate(soil_depth_roots = terra::extract(getsoilproperties("STU_EU_DEPTH_ROOTS"), ., ID = F)[,1]) %>% 
-    pipe_message("Root depth done") %>%
-    mutate(soil_clay_topsoil = terra::extract(getsoilproperties("STU_EU_T_CLAY"), ., ID = F)[,1]) %>% 
-    mutate(soil_clay_subsoil = terra::extract(getsoilproperties("STU_EU_S_CLAY"), ., ID = F)[,1]) %>% 
-    pipe_message("Clay extraction done") %>%
-    mutate(soil_sand_topsoil = terra::extract(getsoilproperties("STU_EU_T_SAND"), ., ID = F)[,1]) %>% 
-    mutate(soil_sand_subsoil = terra::extract(getsoilproperties("STU_EU_S_SAND"), ., ID = F)[,1]) %>% 
-    pipe_message("Sand extraction done") %>%
-    mutate(soil_silt_topsoil = terra::extract(getsoilproperties("STU_EU_T_SILT"), ., ID = F)[,1]) %>% 
-    mutate(soil_silt_subsoil = terra::extract(getsoilproperties("STU_EU_S_SILT"), ., ID = F)[,1]) %>% 
-    mutate(soil_organic_carbon_topsoil = terra::extract(getsoilproperties("STU_EU_T_OC"), ., ID = F)[,1]) %>% 
-    mutate(soil_organic_carbon_subsoil = terra::extract(getsoilproperties("STU_EU_S_OC"), ., ID = F)[,1]) %>% 
-    mutate(soil_bulk_density_topsoil = terra::extract(getsoilproperties("STU_EU_T_BD"), ., ID = F)[,1]) %>% 
-    mutate(soil_bulk_density_subsoil = terra::extract(getsoilproperties("STU_EU_S_BD"), ., ID = F)[,1]) %>% 
-    mutate(soil_gravel_topsoil = terra::extract(getsoilproperties("STU_EU_T_GRAVEL"), ., ID = F)[,1]) %>% 
-    mutate(soil_gravel_subsoil = terra::extract(getsoilproperties("STU_EU_S_GRAVEL"), ., ID = F)[,1]) %>% 
-    pipe_message("Gravel extraction done") %>%
-    mutate(soil_water_ptr_topsoil = terra::extract(getsoilproperties("SMU_EU_T_TAWC"), ., ID = F)[,1]) %>% 
-    mutate(soil_water_ptr_subsoil = terra::extract(getsoilproperties("SMU_EU_S_TAWC"), ., ID = F)[,1]) %>% 
-    mutate(soil_water_ptf_topsoil = terra::extract(getsoilproperties("STU_EU_T_TAWC"), ., ID = F)[,1]) %>% 
-    mutate(soil_water_ptf_subsoil = terra::extract(getsoilproperties("STU_EU_S_TAWC"), ., ID = F)[,1]) %>% 
-    mutate(across(.cols = starts_with(c("bio", "soil")), ~ round(.x, digits = 2), .names = "{.col}"))
+    mutate(terra::extract(soil_stack, ., ID = F)) %>% 
+    mutate(terra::extract(bioclim_stack, ., ID = F)) %>% 
+    mutate(across(.cols = starts_with(c("BIO", "STU", "SMU")), ~ round(.x, digits = 2), .names = "{.col}"))
   
   # tree_dbs <- tree_dbs %>% 
   #   st_drop_geometry()

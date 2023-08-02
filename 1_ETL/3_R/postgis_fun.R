@@ -163,5 +163,60 @@ getsoilproperties <- function(variable = "STU_EU_DEPTH_ROOTS") {
 }
 
 
+tree_dbs <- tree_dbs %>% 
+  st_as_sf(crs = 4326) %>% 
+  mutate(bio01_copernicus_1979_2018 = terra::extract(getpastclimate(source = "copernicus", bioclim = "bio01"), ., ID = F)[,1]) %>% 
+  mutate(soil_depth_roots = terra::extract(getsoilproperties("STU_EU_DEPTH_ROOTS"), ., ID = F)[,1]) 
+
+tree_dbs_exact <- tree_dbs %>% 
+  st_as_sf(crs = 4326) %>% 
+  slice(1:1000000) %>% 
+  mutate(root = exact_extract(getsoilproperties("STU_EU_DEPTH_ROOTS"), ., 'sum'))
+
+bioclim_stack <- c(
+  getpastclimate(source = "copernicus", bioclim = "bio01"),
+  getpastclimate(source = "copernicus", bioclim = "bio02"),
+  getpastclimate(source = "copernicus", bioclim = "bio03"),
+  getpastclimate(source = "copernicus", bioclim = "bio04"),
+  getpastclimate(source = "copernicus", bioclim = "bio05"),
+  getpastclimate(source = "copernicus", bioclim = "bio06"),
+  getpastclimate(source = "copernicus", bioclim = "bio07"),
+  getpastclimate(source = "copernicus", bioclim = "bio08"),
+  getpastclimate(source = "copernicus", bioclim = "bio09"),
+  getpastclimate(source = "copernicus", bioclim = "bio10"),
+  getpastclimate(source = "copernicus", bioclim = "bio11"),
+  getpastclimate(source = "copernicus", bioclim = "bio12"),
+  getpastclimate(source = "copernicus", bioclim = "bio13"),
+  getpastclimate(source = "copernicus", bioclim = "bio14"),
+  getpastclimate(source = "copernicus", bioclim = "bio15"),
+  getpastclimate(source = "copernicus", bioclim = "bio16"),
+  getpastclimate(source = "copernicus", bioclim = "bio17"),
+  getpastclimate(source = "copernicus", bioclim = "bio18"),
+  getpastclimate(source = "copernicus", bioclim = "bio19")
+)
+
+soil_stack <- c(getsoilproperties("STU_EU_DEPTH_ROOTS"),
+                getsoilproperties("STU_EU_T_CLAY"),
+                getsoilproperties("STU_EU_S_CLAY"),
+                getsoilproperties("STU_EU_T_SAND"),
+                getsoilproperties("STU_EU_S_SAND"),
+                getsoilproperties("STU_EU_T_SILT"),
+                getsoilproperties("STU_EU_S_SILT"),
+                getsoilproperties("STU_EU_T_OC"),
+                getsoilproperties("STU_EU_S_OC"),
+                getsoilproperties("STU_EU_T_BD"),
+                getsoilproperties("STU_EU_S_BD"),
+                getsoilproperties("STU_EU_T_GRAVEL"),
+                getsoilproperties("STU_EU_S_GRAVEL"),
+                getsoilproperties("SMU_EU_T_TAWC"),
+                getsoilproperties("SMU_EU_S_TAWC"),
+                getsoilproperties("STU_EU_T_TAWC"),
+                getsoilproperties("STU_EU_S_TAWC"))
 
 
+
+tst <- tree_dbs %>% 
+  st_as_sf(crs = 4326) %>% 
+  slice(1:1000) %>% 
+  mutate(terra::extract(soil_stack, ., ID = F))
+  
