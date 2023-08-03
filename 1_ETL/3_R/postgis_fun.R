@@ -306,4 +306,56 @@ tree_dbs <- tree_dbs %>%
   mutate(terra::extract(bioclim_stack, ., ID = F)) %>% 
   mutate(across(.cols = starts_with(c("BIO", "STU", "SMU")), ~ round(.x, digits = 2), .names = "{.col}"))
 
+###### the tidyverse way
 
+tree_dbs <- tree_dbs %>% 
+  st_as_sf(crs = 4326) %>% 
+  mutate(bio01_copernicus_1979_2018 = raster::extract(getpastclimate(source = "copernicus", bioclim = "bio01"), .)) %>% 
+  mutate(bio02_copernicus_1979_2018 = raster::extract(getpastclimate(source = "copernicus", bioclim = "bio02"), .)) %>% 
+  mutate(bio03_copernicus_1979_2018 = raster::extract(getpastclimate(source = "copernicus", bioclim = "bio03"), .)) %>% 
+  mutate(bio04_copernicus_1979_2018 = raster::extract(getpastclimate(source = "copernicus", bioclim = "bio04"), .)) %>% 
+  mutate(bio05_copernicus_1979_2018 = raster::extract(getpastclimate(source = "copernicus", bioclim = "bio05"), .)) %>% 
+  mutate(bio06_copernicus_1979_2018 = raster::extract(getpastclimate(source = "copernicus", bioclim = "bio06"), .)) %>% 
+  mutate(bio07_copernicus_1979_2018 = raster::extract(getpastclimate(source = "copernicus", bioclim = "bio07"), .)) %>% 
+  mutate(bio08_copernicus_1979_2018 = raster::extract(getpastclimate(source = "copernicus", bioclim = "bio08"), .)) %>% 
+  mutate(bio09_copernicus_1979_2018 = raster::extract(getpastclimate(source = "copernicus", bioclim = "bio09"), .)) %>% 
+  mutate(bio10_copernicus_1979_2018 = raster::extract(getpastclimate(source = "copernicus", bioclim = "bio10"), .)) %>% 
+  mutate(bio11_copernicus_1979_2018 = raster::extract(getpastclimate(source = "copernicus", bioclim = "bio11"), .)) %>% 
+  mutate(bio12_copernicus_1979_2018 = raster::extract(getpastclimate(source = "copernicus", bioclim = "bio12"), .)) %>% 
+  mutate(bio13_copernicus_1979_2018 = raster::extract(getpastclimate(source = "copernicus", bioclim = "bio13"), .)) %>% 
+  mutate(bio14_copernicus_1979_2018 = raster::extract(getpastclimate(source = "copernicus", bioclim = "bio14"), .)) %>% 
+  mutate(bio15_copernicus_1979_2018 = raster::extract(getpastclimate(source = "copernicus", bioclim = "bio15"), .)) %>% 
+  mutate(bio16_copernicus_1979_2018 = raster::extract(getpastclimate(source = "copernicus", bioclim = "bio16"), .)) %>% 
+  mutate(bio17_copernicus_1979_2018 = raster::extract(getpastclimate(source = "copernicus", bioclim = "bio17"), .)) %>% 
+  mutate(bio18_copernicus_1979_2018 = raster::extract(getpastclimate(source = "copernicus", bioclim = "bio18"), .)) %>% 
+  mutate(bio19_copernicus_1979_2018 = raster::extract(getpastclimate(source = "copernicus", bioclim = "bio19"), .)) %>% 
+  mutate(soil_depth_roots = raster::extract(getsoilproperties("STU_EU_DEPTH_ROOTS"), .)) %>% 
+  mutate(soil_clay_topsoil = raster::extract(getsoilproperties("STU_EU_T_CLAY"), .)) %>% 
+  mutate(soil_clay_subsoil = raster::extract(getsoilproperties("STU_EU_S_CLAY"), .)) %>% 
+  mutate(soil_sand_topsoil = raster::extract(getsoilproperties("STU_EU_T_SAND"), .)) %>% 
+  mutate(soil_sand_subsoil = raster::extract(getsoilproperties("STU_EU_S_SAND"), .)) %>% 
+  mutate(soil_silt_topsoil = raster::extract(getsoilproperties("STU_EU_T_SILT"), .)) %>% 
+  mutate(soil_silt_subsoil = raster::extract(getsoilproperties("STU_EU_S_SILT"), .)) %>% 
+  mutate(soil_organic_carbon_topsoil = raster::extract(getsoilproperties("STU_EU_T_OC"), .)) %>% 
+  mutate(soil_organic_carbon_subsoil = raster::extract(getsoilproperties("STU_EU_S_OC"), .)) %>% 
+  mutate(soil_bulk_density_topsoil = raster::extract(getsoilproperties("STU_EU_T_BD"), .)) %>% 
+  mutate(soil_bulk_density_subsoil = raster::extract(getsoilproperties("STU_EU_S_BD"), .)) %>% 
+  mutate(soil_gravel_topsoil = raster::extract(getsoilproperties("STU_EU_T_GRAVEL"), .)) %>% 
+  mutate(soil_gravel_subsoil = raster::extract(getsoilproperties("STU_EU_S_GRAVEL"), .)) %>% 
+  mutate(soil_water_ptr_topsoil = raster::extract(getsoilproperties("SMU_EU_T_TAWC"), .)) %>% 
+  mutate(soil_water_ptr_subsoil = raster::extract(getsoilproperties("SMU_EU_S_TAWC"), .)) %>% 
+  mutate(soil_water_ptf_topsoil = raster::extract(getsoilproperties("STU_EU_T_TAWC"), .)) %>% 
+  mutate(soil_water_ptf_subsoil = raster::extract(getsoilproperties("STU_EU_S_TAWC"), .)) %>% 
+  mutate(across(.cols = starts_with(c("bio", "soil")), ~ round(.x, digits = 2), .names = "{.col}"))
+
+
+##### to add to some processing part. reprojection of ESDAC files
+
+for (i in 1:length(soil_vars)) {
+  esdac_crs <- "+proj=laea +lat_0=52 +lon_0=10 +x_0=4321000 +y_0=3210000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs +type=crs"
+  soil_layer <- raster::raster(paste0("2_Data/0_raw_data/soil/", soil_vars[i], ".rst"))
+  raster::crs(soil_layer) <- esdac_crs
+  soil_layer <- terra::project(terra::rast(soil_layer), "epsg:4326")  
+  terra::writeRaster(soil_layer, paste0("2_Data/0_raw_data/soil/", soil_vars[i], "_4326.tif"), overwrite = T)
+  cat("wrote ", soil_vars[i], " to disk\n")
+}

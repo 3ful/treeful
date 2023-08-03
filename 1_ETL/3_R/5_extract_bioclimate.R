@@ -42,7 +42,7 @@ if (!file.exists("2_Data/1_output/tree_db.csv")) {
     as.data.table(gbif_trees_sf)[, .(master_list_name, db, geometry)]
   )
   
-  rm(gbif_trees_sf, open_trees_sf, try_trees_sf, trees4f_sf)
+  rm(gbif_trees_sf, open_trees_sf, try_trees_sf, trees4f_sf, try_species)
 
   
   ######################### The heart of it all: getting bioclimatic vars for each tree ##########
@@ -73,6 +73,7 @@ if (!file.exists("2_Data/1_output/tree_db.csv")) {
       mutate(across(.cols = starts_with(c("BIO", "STU", "SMU")), ~ round(.x, digits = 2), .names = "{.col}")) 
     print(paste0("Finished extraction of ", soil_vars[i]))
   }
+  
   
   # tree_dbs <- tree_dbs %>% 
   #   st_drop_geometry()
