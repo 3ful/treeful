@@ -4,7 +4,7 @@ pipe_message = function(.data, status) {message(status); .data}
 
 if (!file.exists("2_Data/1_output/tree_db.csv")) {
   
-  gbif_trees <- data.table::fread(file = "2_Data/1_output/gbif_eu_trees.csv")
+  #gbif_trees <- data.table::fread(file = "2_Data/1_output/gbif_eu_trees.csv")
   
   ######################## turn name-matched data.tables into SF ###################
   trees4f_sf <- trees4f_db_selection %>% 
@@ -43,7 +43,7 @@ if (!file.exists("2_Data/1_output/tree_db.csv")) {
   )
   
   rm(gbif_trees_sf, open_trees_sf, try_trees_sf, trees4f_sf, try_species)
-
+  gc()
   
   ######################### The heart of it all: getting bioclimatic vars for each tree ##########
   # ATTENTION with namespaces here. stringdist and raster both have an extract function. took me only an hour to figure out. 
@@ -80,12 +80,12 @@ if (!file.exists("2_Data/1_output/tree_db.csv")) {
   ################################ write it all to csv #################################
   data.table::fwrite(x = tree_dbs, file = "2_Data/1_output/tree_db.csv")
 } else {
-  cat("tree db exists, reading from disk/n")
+  print("tree db exists, reading from disk/n")
   tree_dbs <- fread("2_Data/1_output/tree_db.csv")
 }
 
 # writing trees to postgres DB
-cat("writing tree db to postgres")
+print("writing tree db to postgres")
 con <- DBI::dbConnect(RPostgres::Postgres(), 
                       dbname = Sys.getenv("POSTGRES_DB"),
                       host= "192.168.178.148", 

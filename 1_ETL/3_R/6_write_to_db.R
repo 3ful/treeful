@@ -6,13 +6,7 @@ con <- DBI::dbConnect(RPostgres::Postgres(),
                       user="postgres",
                       password=Sys.getenv("POSTGRES_PW"))
 
-write_to_db <- function() {
-  
-}
-
-
-
-future <- raster::stack(getfutureclimate(source = "copernicus", bioclim = "bio01"),
+future <- c(getfutureclimate(source = "copernicus", bioclim = "bio01"),
                         getfutureclimate(source = "copernicus", bioclim = "bio02"),
                         getfutureclimate(source = "copernicus", bioclim = "bio03"),
                         getfutureclimate(source = "copernicus", bioclim = "bio04"),
@@ -34,7 +28,7 @@ future <- raster::stack(getfutureclimate(source = "copernicus", bioclim = "bio01
                         )
 
 
-past <- raster::stack(getpastclimate(source = "copernicus", bioclim = "bio01"),
+past <- c(getpastclimate(source = "copernicus", bioclim = "bio01"),
                         getpastclimate(source = "copernicus", bioclim = "bio02"),
                         getpastclimate(source = "copernicus", bioclim = "bio03"),
                         getpastclimate(source = "copernicus", bioclim = "bio04"),
@@ -54,6 +48,26 @@ past <- raster::stack(getpastclimate(source = "copernicus", bioclim = "bio01"),
                         getpastclimate(source = "copernicus", bioclim = "bio18"),
                         getpastclimate(source = "copernicus", bioclim = "bio19")
 )
+
+soil <- c(getsoilproperties("STU_EU_DEPTH_ROOTS"),
+                  getsoilproperties("STU_EU_T_CLAY"),
+                  getsoilproperties("STU_EU_S_CLAY"),
+                  getsoilproperties("STU_EU_T_SAND"),
+                  getsoilproperties("STU_EU_S_SAND"),
+                  getsoilproperties("STU_EU_T_SILT"),
+                  getsoilproperties("STU_EU_S_SILT"),
+                  getsoilproperties("STU_EU_T_OC"),
+                  getsoilproperties("STU_EU_S_OC"),
+                  getsoilproperties("STU_EU_T_BD"),
+                  getsoilproperties("STU_EU_S_BD"),
+                  getsoilproperties("STU_EU_T_GRAVEL"),
+                  getsoilproperties("STU_EU_S_GRAVEL"),
+                  getsoilproperties("SMU_EU_T_TAWC"),
+                  getsoilproperties("SMU_EU_S_TAWC"),
+                  getsoilproperties("STU_EU_T_TAWC"),
+                  getsoilproperties("STU_EU_S_TAWC")
+          )
+
 # 
 # pastbio01 <- getpastclimate(source = "copernicus", bioclim = "bio01")
 # 
@@ -70,6 +84,8 @@ rpostgis::pgWriteRast(con,
 rpostgis::pgWriteRast(con,
             name = "future", raster = future, overwrite = TRUE
 )
-
+rpostgis::pgWriteRast(con,
+                      name = "soil", raster = soil, overwrite = TRUE
+)
 
 DBI::dbDisconnect(conn = con)

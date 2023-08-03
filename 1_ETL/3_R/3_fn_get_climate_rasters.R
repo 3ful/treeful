@@ -23,7 +23,7 @@ getpastclimate <- function(source = "copernicus", bioclim = "bio01") {
     
     bio_path <- toupper(bioclim)
 
-    bio_raster <- raster::raster(paste0("2_Data/0_raw_data/past/", bio_path, "_era5-to-1km_1979-2018-mean_v1.0.nc"))
+    bio_raster <- terra::rast(paste0("2_Data/0_raw_data/past/", bio_path, "_era5-to-1km_1979-2018-mean_v1.0.nc"))
     # convert bioclim as per copernicus documentation. for some reasone case_when does not work here.     
     if (bioclim %in% c("bio01", "bio02", "bio04", "bio05", "bio06", "bio07", "bio08", "bio09", "bio10", "bio11")) 
     {bio_raster <- bio_raster - 273.15
@@ -110,9 +110,10 @@ getfutureclimate <- function(source = "copernicus", bioclim = "bio01") {
 
     bio_path <- toupper(bioclim)
 
-    bio_raster <- raster::stack(paste0("2_Data/0_raw_data/future/", bio_path, "_hadgem2-cc_rcp45_r1i1p1_1960-2099-mean_v1.0.nc"))$X2050.01.01
-    #names(bio_raster) <- terra::time(bio_raster)
-    #bio_raster <- bio_raster$`2050-01-01`
+    bio_raster <- terra::rast(paste0("2_Data/0_raw_data/future/", bio_path, "_hadgem2-cc_rcp45_r1i1p1_1960-2099-mean_v1.0.nc"))
+    #$X2050.01.01
+    names(bio_raster) <- terra::time(bio_raster)
+    bio_raster <- bio_raster$`2050-01-01`
     # convert bioclim as per copernicus documentation. for some reason case_when does not work here.     
     if (bioclim %in% c("bio01", "bio02", "bio04", "bio05", "bio06", "bio07", "bio08", "bio09", "bio10", "bio11")) 
     {bio_raster <- bio_raster - 273.15
@@ -127,6 +128,6 @@ getfutureclimate <- function(source = "copernicus", bioclim = "bio01") {
 }
 
 getsoilproperties <- function(variable = "STU_EU_DEPTH_ROOTS") {
-  soil_layer <- raster::raster(paste0("2_Data/0_raw_data/soil/", variable, "_4326.tif"))
+  soil_layer <- terra::rast(paste0("2_Data/0_raw_data/soil/", variable, "_4326.tif"))
   return(soil_layer)
 }
