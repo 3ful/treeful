@@ -126,6 +126,9 @@ con <- DBI::dbConnect(RPostgres::Postgres(),
                       password=Sys.getenv("POSTGRES_PW"))
 sf::st_write(tree_dbs, dsn = con, table = "trees",
              append = FALSE)
+rm(tree_dbs)
+gc()
+
 DBI::dbDisconnect(conn = con)
 
 ##### EOF ####
