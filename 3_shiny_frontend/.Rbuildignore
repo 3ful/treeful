@@ -9,3 +9,6 @@ $run_dev.*
 ^.here$
 ^Dockerfile$
 ^\.dockerignore$
+^LICENSE\.md$
+^README\.Rmd$
+^CODE_OF_CONDUCT\.md$

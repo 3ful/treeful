@@ -33,7 +33,6 @@ golem::fill_desc(
 golem::set_golem_options()
 
 ## Install the required dev dependencies ----
-golem::install_dev_deps()
 
 ## Create Common Files ----
 ## See ?usethis for more information

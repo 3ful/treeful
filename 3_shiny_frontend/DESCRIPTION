@@ -1,10 +1,9 @@
 Package: treeful
 Title: Treeful
 Version: 0.0.0.9000
-Authors@R: 
-    person("Christoph", "Trost", , "port@datenlabor.eu", role = c("cre", "aut"))
+Authors@R: person('Christoph', 'Trost', email = 'port@datenlabor.eu', role = c('cre', 'aut'))
 Description: PKG_DESC.
-License: What license is it under?
+License: MIT + file LICENSE
 Imports: 
     config (>= 0.3.1),
     data.table,

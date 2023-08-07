@@ -7,3 +7,4 @@
 *.tar.gz
 /data/tree_db.csv
 tree_db.csv
+.quarto
