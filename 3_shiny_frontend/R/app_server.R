@@ -48,7 +48,8 @@ app_server <- function(input, output, session) {
 
   })
 
-  make_query <- function(map_point, layer = "", band = 1) {
+  # cobble together query, used for user climate
+  make_query <- function(map_point, layer = "", band = dplyr::filter(biovars, biovars == input$select_biovar)$rowid) {
     return(paste0("SELECT g.pt_geom, ST_Value(ST_Band(r.rast, ARRAY[", band, "]), g.pt_geom) AS biovar
       FROM public.", layer, " AS r
       INNER JOIN
@@ -60,12 +61,12 @@ app_server <- function(input, output, session) {
     map_point <- sf::st_as_sf(tibble(lat = lat, lon = lon), coords = c("lon", "lat"), crs = 4326, remove =FALSE)
 
     #get past at map location
-    bio01_hist <- RPostgreSQL::dbGetQuery(connection,make_query(map_point, layer = "pastbio01", band = 1))$biovar
-    bio12_hist <- RPostgreSQL::dbGetQuery(connection,make_query(map_point, layer = "pastbio12", band = 1))$biovar
+    bio01_hist <- RPostgreSQL::dbGetQuery(backend_con,make_query(map_point, layer = "past", band = 1))$biovar
+    bio12_hist <- RPostgreSQL::dbGetQuery(backend_con,make_query(map_point, layer = "past", band = 12))$biovar
 
 
-    bio01_future <- RPostgreSQL::dbGetQuery(connection,make_query(map_point, layer = "future", band = 1))$biovar
-    bio12_future <-  RPostgreSQL::dbGetQuery(connection,make_query(map_point, layer = "future", band = 2))$biovar
+    bio01_future <- RPostgreSQL::dbGetQuery(backend_con,make_query(map_point, layer = "future", band = 1))$biovar
+    bio12_future <-  RPostgreSQL::dbGetQuery(backend_con,make_query(map_point, layer = "future", band = 12))$biovar
 
     return(tibble(bio01_future, bio12_future,
                   bio01_hist, bio12_hist
@@ -73,13 +74,16 @@ app_server <- function(input, output, session) {
   }
   user_climate1 <- reactive({
     req(input$map_click)
-    get_user_climate()
+    get_user_climate(connection = backend_con, lat = input$map_click$lat, lon = input$map_click$lng)
     })
 
   output$user_location <- renderDT(user_climate1())
 
   #tree_db <- data.table::fread("data/tree_db.csv")
   species <- DBI::dbGetQuery(backend_con, paste0("SELECT DISTINCT master_list_name FROM tree_dbs"))
+  biovars <- tibble(biovars = c("BIO01", "BIO02", "BIO03", "BIO04", "BIO05", "BIO06", "BIO07", "BIO08", "BIO09",
+                                "BIO10", "BIO11", "BIO12", "BIO13", "BIO14", "BIO15", "BIO16", "BIO17", "BIO18", "BIO19")) %>%
+    rowid_to_column()
 
   updateSelectInput(session, "select_species", choices = species$master_list_name, selected = "Sorbus torminalis")
 
@@ -108,14 +112,14 @@ app_server <- function(input, output, session) {
 
   output$species_plot <- renderPlot({
     ggplot2::ggplot(data = tree_occurrence()) +
-    ggplot2::geom_point(aes(x = bio12_copernicus_1979_2018, y = bio01_copernicus_1979_2018, color = db), alpha = 0.1, lwd = 0) +
+    ggplot2::geom_point(aes(x = BIO12, y = BIO01, color = db), alpha = 0.1, stroke = 0) +
     #geom_hex(aes(x = bio12_copernicus_1979_2018, y = bio01_copernicus_1979_2018), bins = 70) +
     #stat_density_2d(aes(x = bio12_copernicus_1979_2018, y = bio01_copernicus_1979_2018, fill = ..level..), geom = "polygon", colour="white") +
     scale_fill_continuous(type = "viridis") +
     ggplot2::geom_point(data = user_climate1(), aes(x = bio12_hist, y = bio01_hist), color = "darkolivegreen4", size = 4) +
     ggplot2::geom_point(data = user_climate1(), aes(x = bio12_future, y = bio01_future), color = "darkolivegreen", size = 4) +
-    #scale_color_paletteer_d("wesanderson::Royal1") +
-    #ggplot2::facet_wrap(~master_list_name) +
+    scale_color_paletteer_d("wesanderson::Royal1") +
+    ggplot2::facet_wrap(~master_list_name) +
     hrbrthemes::theme_ipsum() +
     ggplot2::labs(title = paste0("Jahrestemperatur und Jahresniederschlag"),
          subtitle = paste0("")) +
@@ -123,14 +127,11 @@ app_server <- function(input, output, session) {
           text = element_text(color = "white"),
           strip.text = element_text(color = "white"))
   })
-  # observeEvent(chronik_filtered(), {
-  #   updateSelectInput(session, "county_timeline_option1", choices = unique(chronik_filtered()$county), selected = unique(chronik_filtered()$county))
-  # })
   output$violin_plot <- renderPlot({
-      ggplot2::ggplot(data = tree_occurrence(), aes(x = master_list_name, y = bio01_copernicus_1979_2018)) +
+    ggplot2::ggplot(data = tree_occurrence(), aes(x = master_list_name, y = .data[[dplyr::filter(biovars, biovars == input$select_biovar)$biovars]])) +
       geom_violin(width=1.4) +
       geom_boxplot(width=0.1, color="grey", alpha=0.2) +
-      scale_fill_viridis(discrete = TRUE) +
+      scale_color_paletteer_d("wesanderson::Royal1") +
       theme_ipsum() +
       theme(
         legend.position="none",
@@ -139,6 +140,7 @@ app_server <- function(input, output, session) {
       ggtitle("A Violin wrapping a boxplot") +
       xlab("")
   })
+
 
 
 }
