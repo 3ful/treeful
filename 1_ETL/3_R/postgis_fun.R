@@ -359,3 +359,19 @@ for (i in 1:length(soil_vars)) {
   terra::writeRaster(soil_layer, paste0("2_Data/0_raw_data/soil/", soil_vars[i], "_4326.tif"), overwrite = T)
   cat("wrote ", soil_vars[i], " to disk\n")
 }
+
+
+for (i in 1:length(bio_vars)) {
+  tree_dbs <- tree_dbs %>% 
+    mutate(terra::extract(getpastclimate(source = "copernicus", bioclim = bio_vars[i]), ., ID = F)) %>% 
+    mutate(across(.cols = starts_with(c("BIO", "STU", "SMU")), ~ round(.x, digits = 2), .names = "{.col}")) 
+  print(paste0("Finished extraction of ", bio_vars[i]))
+}
+for (i in 1:length(soil_vars)) {
+  tree_dbs <- tree_dbs %>% 
+    mutate(terra::extract(getsoilproperties(variable = soil_vars[i]), ., ID = F)) %>% 
+    mutate(across(.cols = starts_with(c("BIO", "STU", "SMU")), ~ round(.x, digits = 2), .names = "{.col}")) 
+  print(paste0("Finished extraction of ", soil_vars[i]))
+}
+
+

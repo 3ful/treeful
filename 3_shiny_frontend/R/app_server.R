@@ -108,8 +108,8 @@ app_server <- function(input, output, session) {
 
   output$species_plot <- renderPlot({
     ggplot2::ggplot(data = tree_occurrence()) +
-    #ggplot2::geom_point(aes(x = bio12_copernicus_1979_2018, y = bio01_copernicus_1979_2018, color = db), alpha = 0.1, lwd = 0) +
-    geom_hex(aes(x = bio12_copernicus_1979_2018, y = bio01_copernicus_1979_2018), bins = 70) +
+    ggplot2::geom_point(aes(x = bio12_copernicus_1979_2018, y = bio01_copernicus_1979_2018, color = db), alpha = 0.1, lwd = 0) +
+    #geom_hex(aes(x = bio12_copernicus_1979_2018, y = bio01_copernicus_1979_2018), bins = 70) +
     #stat_density_2d(aes(x = bio12_copernicus_1979_2018, y = bio01_copernicus_1979_2018, fill = ..level..), geom = "polygon", colour="white") +
     scale_fill_continuous(type = "viridis") +
     ggplot2::geom_point(data = user_climate1(), aes(x = bio12_hist, y = bio01_hist), color = "darkolivegreen4", size = 4) +
@@ -126,4 +126,19 @@ app_server <- function(input, output, session) {
   # observeEvent(chronik_filtered(), {
   #   updateSelectInput(session, "county_timeline_option1", choices = unique(chronik_filtered()$county), selected = unique(chronik_filtered()$county))
   # })
+  output$violin_plot <- renderPlot({
+      ggplot2::ggplot(data = tree_occurrence(), aes(x = master_list_name, y = bio01_copernicus_1979_2018)) +
+      geom_violin(width=1.4) +
+      geom_boxplot(width=0.1, color="grey", alpha=0.2) +
+      scale_fill_viridis(discrete = TRUE) +
+      theme_ipsum() +
+      theme(
+        legend.position="none",
+        plot.title = element_text(size=11)
+      ) +
+      ggtitle("A Violin wrapping a boxplot") +
+      xlab("")
+  })
+
+
 }

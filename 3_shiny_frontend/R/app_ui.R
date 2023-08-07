@@ -39,13 +39,24 @@ app_ui <- function(request) {
                icon  = icon("chart-column"),
         # make species plot start ############################################################'
         fluidRow(column(3,
-                        selectInput('select_species', 'Baumart', choices = NULL, multiple = F),
+                        selectInput('select_species', 'Baumart', choices = NULL, multiple = T),
                         p(textOutput("selected_species_control"))
         ), column(width = 9,
                   h3(textOutput("select_species")),
                   plotOutput('species_plot',  height = "800px"),
         ))
         # make species plot end ###############################################################
+      ),
+      tabPanel(title = "Daten darstellen & beschreiben",
+               id    = "explorer",
+               value = "explorerTab",
+               icon  = icon("chart-column"),
+               # make species plot start ############################################################'
+               fluidRow(column(width = 12,
+                         h3(textOutput("select_species")),
+                         plotOutput('violin_plot',  height = "800px"),
+               ))
+               # make species plot end ###############################################################
       )
     ))
   )
