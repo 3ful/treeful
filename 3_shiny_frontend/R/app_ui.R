@@ -37,13 +37,24 @@ app_ui <- function(request) {
                id    = "visualizeTab",
                value = "visualizeTab",
                icon  = icon("chart-column"),
+
+       fluidRow(
+         h2("Bioklimatische Variablen und Bodenindikatoren"),
+         p("Der Streifen zeigt an unter welchen Bedingungen 80% der ausgewählten Baumart vorkommen.
+           Die Punkte zeigen den gewählten Standort. "),
+         column(3,
+                selectInput('select_species', 'Baumart', choices = NULL, multiple = F),
+                p(textOutput("selected_species_control"))
+         ), column(width = 9,
+                   #h3(textOutput("select_species")),
+                   plotOutput('species_bars',  height = "800px")
+         )),
         # make species plot start ############################################################'
         fluidRow(
           h2("Bioklimatische Variablen einzeln erkunden"),
           p("Für jeweils eine Baumart und eine bioklimatische Variable werden Violin Grafiken zusammen mit Boxplots erstellt"),
           column(3,
-                 selectInput('select_species', 'Baumart', choices = NULL, multiple = F),
-                 p(textOutput("selected_species_control")),
+
                  selectInput('select_single_biovar', 'Bioklimatische Variable', choices = biovars$biovars, multiple = F)
         ), column(width = 9,
                   h3(textOutput("select_species")),

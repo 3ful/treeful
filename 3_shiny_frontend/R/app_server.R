@@ -30,6 +30,15 @@
 biovars <- tibble::tibble(biovars = c("BIO01", "BIO02", "BIO03", "BIO04", "BIO05", "BIO06", "BIO07", "BIO08", "BIO09",
                               "BIO10", "BIO11", "BIO12", "BIO13", "BIO14", "BIO15", "BIO16", "BIO17", "BIO18", "BIO19")) %>%
   rowid_to_column()
+biovars_c <- c("BIO01" = 1, "BIO02" = 2, "BIO03" = 3, "BIO04" = 4, "BIO05" = 5, "BIO06" = 6, "BIO07" = 7, "BIO08" = 8, "BIO09" = 9,
+               "BIO10" = 10, "BIO11" = 11, "BIO12" = 12, "BIO13" = 13, "BIO14" = 14, "BIO15" = 15, "BIO16" = 16, "BIO17" = 17,
+               "BIO18" = 18, "BIO19" = 19)
+
+soil_vars_c <- c("STU_EU_DEPTH_ROOTS" = 1,"STU_EU_T_CLAY" = 2,"STU_EU_S_CLAY" = 3,"STU_EU_T_SAND" = 4,"STU_EU_S_SAND" = 5,"STU_EU_T_SILT" = 6,
+                 "STU_EU_S_SILT" = 7, "STU_EU_T_OC" = 8,"STU_EU_S_OC" = 9,"STU_EU_T_BD" = 10,"STU_EU_S_BD" = 11,
+                 "STU_EU_T_GRAVEL" = 12,"STU_EU_S_GRAVEL" = 13, "SMU_EU_T_TAWC" = 14,"SMU_EU_S_TAWC" = 15,
+                 "STU_EU_T_TAWC" = 16, "STU_EU_S_TAWC" = 17)
+
 
 app_server <- function(input, output, session) {
   # Your application server logic
@@ -55,8 +64,14 @@ app_server <- function(input, output, session) {
 
   })
 
+  # construct user point as sf
+  map_point <-
+    reactive({
+      sf::st_as_sf(tibble::tibble(lat = input$map_click$lat, lon = input$map_click$lng), coords = c("lon", "lat"), crs = 4326, remove =FALSE)
+    })
+
   # cobble together query, used for user climate
-  make_query <- function(map_point, layer = "", band = dplyr::filter(biovars, biovars == input$select_biovar)$rowid) {
+  make_query <- function(map_point = map_point(), layer = "", band = dplyr::filter(biovars, biovars == input$select_biovar)$rowid) {
     return(paste0("SELECT g.pt_geom, ST_Value(ST_Band(r.rast, ARRAY[", band, "]), g.pt_geom) AS biovar
       FROM public.", layer, " AS r
       INNER JOIN
@@ -64,48 +79,62 @@ app_server <- function(input, output, session) {
       ON r.rast && g.pt_geom;"))
   }
 
+
   # getting past and future for one biovar from one location
-  get_user_climate <- function(connection = backend_con, lat = input$map_click$lat, lon = input$map_click$lng,
+  get_user_climate <- function(connection = backend_con, map_point = map_point(),
                                user_biovar = dplyr::filter(biovars, biovars == input$select_biovar)$rowid) {
-    map_point <- sf::st_as_sf(tibble::tibble(lat = lat, lon = lon), coords = c("lon", "lat"), crs = 4326, remove =FALSE)
+
 
     #get past at map location
-    bio_hist <- RPostgreSQL::dbGetQuery(backend_con,make_query(map_point, layer = "past", band = user_biovar)) %>%
+    bio_hist <- RPostgreSQL::dbGetQuery(backend_con,make_query(map_point(), layer = "past", band = user_biovar)) %>%
       dplyr::select(-pt_geom, past = biovar)
-    bio_future <- RPostgreSQL::dbGetQuery(backend_con,make_query(map_point, layer = "future", band = user_biovar)) %>%
+    bio_future <- RPostgreSQL::dbGetQuery(backend_con,make_query(map_point(), layer = "future", band = user_biovar)) %>%
       dplyr::select(-pt_geom, future = biovar)
-
 
     return(tibble::tibble(bio_future, bio_hist))
   }
 
 
-  get_all_biovars <- function() {
-
-
+  get_biolayer <- function(band = 1, layer = "past") {
+    biovar <- RPostgreSQL::dbGetQuery(backend_con,make_query(map_point(), layer = layer, band = band))$biovar
+    return(biovar)
   }
+  # get_biolayer <- function(band = 1, layer = "past") {
+  #   biovar <- RPostgreSQL::dbGetQuery(backend_con,make_query(map_point, layer = layer, band = band))$biovar
+  #   return(biovar)
+  # }
 
   user_climate1 <- reactive({
     req(input$map_click)
-      get_user_climate(connection = backend_con, lat = input$map_click$lat, lon = input$map_click$lng,
+      get_user_climate(connection = backend_con, map_point = map_point(),
                        user_biovar = dplyr::filter(biovars, biovars == input$select_single_biovar)$rowid[1])
     })
 
   user_climate2 <- reactive({
-    tibble::tibble(
-      get_user_climate(connection = backend_con, lat = input$map_click$lat, lon = input$map_click$lng,
-                       user_biovar = dplyr::filter(biovars, biovars == input$select_biovar1)$rowid[1]) %>%
-        dplyr::select(past1 = past, future1 = future),
-      get_user_climate(connection = backend_con, lat = input$map_click$lat, lon = input$map_click$lng,
-                       user_biovar = dplyr::filter(biovars, biovars == input$select_biovar2)$rowid[1]) %>%
-        dplyr::select(past2 = past, future2 = future)
-    )
+    req(input$map_click)
+    # tibble::tibble(
+    #   get_user_climate(connection = backend_con, lat = input$map_click$lat, lon = input$map_click$lng,
+    #                    user_biovar = dplyr::filter(biovars, biovars == input$select_biovar1)$rowid[1]) %>%
+    #     dplyr::select(past1 = past, future1 = future),
+    #   get_user_climate(connection = backend_con, lat = input$map_click$lat, lon = input$map_click$lng,
+    #                    user_biovar = dplyr::filter(biovars, biovars == input$select_biovar2)$rowid[1]) %>%
+    #     dplyr::select(past2 = past, future2 = future)
+    #
+      past_biovars <- purrr::map_dfr(biovars_c, get_biolayer, layer = "past") %>% tidyr::pivot_longer(everything()) %>% dplyr::mutate(layer = "past")
+      future_biovars <- purrr::map_dfr(biovars_c, get_biolayer, layer = "future") %>% tidyr::pivot_longer(everything()) %>% dplyr::mutate(layer = "future")
+      soil <- purrr::map_dfr(soil_vars_c, get_biolayer, layer = "soil") %>% tidyr::pivot_longer(everything()) %>% dplyr::mutate(layer = "soil")
+      dplyr::bind_rows(past_biovars, future_biovars, soil)
   })
-  output$user_location <- renderDT(user_climate1())
+  output$user_location <- renderDT(user_climate2())
 
   #tree_db <- data.table::fread("data/tree_db.csv")
   species <- DBI::dbGetQuery(backend_con, paste0("SELECT DISTINCT master_list_name FROM tree_dbs"))
   trees_quantiles <- DBI::dbGetQuery(backend_con, paste0("SELECT * FROM trees_quantiles"))
+  trees_quantiles <- tidyr::pivot_longer(trees_quantiles, cols = dplyr::ends_with(c("_val"))) %>%
+    dplyr::select(dplyr::everything(), -dplyr::ends_with("quant"), -unpack, "bio01_quant") %>%
+    dplyr::rename(quart = bio01_quant) %>%
+    dplyr::mutate(name = toupper(stringr::str_remove(name, "_val")))
+
 
   updateSelectInput(session, "select_species", choices = species$master_list_name, selected = "Sorbus torminalis")
 
@@ -165,6 +194,22 @@ app_server <- function(input, output, session) {
       ) +
       ggtitle(paste0(input$select_species, " Violine um ein Boxplot. ")) +
       xlab("")
+  })
+  output$species_bars <- renderPlot({
+
+    ggplot2::ggplot(data = dplyr::filter(trees_quantiles, master_list_name == input$select_species & quart %in% c(0.1, 0.9))) +
+      ggplot2::geom_line(aes(x = 1, y = value), lwd = 3, color = "darkolivegreen") +
+      ggplot2::geom_point(data = user_climate2(), aes(x = 1, y = value, color = layer)) +
+      ggplot2::facet_wrap(~name, scales = "free") +
+      hrbrthemes::theme_ipsum() +
+      ggplot2::theme(axis.text.x = element_blank(), axis.ticks.x = element_blank(),
+            panel.grid.major.x = element_blank(),
+            panel.grid.minor.x = element_blank()) +
+      ggplot2::theme(plot.background = element_rect(fill = "black"),
+                     text = element_text(color = "white"),
+                     strip.text = element_text(color = "white")) +
+      ggplot2::labs(title = paste0("Unter welchen Bedingungen 80% der ", nrow(tree_occurrence()), " ", input$select_species, "vorkommen"))
+
   })
 
 
