@@ -9,6 +9,7 @@ Imports:
     config (>= 0.3.1),
     data.table,
     DBI,
+    dplyr,
     DT,
     ggplot2,
     golem (>= 0.4.0),
@@ -23,7 +24,8 @@ Imports:
     shiny (>= 1.7.2),
     shinythemes,
     tibble,
-    tidyverse
+    tidyverse,
+    wesanderson
 Suggests: 
     spelling,
     testthat (>= 3.0.0)

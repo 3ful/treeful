@@ -126,6 +126,23 @@ con <- DBI::dbConnect(RPostgres::Postgres(),
                       password=Sys.getenv("POSTGRES_PW"))
 sf::st_write(tree_dbs, dsn = con, table = "trees",
              append = FALSE)
+
+################ Computing percentiles and writing to DB ################
+quantile_df <- function(x, probs = c(0.1, 0.25, 0.5, 0.75, 0.9)) {
+  tibble(
+    val = quantile(x, probs, na.rm = TRUE),
+    quant = probs
+  )
+}
+
+bioclim_quantiles <- tree_dbs %>% 
+  group_by(master_list_name) %>% 
+  reframe(across(starts_with(c("BIO", "STU")), quantile_df), .unpack = TRUE) %>% 
+  janitor::clean_names() %>% 
+  unnest(names_sep = "_") 
+    
+RPostgres::dbWriteTable(backend_con, "trees_quantiles", bioclim_quantiles)
+
 rm(tree_dbs)
 gc()
 
