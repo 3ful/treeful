@@ -198,8 +198,9 @@ app_server <- function(input, output, session) {
   output$species_bars <- renderPlot({
 
     ggplot2::ggplot(data = dplyr::filter(trees_quantiles, master_list_name == input$select_species & quart %in% c(0.1, 0.9))) +
-      ggplot2::geom_line(aes(x = 1, y = value), lwd = 3, color = "darkolivegreen") +
-      ggplot2::geom_point(data = user_climate2(), aes(x = 1, y = value, color = layer)) +
+      ggplot2::geom_line(aes(x = 1, y = value), lwd = 1.5, color = "darkolivegreen") +
+      ggplot2::geom_point(aes(x = 1, y = value), color = "darkolivegreen", size = 2) +
+      ggplot2::geom_point(data = user_climate2(), aes(x = 1, y = value, color = layer), size = 2) +
       ggplot2::facet_wrap(~name, scales = "free") +
       hrbrthemes::theme_ipsum() +
       ggplot2::theme(axis.text.x = element_blank(), axis.ticks.x = element_blank(),
