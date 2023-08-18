@@ -86,9 +86,9 @@ app_server <- function(input, output, session) {
 
 
     #get past at map location
-    bio_hist <- RPostgreSQL::dbGetQuery(backend_con,make_query(map_point(), layer = "past", band = user_biovar)) %>%
+    bio_hist <- RPostgreSQL::dbGetQuery(backend_con,make_query(map_point, layer = "past", band = user_biovar)) %>%
       dplyr::select(-pt_geom, past = biovar)
-    bio_future <- RPostgreSQL::dbGetQuery(backend_con,make_query(map_point(), layer = "future", band = user_biovar)) %>%
+    bio_future <- RPostgreSQL::dbGetQuery(backend_con,make_query(map_point, layer = "future", band = user_biovar)) %>%
       dplyr::select(-pt_geom, future = biovar)
 
     return(tibble::tibble(bio_future, bio_hist))
@@ -169,7 +169,8 @@ app_server <- function(input, output, session) {
     #geom_hex(aes(x = bio12_copernicus_1979_2018, y = bio01_copernicus_1979_2018), bins = 70) +
     #stat_density_2d(aes(x = bio12_copernicus_1979_2018, y = bio01_copernicus_1979_2018, fill = ..level..), geom = "polygon", colour="white") +
     scale_fill_continuous(type = "viridis") +
-    ggplot2::geom_point(data = user_climate2(), ggplot2::aes(x = past1, y = past2), color = "darkolivegreen4", size = 4) +
+    ggplot2::geom_point(data = get_user_climate(connection = backend_con, map_point = map_point(), user_biovar = dplyr::filter(biovars, biovars == input$select_biovar1[1])$biovars),
+                        ggplot2::aes(x = past1, y = past2), color = "darkolivegreen4", size = 4) +
     ggplot2::geom_point(data = user_climate2(), ggplot2::aes(x = future1, y = future2), color = "darkolivegreen1", size = 4) +
         scale_color_paletteer_d("wesanderson::Royal1") +
     ggplot2::facet_wrap(~master_list_name) +

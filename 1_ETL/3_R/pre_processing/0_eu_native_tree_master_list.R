@@ -32,8 +32,8 @@ tree_master_list <- try_species[flat_name %in% eu_trees[,flat_name]]
 # Sort by most observed trees
 tree_master_list <- setorder(tree_master_list,-obsv)
 
-tree_master_list <- tree_master_list %>% 
-  mutate(gbif_taxo_id = name_backbone_checklist(name=.$name)$usageKey) %>% 
+tree_master_list <- master_list %>% 
+  mutate(gbif_taxo_id = name_backbone_checklist(name=.$latin_name)$usageKey) %>% 
   # remove  unmatched or genus level taxo matches
   filter(str_length(gbif_taxo_id) > 5 & !is.na(gbif_taxo_id))
 

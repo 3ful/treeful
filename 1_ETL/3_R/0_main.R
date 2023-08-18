@@ -15,6 +15,14 @@ Sys.setenv("GBIF_USER" = read_lines("/run/secrets/gbif_uid"))
 Sys.setenv("POSTGRES_PW" = read_lines("/run/secrets/postgres_pw"))
 Sys.setenv("POSTGRES_DB" = "treeful-test")
 
+con <- DBI::dbConnect(RPostgres::Postgres(), 
+                      dbname = Sys.getenv("POSTGRES_DB"),
+                      host= "192.168.178.148", 
+                      port="5432",
+                      user="postgres",
+                      password=Sys.getenv("POSTGRES_PW"))
+
+
 
 # so that keyring works headless we set backend to encrypted file. twice for good measure. 
 options(keyring_backend = "file")
@@ -27,14 +35,15 @@ if (file.exists("~/.config/r-keyring/ecmwfr.keyring")) {
 keyring::keyring_create("ecmwfr", password = read_lines("/run/secrets/keyring_pw"))
 
 # download raw data files, including large rasters from CDS
-if (!file.exists("2_Data/0_raw_data/past/BIO01_era5-to-1km_1979-2018-mean_v1.0.nc")) {
+if (!file.exists("2_Data/0_raw_data/past/BIO01_era5-to-1km_1979-2018-mean_v1.0.nc") & !RPostgres::dbExistsTable(conn = con, name = "past")) {
   source("3_R/1_download_raw.R")
   cat("Downloaded Copernicus Raster files")
+} else {
+  cat("No need to download CDS raster files, tables exists in postgres. Proceeding. ")
 }
+DBI::dbDisconnect(conn = con)
 
 # build list of three dozen tree cadastres of european cities
-source("3_R/pre_processing/0_eu_native_tree_master_list.R")
-
 if (!file.exists("2_Data/1_output/all_merged.csv")) {
   source("3_R/pre_processing/1_harmonize_cadastres.R")
   cat("Merged various tree cadastres from around Europe and saved to disk")
