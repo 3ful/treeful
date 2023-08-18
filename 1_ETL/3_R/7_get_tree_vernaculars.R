@@ -1,7 +1,7 @@
 library(librarian)
 shelf(rvest)
 
-tree_master_list <- fread("2_Data/1_output/try_eu_native_trees_master.csv") 
+tree_master_list <- fread("2_Data/1_output/eu_native_trees_master.csv") 
 
 wikipedia <- function(search_terms, lang = c("en", "de", "es", "fr")) {
   if (missing(search_terms)) {
@@ -41,24 +41,25 @@ wikipedia <- function(search_terms, lang = c("en", "de", "es", "fr")) {
   }
 }
 
-wikipedia("taxus baccata", "de") %>% 
-  rvest::read_html() %>% 
-  rvest::html_element(xpath = "/html/body/div[3]/div[3]/div[5]/div[1]/p[1]") %>% 
-  rvest::html_text(trim = TRUE)
-
-
 tree_master_list <- tree_master_list %>% 
   add_column(tree_descr = "empty")
 
 for (i in 1:nrow(tree_master_list)) {
-  tree_text <- wikipedia(tree_master_list$name[i], "de") %>% 
-    rvest::read_html() %>% 
-    rvest::html_element(xpath = "/html/body/div[3]/div[3]/div[5]/div[1]/p[1]") %>% 
-    rvest::html_text(trim = TRUE)
+  tree_url <- wikipedia(tree_master_list$latin_name[i], "de")
+  tree_page <-  tree_url %>% 
+    rvest::read_html()
   
-  tree_master_list$tree_descr[i] <- tree_text
-  cat("fetched ", tree_text, " \\n for ", tree_master_list$name[i])
+  tree_tribble <- tibble::tribble(~descr_de, ~url, ~image_url,
+                  rvest::html_text(rvest::html_element(tree_page, xpath = "/html/body/div[3]/div[3]/div[5]/div[1]/p[1]"), trim = TRUE),
+                  tree_url,
+                  rvest::html_attr(html_element(tree_page, xpath = "/html/body/div[3]/div[3]/div[5]/div[1]/table[1]/tbody/tr[2]/td/span/a/img"), "src")
+                  ) 
+  tree_master_list$descr_de[i] <- tree_tribble$descr_de
+  tree_master_list$url[i] <- tree_tribble$url
+  tree_master_list$image_url[i] <- tree_tribble$image_url
+  cat("fetched ", tree_tribble$descr_de, " \n for ", tree_master_list$latin_name[i])
   Sys.sleep(1.2)
 }
 
-
+tree_master_list <- tree_master_list %>% 
+  mutate(image_url = stringr::str_remove(image_url, "^\\/\\/"))

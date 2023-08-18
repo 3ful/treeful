@@ -4,7 +4,7 @@ library(librarian)
 shelf(data.table,stringr, sf, tidyverse, raster, 
       paletteer, RSQLite, RPostgreSQL, DBI, fuzzyjoin, keyring, janitor, rgbif, ecmwfr, CoordinateCleaner, 
       osmdata, stars, snow, geodata, jsonlite, readxl, 
-      rpostgis, terra)
+      rpostgis, terra, rvest)
 
 # setting docker secrets as env variables to be availabe to R scripts
 Sys.setenv("COPERNICUS_KEY" = read_lines("/run/secrets/copernicus_key"))

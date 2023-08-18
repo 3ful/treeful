@@ -131,8 +131,8 @@ tree_master_list <- master_list %>%
   # remove  unmatched or genus level taxo matches
   filter(str_length(gbif_taxo_id) > 5 & !is.na(gbif_taxo_id))
 
-fwrite(tree_master_list,"2_Data/1_output/try_eu_native_trees_master.csv")
-tree_master_list <- fread("2_Data/1_output/try_eu_native_trees_master.csv") 
+fwrite(tree_master_list,"2_Data/1_output/eu_native_trees_master.csv")
+tree_master_list <- fread("2_Data/1_output/eu_native_trees_master.csv") 
 
 
 rm(open_trees_db, open_trees_matching_table, open_trees_matching_table_selection, try_trees, try_trees_matching_table, 
