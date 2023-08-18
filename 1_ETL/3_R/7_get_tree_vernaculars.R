@@ -41,9 +41,6 @@ wikipedia <- function(search_terms, lang = c("en", "de", "es", "fr")) {
   }
 }
 
-tree_master_list <- tree_master_list %>% 
-  add_column(tree_descr = "empty")
-
 for (i in 1:nrow(tree_master_list)) {
   tree_url <- wikipedia(tree_master_list$latin_name[i], "de")
   tree_page <-  tree_url %>% 
@@ -63,3 +60,17 @@ for (i in 1:nrow(tree_master_list)) {
 
 tree_master_list <- tree_master_list %>% 
   mutate(image_url = stringr::str_remove(image_url, "^\\/\\/"))
+
+cat("writing master list with drescriptions to postgres")
+con <- DBI::dbConnect(RPostgres::Postgres(), 
+                      dbname = Sys.getenv("POSTGRES_DB"),
+                      host= "192.168.178.148", 
+                      port="5432",
+                      user="postgres",
+                      password=Sys.getenv("POSTGRES_PW"))
+
+RPostgres::dbWriteTable(con, "tree_master_list", tree_master_list)
+
+DBI::dbDisconnect(conn = con)
+
+

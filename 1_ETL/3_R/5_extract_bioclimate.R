@@ -24,7 +24,7 @@ if (!file.exists("2_Data/1_output/tree_db.csv")) {
   
   gbif_trees_sf <- gbif_trees %>% 
     dplyr::select(taxonkey, x = decimallatitude, y = decimallongitude) %>% 
-    left_join(dplyr::select(tree_master_list, master_list_name = name, gbif_taxo_id), by = c("taxonkey" = "gbif_taxo_id")) %>% 
+    left_join(dplyr::select(tree_master_list, master_list_name = latin_name, gbif_taxo_id), by = c("taxonkey" = "gbif_taxo_id")) %>% 
     filter(!is.na(x) & !is.na(y) & !is.na(master_list_name)) %>% 
     st_as_sf(coords = c("y", "x"), crs = 4326) %>% 
     # this will only keep observation inside Europe, i.e. the bounding box of the copernicus raster
@@ -141,7 +141,7 @@ bioclim_quantiles <- tree_dbs %>%
   janitor::clean_names() %>% 
   unnest(names_sep = "_") 
     
-RPostgres::dbWriteTable(backend_con, "trees_quantiles", bioclim_quantiles)
+RPostgres::dbWriteTable(con, "trees_quantiles", bioclim_quantiles)
 
 rm(tree_dbs)
 gc()
