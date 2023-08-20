@@ -76,4 +76,8 @@ gc()
 cat("writing all to postgres")
 source("3_R/6_write_to_db.R")
 
+## writing wikipedia-enriched master db to postgres
+cat("writing all to postgres")
+source("3_R/7_get_tree_vernaculars.R")
+
 ###### EOF ####

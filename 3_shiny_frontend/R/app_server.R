@@ -28,7 +28,16 @@
 # library(tibble)
 
 biovars <- tibble::tibble(biovars = c("BIO01", "BIO02", "BIO03", "BIO04", "BIO05", "BIO06", "BIO07", "BIO08", "BIO09",
-                              "BIO10", "BIO11", "BIO12", "BIO13", "BIO14", "BIO15", "BIO16", "BIO17", "BIO18", "BIO19")) %>%
+                              "BIO10", "BIO11", "BIO12", "BIO13", "BIO14", "BIO15", "BIO16", "BIO17", "BIO18", "BIO19"),
+                          descr_de = c("Jahresdurchschnittstemperatur", "Tagestemperaturspanne", "Isothermalität",
+                                              "Temperatur-Saisonalität", "Maximaltemperatur des wärmsten Monats",
+                                              "Minimaltemperatur des kältesten Monats", "Jahrestemperaturspanne",
+                                              "Durchschnittstemperatur des feuchtesten Quartals", "Durchschnittstemperatur des trockensten Quartals",
+                                              "Durchschnittstemperatur des wärmsten Quartals", "Durchschnittstemperatur des kältesten Quartals",
+                                              "Jahresniederschlag", "Niederschlag im feuchtesten Monat", "Niederschlag im trockensten Monat",
+                                              "Niederschlags-Saisonalität", "Niederschlag im feuchtesten Quartal", "Niederschlag im trockensten Quartal",
+                                              "Niederschlag im wärmsten Quartal", "Niederschlag im kältesten Quartal"
+                                              )) %>%
   rowid_to_column()
 biovars_c <- c("BIO01" = 1, "BIO02" = 2, "BIO03" = 3, "BIO04" = 4, "BIO05" = 5, "BIO06" = 6, "BIO07" = 7, "BIO08" = 8, "BIO09" = 9,
                "BIO10" = 10, "BIO11" = 11, "BIO12" = 12, "BIO13" = 13, "BIO14" = 14, "BIO15" = 15, "BIO16" = 16, "BIO17" = 17,
@@ -52,7 +61,9 @@ app_server <- function(input, output, session) {
                         port="5432",
                         user="postgres",
                         password="mysecretpassword")
-  #on.exit(DBI::dbDisconnect(backend_con), add = TRUE)
+  session$onSessionEnded(function() {
+    DBI::dbDisconnect(backend_con)
+  })
 
   output$map <- renderLeaflet({leaflet()%>% addTiles()})
 
@@ -95,8 +106,8 @@ app_server <- function(input, output, session) {
   }
 
 
-  get_biolayer <- function(band = 1, layer = "past") {
-    biovar <- RPostgreSQL::dbGetQuery(backend_con,make_query(map_point(), layer = layer, band = band))$biovar
+  get_biolayer <- function(band = 1, layer = "past", map_point = map_point()) {
+    biovar <- RPostgreSQL::dbGetQuery(backend_con,make_query(map_point = map_point, layer = layer, band = band))$biovar
     return(biovar)
   }
   # get_biolayer <- function(band = 1, layer = "past") {
@@ -110,7 +121,7 @@ app_server <- function(input, output, session) {
                        user_biovar = dplyr::filter(biovars, biovars == input$select_single_biovar)$rowid[1])
     })
 
-  user_climate2 <- reactive({
+  user_climate_wide <- reactive({
     req(input$map_click)
     # tibble::tibble(
     #   get_user_climate(connection = backend_con, lat = input$map_click$lat, lon = input$map_click$lng,
@@ -120,23 +131,33 @@ app_server <- function(input, output, session) {
     #                    user_biovar = dplyr::filter(biovars, biovars == input$select_biovar2)$rowid[1]) %>%
     #     dplyr::select(past2 = past, future2 = future)
     #
-      past_biovars <- purrr::map_dfr(biovars_c, get_biolayer, layer = "past") %>% tidyr::pivot_longer(everything()) %>% dplyr::mutate(layer = "past")
-      future_biovars <- purrr::map_dfr(biovars_c, get_biolayer, layer = "future") %>% tidyr::pivot_longer(everything()) %>% dplyr::mutate(layer = "future")
-      soil <- purrr::map_dfr(soil_vars_c, get_biolayer, layer = "soil") %>% tidyr::pivot_longer(everything()) %>% dplyr::mutate(layer = "soil")
+      past_biovars <- purrr::map_dfr(biovars_c, get_biolayer, layer = "past", map_point = map_point())  %>% dplyr::mutate(layer = "past")
+      future_biovars <- purrr::map_dfr(biovars_c, get_biolayer, layer = "future", map_point = map_point())  %>% dplyr::mutate(layer = "future")
+      soil <- purrr::map_dfr(soil_vars_c, get_biolayer, layer = "soil", map_point = map_point()) %>% dplyr::mutate(layer = "soil")
       dplyr::bind_rows(past_biovars, future_biovars, soil)
   })
-  output$user_location <- renderDT(user_climate2())
+  user_climate_long <- reactive({
+    req(input$map_click)
+    past_biovars <- purrr::map_dfr(biovars_c, get_biolayer, layer = "past", map_point = map_point()) %>% tidyr::pivot_longer(everything()) %>% dplyr::mutate(layer = "past")
+    future_biovars <- purrr::map_dfr(biovars_c, get_biolayer, layer = "future", map_point = map_point()) %>% tidyr::pivot_longer(everything()) %>% dplyr::mutate(layer = "future")
+    soil <- purrr::map_dfr(soil_vars_c, get_biolayer, layer = "soil", map_point = map_point()) %>% tidyr::pivot_longer(everything()) %>% dplyr::mutate(layer = "soil")
+    dplyr::bind_rows(past_biovars, future_biovars, soil)
+  })
+
+  output$user_location <- renderDT(user_climate_long())
 
   #tree_db <- data.table::fread("data/tree_db.csv")
-  species <- DBI::dbGetQuery(backend_con, paste0("SELECT DISTINCT master_list_name FROM tree_dbs"))
-  trees_quantiles <- DBI::dbGetQuery(backend_con, paste0("SELECT * FROM trees_quantiles"))
-  trees_quantiles <- tidyr::pivot_longer(trees_quantiles, cols = dplyr::ends_with(c("_val"))) %>%
-    dplyr::select(dplyr::everything(), -dplyr::ends_with("quant"), -unpack, "bio01_quant") %>%
-    dplyr::rename(quart = bio01_quant) %>%
-    dplyr::mutate(name = toupper(stringr::str_remove(name, "_val")))
+  species <- DBI::dbGetQuery(backend_con, paste0("SELECT * FROM tree_master_list")) %>%
+    dplyr::arrange(latin_name)
+
+  # trees_quantiles <- DBI::dbGetQuery(backend_con, paste0("SELECT * FROM trees_quantiles"))
+  # trees_quantiles <- tidyr::pivot_longer(trees_quantiles, cols = dplyr::ends_with(c("_val"))) %>%
+  #   dplyr::select(dplyr::everything(), -dplyr::ends_with("quant"), -unpack, "bio01_quant") %>%
+  #   dplyr::rename(quart = bio01_quant) %>%
+  #   dplyr::mutate(name = toupper(stringr::str_remove(name, "_val")))
 
 
-  updateSelectInput(session, "select_species", choices = species$master_list_name, selected = "Sorbus torminalis")
+  updateSelectInput(session, "select_species", choices = species$latin_name, selected = "Sorbus torminalis")
 
   # tree_occurrence <- reactive(tree_db[master_list_name %in% c(input$select_species), ]
   # )
@@ -148,6 +169,11 @@ app_server <- function(input, output, session) {
   )
 
   output$selected_species_control <- renderText({ paste0(nrow(tree_occurrence()), " Baumstandorte gefunden") })
+
+  output$selected_species_descr <- renderText({ dplyr::filter(species, latin_name == input$select_species)$descr_de })
+  output$selected_species_img <- renderUI({
+    tags$img(src = paste0("https://", dplyr::filter(species, latin_name == input$select_species)$image_url))
+  })
 
   # output$user_input_plot <- renderPlot({
   #   ggplot2::ggplot(data = user_climate1()) +
@@ -168,52 +194,26 @@ app_server <- function(input, output, session) {
                         alpha = 0.1, stroke = 0) +
     #geom_hex(aes(x = bio12_copernicus_1979_2018, y = bio01_copernicus_1979_2018), bins = 70) +
     #stat_density_2d(aes(x = bio12_copernicus_1979_2018, y = bio01_copernicus_1979_2018, fill = ..level..), geom = "polygon", colour="white") +
-    scale_fill_continuous(type = "viridis") +
-    ggplot2::geom_point(data = get_user_climate(connection = backend_con, map_point = map_point(), user_biovar = dplyr::filter(biovars, biovars == input$select_biovar1[1])$biovars),
-                        ggplot2::aes(x = past1, y = past2), color = "darkolivegreen4", size = 4) +
-    ggplot2::geom_point(data = user_climate2(), ggplot2::aes(x = future1, y = future2), color = "darkolivegreen1", size = 4) +
-        scale_color_paletteer_d("wesanderson::Royal1") +
-    ggplot2::facet_wrap(~master_list_name) +
+    ggplot2::geom_point(data = dplyr::filter(user_climate_wide(), layer %in% c("past", "future")),
+                        ggplot2::aes(x = .data[[dplyr::filter(biovars, biovars == input$select_biovar1[1])$biovars]],
+                                     y = .data[[dplyr::filter(biovars, biovars == input$select_biovar2[1])$biovars]]),
+                        color = "darkolivegreen4", size = 4) +
+    scale_color_paletteer_d("wesanderson::Royal1") +
+    #ggplot2::facet_wrap(~master_list_name) +
     hrbrthemes::theme_ipsum() +
-    ggplot2::labs(title = paste0("Jahrestemperatur und Jahresniederschlag"),
+    ggplot2::labs(title = paste0(dplyr::filter(biovars, biovars == input$select_biovar1[1])$descr_de, " und ",
+                                 dplyr::filter(biovars, biovars == input$select_biovar2[1])$descr_de),
+                  x = dplyr::filter(biovars, biovars == input$select_biovar1[1])$descr_de,
+                  y = dplyr::filter(biovars, biovars == input$select_biovar2[1])$descr_de,
          subtitle = paste0("")) +
-      ggplot2::theme(plot.background = element_rect(fill = "black"),
-          text = element_text(color = "white"),
-          strip.text = element_text(color = "white"))
+      ggplot2::theme(
+        plot.background = element_rect(fill = "black"),
+        text = element_text(color = "white"),
+        strip.text = element_text(color = "white"),
+        axis.title.y = element_text(size = 20),
+        axis.title.x = element_text(size = 20)
+        )
   })
-  output$violin_plot <- renderPlot({
-    ggplot2::ggplot(data = tree_occurrence(), ggplot2::aes(x = 1, y = .data[[dplyr::filter(biovars, biovars == input$select_single_biovar)$biovars]])) +
-      geom_violin(width=1.4) +
-      geom_boxplot(width=0.1, color="grey", alpha=0.2) +
-      ggplot2::geom_point(data = user_climate1(), ggplot2::aes(x = 1, y = past), color = "darkolivegreen4", size = 4) +
-      ggplot2::geom_point(data = user_climate1(), ggplot2::aes(x = 1, y = future), color = "darkolivegreen1", size = 4) +
-      scale_color_paletteer_d("wesanderson::Royal1") +
-      theme_ipsum() +
-      theme(
-        legend.position="none",
-        plot.title = element_text(size=11)
-      ) +
-      ggtitle(paste0(input$select_species, " Violine um ein Boxplot. ")) +
-      xlab("")
-  })
-  output$species_bars <- renderPlot({
-
-    ggplot2::ggplot(data = dplyr::filter(trees_quantiles, master_list_name == input$select_species & quart %in% c(0.1, 0.9))) +
-      ggplot2::geom_line(aes(x = 1, y = value), lwd = 1.5, color = "darkolivegreen") +
-      ggplot2::geom_point(aes(x = 1, y = value), color = "darkolivegreen", size = 2) +
-      ggplot2::geom_point(data = user_climate2(), aes(x = 1, y = value, color = layer), size = 2) +
-      ggplot2::facet_wrap(~name, scales = "free") +
-      hrbrthemes::theme_ipsum() +
-      ggplot2::theme(axis.text.x = element_blank(), axis.ticks.x = element_blank(),
-            panel.grid.major.x = element_blank(),
-            panel.grid.minor.x = element_blank()) +
-      ggplot2::theme(plot.background = element_rect(fill = "black"),
-                     text = element_text(color = "white"),
-                     strip.text = element_text(color = "white")) +
-      ggplot2::labs(title = paste0("Unter welchen Bedingungen 80% der ", nrow(tree_occurrence()), " ", input$select_species, "vorkommen"))
-
-  })
-
 
 
 }

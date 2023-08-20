@@ -38,41 +38,23 @@ app_ui <- function(request) {
                value = "visualizeTab",
                icon  = icon("chart-column"),
 
-       fluidRow(
-         h2("Bioklimatische Variablen und Bodenindikatoren"),
-         p("Der Streifen zeigt an unter welchen Bedingungen 80% der ausgewählten Baumart vorkommen.
-           Die Punkte zeigen den gewählten Standort. "),
-         column(3,
-                selectInput('select_species', 'Baumart', choices = NULL, multiple = F),
-                p(textOutput("selected_species_control"))
-         ), column(width = 9,
-                   #h3(textOutput("select_species")),
-                   plotOutput('species_bars',  height = "800px")
-         )),
-        # make species plot start ############################################################'
-        fluidRow(
-          h2("Bioklimatische Variablen einzeln erkunden"),
-          p("Für jeweils eine Baumart und eine bioklimatische Variable werden Violin Grafiken zusammen mit Boxplots erstellt"),
-          column(3,
-
-                 selectInput('select_single_biovar', 'Bioklimatische Variable', choices = biovars$biovars, multiple = F)
-        ), column(width = 9,
-                  h3(textOutput("select_species")),
-                  plotOutput('violin_plot',  height = "800px")
-        )),
-        fluidRow(
-          h2("Zusammenhänge zwischen Variablen entdecken"),
-          p("Für jeweils eine Baumart können zwei Variablen zusammen dargestellt werden. Daraus ergeben sich zweidimensionale Klimahüllen,
-            eine Art Wohlfühlzone der Baumart. "),
-          column(3,
-                 #selectInput('select_species', 'Baumart', choices = NULL, multiple = F),
-                 #p(textOutput("selected_species_control")),
-                 selectInput('select_biovar1', 'Bioklimatische Variable 1', choices = biovars$biovars, multiple = F),
-                 selectInput('select_biovar2', 'Bioklimatische Variable 1', choices = biovars$biovars, multiple = F)
-          ), column(width = 9,
-                    #h3(textOutput("select_species")),
-                    plotOutput('species_plot',  height = "800px")
-          ))
+               fluidRow(
+                 h2("Zusammenhänge zwischen Variablen entdecken"),
+                    p("Für jeweils eine Baumart können zwei Variablen zusammen dargestellt werden. Daraus ergeben sich zweidimensionale Klimahüllen,
+                      eine Art Wohlfühlzone der Baumart. "),
+                    column(3,
+                           #selectInput('select_species', 'Baumart', choices = NULL, multiple = F),
+                           #p(textOutput("selected_species_control")),
+                           selectInput('select_species', 'Baumart', choices = NULL, multiple = F),
+                           p(textOutput("selected_species_descr")),
+                           p(uiOutput("selected_species_img")),
+                           p(textOutput("selected_species_control")),
+                           selectInput('select_biovar1', 'Bioklimatische Variable 1', choices = biovars$biovars, multiple = F),
+                           selectInput('select_biovar2', 'Bioklimatische Variable 2', choices = biovars$biovars, multiple = F)
+                    ), column(width = 9,
+                              #h3(textOutput("select_species")),
+                              plotOutput('species_plot',  height = "100vh", width = "100%")
+                    ))
         # make species plot end ###############################################################
       )
     ))

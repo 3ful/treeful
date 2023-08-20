@@ -151,7 +151,7 @@ bioclim_quantiles <- tree_dbs %>%
   janitor::clean_names() %>% 
   unnest(names_sep = "_") 
     
-RPostgres::dbWriteTable(con, "trees_quantiles", bioclim_quantiles)
+RPostgres::dbWriteTable(con, "trees_quantiles", bioclim_quantiles, append = FALSE, overwrite = TRUE)
 
 rm(tree_dbs)
 gc()
