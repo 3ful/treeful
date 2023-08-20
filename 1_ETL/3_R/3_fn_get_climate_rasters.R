@@ -84,7 +84,7 @@ getpastclimate <- function(source = "copernicus", bioclim = "bio01") {
   
   
   return(bio_raster)
-  
+  rm(bio_raster)
   
 }
 
@@ -125,9 +125,11 @@ getfutureclimate <- function(source = "copernicus", bioclim = "bio01") {
   }
   
   return(bio_raster)
+  rm(bio_raster)
 }
 
 getsoilproperties <- function(variable = "STU_EU_DEPTH_ROOTS") {
   soil_layer <- terra::rast(paste0("2_Data/0_raw_data/soil/", variable, "_4326.tif"))
   return(soil_layer)
+  rm(soil_layer)
 }

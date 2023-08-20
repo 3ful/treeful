@@ -82,7 +82,15 @@ if (!file.exists("2_Data/1_output/tree_db.csv")) {
     getpastclimate(source = "copernicus", bioclim = "bio18"),
     getpastclimate(source = "copernicus", bioclim = "bio19")
   )
-  print("read and stacked bioclim rasters")
+  print("read and stacked bioclim rasters. starting bioclim extraction")
+  
+  tree_dbs <- tree_dbs %>% 
+    mutate(terra::extract(bioclim_stack, ., ID = F)) 
+  
+  rm(bioclim_stack)
+  gc()
+  
+  ##### soil data extraction begin
   soil_stack <- c(getsoilproperties("STU_EU_DEPTH_ROOTS"),
                   getsoilproperties("STU_EU_T_CLAY"),
                   getsoilproperties("STU_EU_S_CLAY"),
@@ -100,12 +108,14 @@ if (!file.exists("2_Data/1_output/tree_db.csv")) {
                   getsoilproperties("SMU_EU_S_TAWC"),
                   getsoilproperties("STU_EU_T_TAWC"),
                   getsoilproperties("STU_EU_S_TAWC"))
-  print("read and stacked soil rasters. starting extraction")
-  
+  print("read and stacked soil rasters. starting soil extraction")
   tree_dbs <- tree_dbs %>% 
-    mutate(terra::extract(bioclim_stack, ., ID = F)) %>% 
     mutate(terra::extract(soil_stack, ., ID = F)) %>% 
     mutate(across(.cols = starts_with(c("BIO", "STU", "SMU")), ~ round(.x, digits = 2), .names = "{.col}"))
+  
+  rm(soil_stack)
+  gc()
+  
   # tree_dbs <- tree_dbs %>% 
   #   st_drop_geometry()
   ################################ write it all to csv #################################
