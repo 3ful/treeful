@@ -11,7 +11,7 @@ app_ui <- function(request) {
     golem_add_external_resources(),
     # Your application UI logic
     fluidPage(
-      navbarPage(theme=shinytheme("superhero"),
+      navbarPage(theme=shinytheme("darkly"),
                  title = tags$b("Treeful"),
                  windowTitle = "Treeful",
                  id = "mainNavbar",
@@ -39,22 +39,42 @@ app_ui <- function(request) {
                icon  = icon("chart-column"),
 
                fluidRow(
-                 h2("Zusammenhänge zwischen Variablen entdecken"),
+                 h2("Klimahüllen erstellen"),
                     p("Für jeweils eine Baumart können zwei Variablen zusammen dargestellt werden. Daraus ergeben sich zweidimensionale Klimahüllen,
-                      eine Art Wohlfühlzone der Baumart. "),
+                      eine Art Wohlfühlzone der Baumart."),
                     column(3,
                            #selectInput('select_species', 'Baumart', choices = NULL, multiple = F),
                            #p(textOutput("selected_species_control")),
                            selectInput('select_species', 'Baumart', choices = NULL, multiple = F),
                            p(textOutput("selected_species_descr")),
                            p(uiOutput("selected_species_img")),
-                           p(textOutput("selected_species_control")),
-                           selectInput('select_biovar1', 'Bioklimatische Variable 1', choices = biovars$biovars, multiple = F),
-                           selectInput('select_biovar2', 'Bioklimatische Variable 2', choices = biovars$biovars, multiple = F)
+                           p(textOutput("selected_species_control"))
                     ), column(width = 9,
+                              shiny::fluidRow(
+                                column(width = 6,
+                                  selectInput('select_biovar1', 'Bioklimatische Variable X', choices = biovars$biovars, multiple = F, selected = "BIO01"),
+                                ),
+                                column(width = 6,
+                                  selectInput('select_biovar2', 'Bioklimatische Variable Y', choices = biovars$biovars, multiple = F, selected = "BIO12"))
+                                ),
                               #h3(textOutput("select_species")),
                               plotOutput('species_plot',  height = "100vh", width = "100%")
-                    ))
+                    )),
+               fluidRow(
+                 h2("Bodenbedingungen abgleichen"),
+                 p("Neben klimatischen Bedingungen ist auch der Boden entscheidend für einen Baum."),
+                 column(3),
+                 column(width = 9,
+                           shiny::fluidRow(
+                             column(width = 6,
+                                    selectInput('select_soilvar1', 'Boden-Variable X', choices = soil_vars$soilvars, multiple = F, selected = "STU_EU_DEPTH_ROOTS"),
+                             ),
+                             column(width = 6,
+                                    selectInput('select_soilvar2', 'Boden-Variable Y', choices = soil_vars$soilvars, multiple = F, selected = "STU_EU_T_CLAY"))
+                           ),
+                           #h3(textOutput("select_species")),
+                           plotOutput('soil_plot',  height = "90vh", width = "100%")
+                 ))
         # make species plot end ###############################################################
       )
     ))

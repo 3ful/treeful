@@ -1,0 +1,18 @@
+proxy:
+  port: 8080
+  authentication: none
+  template-path: ./templates
+  container-wait-time: 30000
+  docker:
+      internal-networking: true
+  specs:
+  - id: treeful
+    display-name: Treeful
+    description: Besser Bäume pflanzen
+    container-cmd: ["R", "-e", "options('shiny.port'=3838,shiny.host='0.0.0.0');library(treeful);treeful::run_app()"]
+    container-image: treeful
+    container-network: sp-net
+
+logging:
+  file:
+    /opt/shinyproxy/logs/shinyproxy.log

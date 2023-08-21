@@ -1,9 +1,13 @@
 # Treeful - Besser Bäume pflanzen
 
-Such dir auf der Karte einen Standort aus. Wir zeigen dir wie das Klima dort war und wird. 
-Im nächsten Schritt siehst du das Habitat verschiedener Baumarten. 
+Diese Web-App liefert keine schnellen Antworten sondern zeigt dir, welche Baumarten unter welchen klimatischen Bedingungen gedeihen und setzt diese ins Verhältnis zu deinem potenziellen Pfanzstandort. 
+
+## Wie funktioniert das?
+
+Auf der Karte rechts setzt du einen Punkt wo du einen Baum pflanzen möchtest. Auf der nächsten Seite kannst du dich durch in Europa verbreitete Baumarten klicken. Für jede Baumart zeigen wir dir die Wohlfühlzone des Baums für zwei Variablen. Sinnvolle Kombinationen:
+* BIO01 (Jahresdurchschnittstemperatur) und BIO12 (Jahresniederschlag)
 
 ## Ergebnisse sind nur so genau wie Klimavorhersagen
 
-Wir nutzen Klimavorhersagen von Copernicus. Das bedeutet: Copernicus versucht europaweit vorherzusagen, welche Temperatur, Niederschlag, etc an einem Standort herrschen. Diese Vorhersagen können natürlich ungenau sein, sind jedoch das beste was momentan verfügbar ist. 
+Wir nutzen Klimavorhersagen vom Copernicus CDS. Das bedeutet: Copernicus versucht europaweit vorherzusagen, welche Temperatur, Niederschlag, etc. an einem Standort herrschen werden. Diese Vorhersagen können natürlich ungenau sein, sind jedoch das beste was momentan verfügbar ist. 
 

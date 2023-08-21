@@ -4,6 +4,34 @@
     "href": "index.html",
     "title": "Treeful Docs",
     "section": "",
-    "text": "Getting Tree Location Data\nThis section is for everyone in this delegation. It contains some useful digital tips and tricks, even for non-technical staff.\n\n\nGetting Bioclimatic Variables\n\n\nMerging Tree Locations and Bioclimatic Variables\n\n\nWriting to PostGIS DB"
+    "text": "About this Book\nThis book is the documentation for Treeful, an R Shiny application helping people plant trees based on species distribution modelling.\nThis section is for everyone in this delegation. It contains some useful digital tips and tricks, even for non-technical staff."
+  },
+  {
+    "objectID": "index.html#contribute",
+    "href": "index.html#contribute",
+    "title": "Treeful Docs",
+    "section": "Contribute",
+    "text": "Contribute"
+  },
+  {
+    "objectID": "index.html#who-is-behind-this",
+    "href": "index.html#who-is-behind-this",
+    "title": "Treeful Docs",
+    "section": "Who is behind this",
+    "text": "Who is behind this\n\nJakob Kutsch\nChristoph Trost"
+  },
+  {
+    "objectID": "how-it-works.html#quarto",
+    "href": "how-it-works.html#quarto",
+    "title": "1  How it works",
+    "section": "1.1 Quarto",
+    "text": "1.1 Quarto\nQuarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see https://quarto.org."
+  },
+  {
+    "objectID": "how-it-works.html#running-code",
+    "href": "how-it-works.html#running-code",
+    "title": "1  How it works",
+    "section": "1.2 Running Code",
+    "text": "1.2 Running Code\nWhen you click the Render button a document will be generated that includes both content and the output of embedded code. You can embed code like this:\n\n conn <- DBI::dbConnect(RPostgres::Postgres(),\n                        dbname = \"treeful-test\",\n                        host= \"192.168.178.148\",\n                        port=\"5432\",\n                        user=\"postgres\",\n                        password=\"mysecretpassword\")\n\ntree_db <- data.table::fread(\"../../../data/tree_db.csv\")\n\ntree_occurrence <- DBI::dbGetQuery(conn, paste0(\n      \"SELECT * FROM tree_dbs;\"))\n\ntree_occurrence <- sf::st_read(conn, layer = \"tree_dbs\")\n\n\noptions(scipen=100000000)\neu_grid <- sf::st_make_grid(sf::st_bbox(tree_occurrence),\n  n = c(100,100),\n  what = 'polygons',\n  square = FALSE,\n  flat_topped = TRUE) %>%\n  sf::st_as_sf() %>% \n  tibble::rownames_to_column(var = \"grid_id\")\n\ntree_occurrence <- sf::st_join(tree_occurrence, eu_grid, join = st_within)\ntree_grid <- tree_occurrence %>%  \n  sf::st_drop_geometry() %>% \n  dplyr::select(master_list_name, db, grid_id)\ntree_count <- tree_grid %>% \n  dplyr::group_by(grid_id) %>% \n  dplyr::count()\n\neu_grid <- eu_grid %>% \n  dplyr::left_join(tree_count)\n\ntmap::tm_shape(eu_grid) + tmap::tm_polygons(col = \"n\", alpha = 0.5, id = \"n\", style = \"log10_pretty\")\n  \nneutralocre <- \"#f5efe2ff\"\n\n  ggplot2::ggplot() +\n  ggplot2::geom_sf(data = eu_grid, aes(fill = n), color = \"white\", lwd = 0) +\n  viridis::scale_fill_viridis(direction = -1, option = \"D\", na.value = NA, trans = \"log\", breaks = c(10,100,1000,10000,100000)) +\n  ggplot2::labs(title = paste0(nrow(tree_occurrence), \" Tree Locations\"), fill = \"\") +\n  ggplot2::theme_void() +\n  ggplot2::theme(legend.position = \"bottom\", \n        legend.direction = \"horizontal\", legend.key.width = ggplot2::unit(2, \"cm\"))\n\n\nlibrary(raster)\n\nsource(\"../1_ETL/3_R/3_fn_get_climate_rasters.R\")\ngetpastclimate(source = \"copernicus\", bioclim = \"bio01\")\nbio_path <- \"BIO01\"\nbio01 <- raster(paste0(\"../1_ETL/2_Data/0_raw_data/copernicus/\", bio_path, \"_era5-to-1km_1979-2018-mean_v1.0.nc\"))\nbio01 <- calc(bio01, function(x) {x - 273.15})\nharz <- osmdata::opq_osm_id(id = 3734731, type = \"relation\") %>%\n  osmdata::osmdata_sf()\nharz <- st_make_valid(harz$osm_multipolygons)\n\nharz_bio <- raster::crop(bio01, extent(harz))\nharz_bio <- as.data.frame(harz_bio, xy = TRUE) \n\nggplot() +\n  geom_raster(data = harz_bio, aes(x = x, y = y, fill = layer)) + \n  scale_fill_viridis() +\n  theme_light() +\n  coord_quickmap() +\n  theme(legend.position = \"bottom\", legend.direction = \"horizontal\", axis.ticks = element_blank(), axis.text = element_blank(), axis.title = element_blank()) +\n  labs(fill = \"Durchschnittstemperatur 1979 - 2018\", title = \"Copernicus Temperatur am Harz 1979 - 2018\")\n\nYou can add options to executable code like this\n\n\n[1] 4\n\n\nThe echo: false option disables the printing of code (only output is displayed)."
   }
 ]

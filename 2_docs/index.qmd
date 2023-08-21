@@ -9,15 +9,66 @@ This book is the documentation for Treeful, an R Shiny application helping peopl
 * Jakob Kutsch
 * Christoph Trost
 
-# Getting Tree Location Data
+## About this Project and technical Approach
 
-This section is for everyone in this delegation. It contains some useful digital tips and tricks, even for non-technical staff. 
+This project was funded from the German ministry for Education and Research from March 1st 2023 to September 1st 2023. The purpose is to build a shiny app that allows user to explore habitat shapes of trees in Europe. These habitat shapes are plots of existing trees from a merged database of close to 9 million trees. We extracted climatic variables present at each tree location. These shapes allow users to compare with their own location, a potential planting site, for the past and future. 
 
-# Getting Bioclimatic Variables
+## Infrastructure
 
-# Merging Tree Locations and Bioclimatic Variables
+### ETL Container
 
-# Writing to PostGIS DB
+This container runs through the main script, fetching tree location data, getting bioclimatic variables, extracting those from the tree locations and writing everything to Postgis. 
+
+### Postgis Database Container
+
+All processed data from the ETL pipeline ends up in here. We chose to also write rasters to postgis, although rasters for projects like this are typically stored on disk. Our final shiny app will never read an entire raster but merely extract values from user locations. 
+
+### Shiny Proxy Container
+
+Shiny proxy is used to orchestrate the app itself. 
+
+### Shiny Container
+
+The actual app runs in this container, which is being called upon user request by shinyproxy. 
+
+## Getting Tree Location Data
+
+### Various academic data sources
+
+### GBIF
+
+### European Tree Cadastres
+
+
+
+## Getting Bioclimatic Variables
+
+### Why we chose what we chose
+
+Our ETL pipeline uses bioclimatic variables for the past and the future from copernicus CDS. 
+
+
+## Merging Tree Locations and Bioclimatic Variables
+
+On efficient functions and lots of RAM
+
+## Writing to PostGIS DB
+
+## Shiny App Development
+
+## Database Deployment
+
+## Shiny App Deployment
+
+Thanks to our Postgis database, the Shiny app itself is rather lightweight, does not need large files to be transferred and only does a minimum of plotting. 
+
+* Generate Dockerfile from app. Golem handles this. 
+* Build Docker image on host
+* 
+
+
+
+
 
 
 

@@ -48,6 +48,20 @@ soil_vars_c <- c("STU_EU_DEPTH_ROOTS" = 1,"STU_EU_T_CLAY" = 2,"STU_EU_S_CLAY" = 
                  "STU_EU_T_GRAVEL" = 12,"STU_EU_S_GRAVEL" = 13, "SMU_EU_T_TAWC" = 14,"SMU_EU_S_TAWC" = 15,
                  "STU_EU_T_TAWC" = 16, "STU_EU_S_TAWC" = 17)
 
+soil_vars <- tibble::tibble(soilvars = c("STU_EU_DEPTH_ROOTS","STU_EU_T_CLAY","STU_EU_S_CLAY","STU_EU_T_SAND","STU_EU_S_SAND","STU_EU_T_SILT","STU_EU_S_SILT",
+                                         "STU_EU_T_OC","STU_EU_S_OC","STU_EU_T_BD","STU_EU_S_BD","STU_EU_T_GRAVEL","STU_EU_S_GRAVEL",
+                                         "SMU_EU_T_TAWC","SMU_EU_S_TAWC","STU_EU_T_TAWC", "STU_EU_S_TAWC"),
+                          descr_de = c("Wurzelverfügbare Tiefe cm", "Tonanteil % Oberboden", "Tonanteil % Unterboden",
+                                       "Sandanteil % Oberboden", "Sandanteil % Unterboden",
+                                       "Schluffanteil % Oberboden", "Schluffanteil % Unterboden",
+                                       "Anteil org. Kohlenstoff % Oberboden", "Anteil org. Kohlenstoff % Unterboden",
+                                       "Schüttdichte Oberboden g/cm^3", "Schüttdichte Unterboden g/cm^3",
+                                       "Anteil grobkörniger Fragmente % Oberboden", "Anteil grobkörniger Fragmente % unterboden",
+                                       "Insges. verfügbarer Wassergehalt (PTR) Oberboden mm", "Insges. verfügbarer Wassergehalt (PTR) Unterboden mm",
+                                       "Insges. verfügbarer Wassergehalt (PTF) Oberboden mm", "Insges. verfügbarer Wassergehalt (PTF) Unterboden mm"
+                          )) %>%
+  rowid_to_column()
+
 
 app_server <- function(input, output, session) {
   # Your application server logic
@@ -65,7 +79,7 @@ app_server <- function(input, output, session) {
     DBI::dbDisconnect(backend_con)
   })
 
-  output$map <- renderLeaflet({leaflet()%>% addTiles()})
+  output$map <- renderLeaflet({leaflet()%>% addTiles() %>% leaflet.extras::addSearchOSM()})
 
   observe({
     click <- input$map_click
@@ -144,7 +158,7 @@ app_server <- function(input, output, session) {
     dplyr::bind_rows(past_biovars, future_biovars, soil)
   })
 
-  output$user_location <- renderDT(user_climate_long())
+  output$user_location <- renderDataTable(user_climate_long())
 
   #tree_db <- data.table::fread("data/tree_db.csv")
   species <- DBI::dbGetQuery(backend_con, paste0("SELECT * FROM tree_master_list")) %>%
@@ -207,7 +221,7 @@ app_server <- function(input, output, session) {
                   y = dplyr::filter(biovars, biovars == input$select_biovar2[1])$descr_de,
          subtitle = paste0("")) +
       ggplot2::theme(
-        plot.background = element_rect(fill = "black"),
+        plot.background = element_rect(fill = "#222222"),
         text = element_text(color = "white"),
         strip.text = element_text(color = "white"),
         axis.title.y = element_text(size = 20),
@@ -215,5 +229,33 @@ app_server <- function(input, output, session) {
         )
   })
 
+
+  output$soil_plot <- renderPlot({
+    ggplot2::ggplot(data = tree_occurrence()) +
+      ggplot2::geom_point(ggplot2::aes(x = .data[[dplyr::filter(soil_vars, soilvars == input$select_soilvar1[1])$soilvars]],
+                                       y = .data[[dplyr::filter(soil_vars, soilvars == input$select_soilvar2[1])$soilvars]], color = db),
+                          alpha = 0.1, stroke = 0) +
+      #geom_hex(aes(x = bio12_copernicus_1979_2018, y = bio01_copernicus_1979_2018), bins = 70) +
+      #stat_density_2d(aes(x = bio12_copernicus_1979_2018, y = bio01_copernicus_1979_2018, fill = ..level..), geom = "polygon", colour="white") +
+      ggplot2::geom_point(data = dplyr::filter(user_climate_wide(), layer %in% c("soil")),
+                          ggplot2::aes(x = .data[[dplyr::filter(soil_vars, soilvars == input$select_soilvar1[1])$soilvars]],
+                                       y = .data[[dplyr::filter(soil_vars, soilvars == input$select_soilvar2[1])$soilvars]]),
+                          color = "darkolivegreen4", size = 4) +
+      scale_color_paletteer_d("wesanderson::Royal1") +
+      #ggplot2::facet_wrap(~master_list_name) +
+      hrbrthemes::theme_ipsum() +
+      ggplot2::labs(title = paste0(dplyr::filter(soil_vars, soilvars == input$select_soilvar1[1])$descr_de, " und ",
+                                   dplyr::filter(soil_vars, soilvars == input$select_soilvar2[1])$descr_de),
+                    x = dplyr::filter(soil_vars, soilvars == input$select_soilvar1[1])$descr_de,
+                    y = dplyr::filter(soil_vars, soilvars == input$select_soilvar2[1])$descr_de,
+                    subtitle = paste0("")) +
+      ggplot2::theme(
+        plot.background = element_rect(fill = "#222222"),
+        text = element_text(color = "white"),
+        strip.text = element_text(color = "white"),
+        axis.title.y = element_text(size = 20),
+        axis.title.x = element_text(size = 20)
+      )
+  })
 
 }

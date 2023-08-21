@@ -5,13 +5,12 @@ format: html
 
 ## Quarto
 
-Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
-
 ## Running Code
 
 When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
 
 ```{r}
+#| eval: false
  conn <- DBI::dbConnect(RPostgres::Postgres(),
                         dbname = "treeful-test",
                         host= "192.168.178.148",
@@ -29,6 +28,7 @@ tree_occurrence <- sf::st_read(conn, layer = "tree_dbs")
 
 
 ```{r}
+#| eval: false
 options(scipen=100000000)
 eu_grid <- sf::st_make_grid(sf::st_bbox(tree_occurrence),
   n = c(100,100),
@@ -65,6 +65,7 @@ neutralocre <- "#f5efe2ff"
 
 
 ```{r}
+#| eval: false
 library(raster)
 
 source("../1_ETL/3_R/3_fn_get_climate_rasters.R")
