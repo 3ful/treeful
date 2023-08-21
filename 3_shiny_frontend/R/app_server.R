@@ -158,7 +158,7 @@ app_server <- function(input, output, session) {
     dplyr::bind_rows(past_biovars, future_biovars, soil)
   })
 
-  output$user_location <- renderDataTable(user_climate_long())
+  output$user_location <- DT::renderDT(user_climate_long())
 
   #tree_db <- data.table::fread("data/tree_db.csv")
   species <- DBI::dbGetQuery(backend_con, paste0("SELECT * FROM tree_master_list")) %>%

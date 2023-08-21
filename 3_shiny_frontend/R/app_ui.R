@@ -25,11 +25,10 @@ app_ui <- function(request) {
                         includeMarkdown(file.path("inst", "app", "www", "intro.md"))
                  ),
                  column(width = 4,
-                               leafletOutput("map", height="600px"),
-                               DTOutput("user_location")
+                               leafletOutput("map", height="600px")
                ),
                column(width = 4,
-               #          plotOutput('user_input_plot',  height = "800px"),
+                      DTOutput("user_location")
                ))
                # start page ###############################################################
       ),

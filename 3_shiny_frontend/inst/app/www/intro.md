@@ -9,5 +9,5 @@ Auf der Karte rechts setzt du einen Punkt wo du einen Baum pflanzen möchtest. A
 
 ## Ergebnisse sind nur so genau wie Klimavorhersagen
 
-Wir nutzen Klimavorhersagen vom Copernicus CDS. Das bedeutet: Copernicus versucht europaweit vorherzusagen, welche Temperatur, Niederschlag, etc. an einem Standort herrschen werden. Diese Vorhersagen können natürlich ungenau sein, sind jedoch das beste was momentan verfügbar ist. 
+Wir nutzen Klimavorhersagen vom Copernicus CDS, momentan lediglich RPC 4.5 für 2050. Das bedeutet: Copernicus versucht europaweit vorherzusagen, welche Temperatur, Niederschlag, etc. an einem Standort herrschen werden. Diese Vorhersagen können natürlich ungenau sein, sind jedoch das beste was momentan verfügbar ist. 
 

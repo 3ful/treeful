@@ -15,7 +15,9 @@ Imports:
     golem (>= 0.4.0),
     hrbrthemes,
     leaflet,
+    leaflet.extras,
     paletteer,
+    purrr,
     raster,
     rpostgis,
     RPostgres,
@@ -24,6 +26,7 @@ Imports:
     shiny (>= 1.7.2),
     shinythemes,
     tibble,
+    tidyr,
     tidyverse,
     wesanderson
 Suggests: 
