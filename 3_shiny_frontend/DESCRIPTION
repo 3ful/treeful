@@ -12,6 +12,7 @@ Imports:
     dplyr,
     DT,
     ggplot2,
+    ggtext,
     golem (>= 0.4.0),
     hrbrthemes,
     leaflet,

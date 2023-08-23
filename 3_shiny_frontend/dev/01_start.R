@@ -26,7 +26,7 @@ golem::fill_desc(
   author_last_name = "Trost", # Your Last Name
   author_email = "post@datenlabor.eu", # Your Email
   repo_url = NULL, # The URL of the GitHub Repo (optional),
-  pkg_version = "0.0.0.9000" # The Version of the package containing the App
+  pkg_version = "0.0.1.0" # The Version of the package containing the App
 )
 
 ## Set {golem} options ----

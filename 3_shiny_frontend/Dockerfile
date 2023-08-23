@@ -4,7 +4,9 @@ RUN mkdir -p /usr/local/lib/R/etc/ /usr/lib/R/etc/
 RUN echo "options(repos = c(CRAN = 'https://cran.rstudio.com/'), download.file.method = 'libcurl', Ncpus = 4)" | tee /usr/local/lib/R/etc/Rprofile.site | tee /usr/lib/R/etc/Rprofile.site
 RUN R -e 'install.packages("remotes")'
 RUN Rscript -e 'remotes::install_version("tibble",upgrade="never", version = "3.2.1")'
+RUN Rscript -e 'remotes::install_version("purrr",upgrade="never", version = "1.0.1")'
 RUN Rscript -e 'remotes::install_version("dplyr",upgrade="never", version = "1.1.2")'
+RUN Rscript -e 'remotes::install_version("tidyr",upgrade="never", version = "1.3.0")'
 RUN Rscript -e 'remotes::install_version("data.table",upgrade="never", version = "1.14.8")'
 RUN Rscript -e 'remotes::install_version("DBI",upgrade="never", version = "1.1.3")'
 RUN Rscript -e 'remotes::install_version("ggplot2",upgrade="never", version = "3.4.2")'
@@ -22,12 +24,11 @@ RUN Rscript -e 'remotes::install_version("sf",upgrade="never", version = "1.0-14
 RUN Rscript -e 'remotes::install_version("RPostgres",upgrade="never", version = "1.4.5")'
 RUN Rscript -e 'remotes::install_version("rpostgis",upgrade="never", version = "1.4.4")'
 RUN Rscript -e 'remotes::install_version("paletteer",upgrade="never", version = "1.5.0")'
+RUN Rscript -e 'remotes::install_version("leaflet.extras",upgrade="never", version = "1.0.0")'
 RUN Rscript -e 'remotes::install_version("hrbrthemes",upgrade="never", version = "0.8.0")'
 RUN Rscript -e 'remotes::install_version("golem",upgrade="never", version = "0.4.1")'
+RUN Rscript -e 'remotes::install_version("ggtext",upgrade="never", version = "0.1.2")'
 RUN Rscript -e 'remotes::install_version("DT",upgrade="never", version = "0.28")'
-RUN Rscript -e 'remotes::install_version("purrr",upgrade="never", version = "1.0.1")'
-RUN Rscript -e 'remotes::install_version("leaflet.extras",upgrade="never", version = "1.0.0")'
-RUN Rscript -e 'remotes::install_version("tidyr",upgrade="never", version = "1.3.0")'
 COPY treeful_*.tar.gz /app.tar.gz
 RUN R -e 'remotes::install_local("/app.tar.gz",upgrade="never")'
 RUN rm /app.tar.gz

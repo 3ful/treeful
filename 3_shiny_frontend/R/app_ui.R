@@ -28,7 +28,7 @@ app_ui <- function(request) {
                                leafletOutput("map", height="600px")
                ),
                column(width = 4,
-                      DTOutput("user_location")
+                      DTOutput("user_location", fill = FALSE)
                ))
                # start page ###############################################################
       ),

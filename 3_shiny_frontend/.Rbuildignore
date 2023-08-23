@@ -1,4 +1,5 @@
 ^renv$
+^tests/run
 ^renv\.lock$
 ^.*\.Rproj$
 ^\.Rproj\.user$
