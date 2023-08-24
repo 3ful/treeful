@@ -44,18 +44,18 @@ services:
 #       - keyring_pw
 secrets:
       postgres_pw:
-        file: ./0_secrets/postgres_pw.txt
+        file: ./1_ETL/0_secrets/postgres_pw.txt
       postgres_host:
-        file: ./0_secrets/postgres_host.txt
+        file: ./1_ETL/0_secrets/postgres_host.txt
       copernicus_key:
-        file: ./0_secrets/copernicus_key.txt
+        file: ./1_ETL/0_secrets/copernicus_key.txt
       copernicus_uid:
-        file: ./0_secrets/copernicus_uid.txt
+        file: ./1_ETL/0_secrets/copernicus_uid.txt
       gbif_email:
-        file: ./0_secrets/gbif_email.txt
+        file: ./1_ETL/0_secrets/gbif_email.txt
       gbif_pw:
-        file: ./0_secrets/gbif_pw.txt
+        file: ./1_ETL/0_secrets/gbif_pw.txt
       gbif_uid:
-        file: ./0_secrets/gbif_uid.txt
+        file: ./1_ETL/0_secrets/gbif_uid.txt
       keyring_pw:
-        file: ./0_secrets/keyring_pw.txt
+        file: ./1_ETL/0_secrets/keyring_pw.txt

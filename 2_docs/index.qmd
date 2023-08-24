@@ -89,7 +89,8 @@ This section relies on the package rpostgis. Currently, there's no simple other 
 Thanks to our Postgis database, the Shiny app itself is rather lightweight, does not need large files to be transferred and only does a minimum of plotting. 
 
 * Generate Dockerfile from app. Golem handles this. It is wise to double-check the Dockerfile before buidling. When adding new packages, ensure they're at the end of the Dockerfile in order to leverage build caching. 
-* Build Docker image on host
+* **On your host:** clone the repository with git clone `https://github.com/3ful/treeful.git` and move to the directory with `cd ./treeful`
+*
 * Run stack with swarm and compose
 * 
 
