@@ -15,6 +15,8 @@ This project was funded from the German ministry for Education and Research from
 
 ## Infrastructure
 
+The docker-compose file 
+
 ### ETL Container
 
 This container runs through the main script, fetching tree location data, getting bioclimatic variables, extracting those from the tree locations and writing everything to Postgis. 
