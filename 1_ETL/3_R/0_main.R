@@ -13,11 +13,12 @@ Sys.setenv("GBIF_EMAIL" = read_lines("/run/secrets/gbif_email"))
 Sys.setenv("GBIF_PWD" = read_lines("/run/secrets/gbif_pw"))
 Sys.setenv("GBIF_USER" = read_lines("/run/secrets/gbif_uid"))
 Sys.setenv("POSTGRES_PW" = read_lines("/run/secrets/postgres_pw"))
+Sys.setenv("POSTGRES_HOST" = read_lines("/run/secrets/postgres_host"))
 Sys.setenv("POSTGRES_DB" = "treeful-test")
 
 con <- DBI::dbConnect(RPostgres::Postgres(), 
                       dbname = Sys.getenv("POSTGRES_DB"),
-                      host= "192.168.178.148", 
+                      host= Sys.getenv("POSTGRES_HOST"), 
                       port="5432",
                       user="postgres",
                       password=Sys.getenv("POSTGRES_PW"))

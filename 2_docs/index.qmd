@@ -47,12 +47,38 @@ The actual app runs in this container, which is being called upon user request b
 
 Our ETL pipeline uses bioclimatic variables for the past and the future from copernicus CDS. 
 
+## Reading Climate Rasters into R
+
+In order to extract bioclimatic variables from each species location, we'll have to load raster files into R. The function described here will solve a few complexities:
+
+* We convert raster values into units fit for anlysis. 
+* Stacked rasters need to be treated accordingly. 
+* Efficiency matters greatly here, especially when it comes to RAM-efficient raster reading. 
+
+What could and probably should not be done here: CRS-reprojections. Sometimes you may get a different CRS. Reproject outside of your ETL pipeline and then read. 
+
+
+```{r}
+#| eval: false
+#| file: ../1_ETL/3_R/3_fn_get_climate_rasters.R
+```
 
 ## Merging Tree Locations and Bioclimatic Variables
 
 On efficient functions and lots of RAM
 
 ## Writing to PostGIS DB
+
+The bioclimatic and soil rasters used in this project are several GBs large and usually do not fit into memory. This snipped reads them as raster stack, writes the stack to the PostGIS DB and removes it. 
+
+::: {.callout-warning title="Package rpostgis retired"}
+This section relies on the package rpostgis. Currently, there's no simple other way to write raster data to postGIS from R, neither sf nor terra nor stars. See [this discussion](https://github.com/r-spatial/discuss/issues/58)
+:::
+
+```{r}
+#| eval: false
+#| file: ../1_ETL/3_R/6_write_to_db.R
+```
 
 ## Shiny App Development
 
@@ -62,8 +88,9 @@ On efficient functions and lots of RAM
 
 Thanks to our Postgis database, the Shiny app itself is rather lightweight, does not need large files to be transferred and only does a minimum of plotting. 
 
-* Generate Dockerfile from app. Golem handles this. 
+* Generate Dockerfile from app. Golem handles this. It is wise to double-check the Dockerfile before buidling. When adding new packages, ensure they're at the end of the Dockerfile in order to leverage build caching. 
 * Build Docker image on host
+* Run stack with swarm and compose
 * 
 
 

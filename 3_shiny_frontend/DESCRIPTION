@@ -1,11 +1,14 @@
 Package: treeful
 Title: Treeful
-Version: 0.0.0.9000
+Version: 0.0.1.0
 Authors@R: 
-    person("Christoph", "Trost", , "port@datenlabor.eu", role = c("cre", "aut"))
+    person("Christoph", "Trost", , "post@datenlabor.eu", role = c("cre", "aut"))
 Description: PKG_DESC.
 License: MIT + file LICENSE
+Depends: 
+    tidyverse
 Imports: 
+    cachem,
     config (>= 0.3.1),
     data.table,
     DBI,
@@ -15,9 +18,12 @@ Imports:
     ggtext,
     golem (>= 0.4.0),
     hrbrthemes,
+    htmltools,
     leaflet,
     leaflet.extras,
+    markdown,
     paletteer,
+    pool,
     purrr,
     raster,
     rpostgis,
@@ -25,10 +31,11 @@ Imports:
     RPostgreSQL,
     sf,
     shiny (>= 1.7.2),
+    shinyFeedback,
     shinythemes,
     tibble,
     tidyr,
-    tidyverse,
+    waiter,
     wesanderson
 Suggests: 
     spelling,

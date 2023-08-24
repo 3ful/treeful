@@ -13,6 +13,41 @@
 
 # Engineering
 
+usethis::use_package( "data.table" )
+usethis::use_package( "shinythemes" )
+usethis::use_package( "shiny" )
+usethis::use_package( "sf" )
+usethis::use_package( "RPostgreSQL" )
+usethis::use_package( "RPostgres" )
+usethis::use_package( "rpostgis" )
+usethis::use_package( "raster" )
+usethis::use_package( "purrr" )
+usethis::use_package( "pool" )
+usethis::use_package( "paletteer" )
+usethis::use_package( "markdown" )
+usethis::use_package( "leaflet" )
+usethis::use_package( "leaflet.extras" )
+usethis::use_package( "hrbrthemes" )
+usethis::use_package( "golem" )
+usethis::use_package( "glue" )
+usethis::use_package( "ggtext" )
+usethis::use_package( "ggplot2" )
+usethis::use_package( "DT" )
+usethis::use_package( "dplyr" )
+usethis::use_package( "DBI" )
+usethis::use_package( "config" )
+usethis::use_package( "cachem" )
+usethis::use_package( "tibble" )
+usethis::use_package( "tidyr" )
+usethis::use_package( "tidyverse", type = "depends")
+usethis::use_package( "wesanderson" )
+usethis::use_package( "shinyFeedback" )
+
+usethis::use_package( "waiter" )
+
+
+
+
 ## Dependencies ----
 ## Amend DESCRIPTION with dependencies read from package code parsing
 ## install.packages('attachment') # if needed.

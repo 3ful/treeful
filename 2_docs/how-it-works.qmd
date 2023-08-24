@@ -13,10 +13,10 @@ When you click the **Render** button a document will be generated that includes 
 #| eval: false
  conn <- DBI::dbConnect(RPostgres::Postgres(),
                         dbname = "treeful-test",
-                        host= "192.168.178.148",
+                        host= Sys.getenv("POSTGRES_HOST"),
                         port="5432",
                         user="postgres",
-                        password="mysecretpassword")
+                        password=Sys.getenv("POSTGRES_PW"))
 
 tree_db <- data.table::fread("../../../data/tree_db.csv")
 

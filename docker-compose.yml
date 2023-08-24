@@ -1,0 +1,61 @@
+version: '3'
+services:
+  db:
+      build: "1_ETL/4_postgres/."
+      #image: "postgis/postgis"
+      ports:
+        - "5432:5432"
+      secrets:
+        - postgres_pw
+      environment:
+        POSTGRES_DB: treeful-test
+        POSTGRES_PASSWORD_FILE: /run/secrets/postgres_pw
+        PGDATA: /var/lib/postgresql/data/pgdata
+      volumes:
+        -
+          type: bind
+          source: ./1_ETL/4_postgres
+          target: /var/lib/postgresql/data
+  frontend:
+    build: "./3_shiny_frontend/"
+    image: "treeful"
+    ports:
+      - "8080:3838"
+    secrets:
+      - postgres_pw
+      - postgres_host
+    environment:
+      POSTGRES_DB: treeful-test
+      POSTGRES_PASSWORD_FILE: /run/secrets/postgres_pw
+      POSTGRES_HOST_FILE: /run/secrets/postgres_host
+
+#   etl:
+#     # building container to fetch tree dbs and raster data and stick into postgres
+#     build: ./
+#     volumes:
+#       - .:/home/rstudio
+#     secrets:
+#       - postgres_pw
+#       - copernicus_key
+#       - copernicus_uid
+#       - gbif_email
+#       - gbif_pw
+#       - gbif_uid
+#       - keyring_pw
+secrets:
+      postgres_pw:
+        file: ./0_secrets/postgres_pw.txt
+      postgres_host:
+        file: ./0_secrets/postgres_host.txt
+      copernicus_key:
+        file: ./0_secrets/copernicus_key.txt
+      copernicus_uid:
+        file: ./0_secrets/copernicus_uid.txt
+      gbif_email:
+        file: ./0_secrets/gbif_email.txt
+      gbif_pw:
+        file: ./0_secrets/gbif_pw.txt
+      gbif_uid:
+        file: ./0_secrets/gbif_uid.txt
+      keyring_pw:
+        file: ./0_secrets/keyring_pw.txt
