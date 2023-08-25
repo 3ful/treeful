@@ -28,6 +28,7 @@ tree_occurrence <- sf::st_read(conn, layer = "tree_dbs")
 
 
 ```{r}
+#| eval: false
 options(scipen=100000000)
 library(librarian)
 shelf(tidyverse, sf, hrbrthemes)

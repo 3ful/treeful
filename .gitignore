@@ -20,6 +20,8 @@
 !*1_ETL/2_Data/1_output/README.md
 3_shiny_frontend/data/*
 3_shiny_frontend/data-raw/*
+*tracker.js
+optout.html
 
 # Session Data files
 .RData

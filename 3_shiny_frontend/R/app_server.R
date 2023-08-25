@@ -32,12 +32,14 @@ shinyOptions(cache = cachem::cache_mem(max_size = 500e6))
 # Sys.setenv("POSTGRES_HOST" = read_lines("/run/secrets/postgres_host"))
 # Sys.setenv("POSTGRES_DB" = "treeful-test")
 
-
 #Sys.setlocale("LC_TIME","de_DE.UTF-8")
 
 app_server <- function(input, output, session) {
 
-  output$map <- renderLeaflet({leaflet()%>% addTiles() %>% leaflet.extras::addSearchOSM() %>% leaflet::setView(lat = 48.17, lng = 17.49, zoom = 4)})
+  output$map <- renderLeaflet({leaflet()%>% addTiles() %>% leaflet.extras::addSearchOSM() %>%
+      leaflet::setView(lat = 48.17, lng = 17.49, zoom = 4) %>%
+      addMarkers(lat = 51.3069, lng = 11.0012)
+    })
 
   observe({
     click <- input$map_click
@@ -45,6 +47,13 @@ app_server <- function(input, output, session) {
     leafletProxy('map') %>% clearMarkers()
     leafletProxy('map')%>% addMarkers(lng = click$lng, lat = click$lat)
 
+  })
+
+  observeEvent(input$nextpage, {
+    validate(
+      need(input$map_click, 'Bitte Standort auf der Karte wählen!')
+    )
+    updateTabsetPanel(session = session, inputId = "tabs", selected = "visualizeTab")
   })
 
   # construct user point as sf
@@ -83,9 +92,9 @@ app_server <- function(input, output, session) {
 
 
   tree_occurrence <- reactive({
-    #waiter <- waiter::Waiter$new(id = "species_plot")
-    #waiter$show()
-    #on.exit(waiter$hide())
+    waiter <- waiter::Waiter$new(id = "species_plot")
+    waiter$show()
+    on.exit(waiter$hide())
     DBI::dbGetQuery(backend_con, paste0(
       "SELECT * FROM tree_dbs WHERE master_list_name ='", input$select_species, "';"))
   }) %>% bindCache(Sys.Date(), input$select_species)
@@ -151,7 +160,16 @@ app_server <- function(input, output, session) {
     validate(
       need(input$map_click, 'Bitte Standort auf der Karte wählen!')
     )
-    temp_species_plot()
+    temp_species_plot() +
+      ggplot2::geom_point(ggplot2::aes(x = .data[[user_x()$biovars]],
+                                       y = .data[[user_y()$biovars]]),
+                          color = "darkolivegreen4", size = 4) +
+      ggtext::geom_richtext(aes(x = .data[[user_x()$biovars]],
+                                y = .data[[user_y()$biovars]], label = c("Dein Ort 1979-2018", "Dein Ort 2050")),
+                            stat = "unique", angle = 30,
+                            color = "white", fill = "steelblue",
+                            label.color = NA, hjust = 0, vjust = 0,
+                            family = "Playfair Display")
   })
 
 
