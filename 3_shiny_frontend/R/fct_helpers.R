@@ -8,12 +8,12 @@
 
 backend_con <- pool::dbPool(RPostgres::Postgres(),
                             dbname = "treeful-test",
-                            #host= "192.168.178.148",
-                            host= "db",
+                            host= "192.168.178.148",
+                            #host= "db",
                             port="5432",
                             user="postgres",
-                            #password="mysecretpassword")
-                            password=Sys.getenv("POSTGRES_PW"))
+                            password="mysecretpassword")
+                            #password=read_lines(Sys.getenv("POSTGRES_PW_FILE")))
 onStop(function() {
   pool::poolClose(backend_con)
 })

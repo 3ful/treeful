@@ -38,7 +38,7 @@ app_ui <- function(request) {
                value = "visualizeTab",
                fluidRow(
                  h2("Klimahüllen erstellen"),
-                    p("Für jeweils eine Baumart können zwei Variablen zusammen dargestellt werden. Daraus ergeben sich zweidimensionale Klimahüllen,
+                    p("Für eine Baumart siehst du zwei Variablen. Daraus ergeben sich zweidimensionale Klimahüllen,
                       eine Art Wohlfühlzone der Baumart."),
                     column(3,
                            #selectInput('select_species', 'Baumart', choices = NULL, multiple = F),

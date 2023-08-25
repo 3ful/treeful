@@ -35,8 +35,14 @@ RUN Rscript -e 'remotes::install_version("golem",upgrade="never", version = "0.4
 RUN Rscript -e 'remotes::install_version("ggtext",upgrade="never", version = "0.1.2")'
 RUN Rscript -e 'remotes::install_version("DT",upgrade="never", version = "0.28")'
 RUN Rscript -e 'remotes::install_version("tidyverse",upgrade="never", version = "2.0.0")'
+RUN Rscript -e 'remotes::install_version("xfun",upgrade="never", version = "0.40")'
+ARG CACHE_DATE=2023-08-22
+RUN mkdir /home/rstudio/treeful/
+COPY ./ /home/rstudio/treeful/
 COPY treeful_*.tar.gz /app.tar.gz
-RUN R -e 'remotes::install_local("/app.tar.gz",upgrade="never")'
-RUN rm /app.tar.gz
+#RUN R -e 'remotes::install_local("/app.tar.gz",upgrade="never")'
+#RUN rm /app.tar.gz
+WORKDIR /home/rstudio/treeful/
 EXPOSE 3838
-CMD  ["R", "-e", "options('shiny.port'=3838,shiny.host='0.0.0.0');library(treeful);treeful::run_app()"]
+#install needs to happen on run, otherwise install fails since docker secrets are not mounted
+CMD  ["R", "-e", "options('shiny.port'=3838,shiny.host='0.0.0.0');remotes::install_local('/app.tar.gz',upgrade='never');library(treeful);treeful::run_app()"]

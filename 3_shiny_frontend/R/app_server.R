@@ -37,7 +37,7 @@ shinyOptions(cache = cachem::cache_mem(max_size = 500e6))
 
 app_server <- function(input, output, session) {
 
-  output$map <- renderLeaflet({leaflet()%>% addTiles() %>% leaflet.extras::addSearchOSM()})
+  output$map <- renderLeaflet({leaflet()%>% addTiles() %>% leaflet.extras::addSearchOSM() %>% leaflet::setView(lat = 48.17, lng = 17.49, zoom = 4)})
 
   observe({
     click <- input$map_click
@@ -128,8 +128,6 @@ app_server <- function(input, output, session) {
     ggplot2::geom_point(data = tree_occurrence(), ggplot2::aes(x = .data[[user_x()$biovars]],
                             y = .data[[user_y()$biovars]], color = db),
                         alpha = 0.1, stroke = 0) +
-    #geom_hex(aes(x = bio12_copernicus_1979_2018, y = bio01_copernicus_1979_2018), bins = 70) +
-    #stat_density_2d(aes(x = bio12_copernicus_1979_2018, y = bio01_copernicus_1979_2018, fill = ..level..), geom = "polygon", colour="white") +
     scale_color_paletteer_d("wesanderson::Royal1") +
     #ggplot2::facet_wrap(~master_list_name) +
     hrbrthemes::theme_ipsum() +
@@ -143,7 +141,8 @@ app_server <- function(input, output, session) {
         text = element_text(color = "white"),
         strip.text = element_text(color = "white"),
         axis.title.y = element_text(size = 20),
-        axis.title.x = element_text(size = 20)
+        axis.title.x = element_text(size = 20),
+        legend.position = "bottom"
         )
   })
   #%>% bindCache(user_x(), user_y(), input$select_species)
@@ -152,16 +151,7 @@ app_server <- function(input, output, session) {
     validate(
       need(input$map_click, 'Bitte Standort auf der Karte wählen!')
     )
-    temp_species_plot() +
-    ggplot2::geom_point(ggplot2::aes(x = .data[[user_x()$biovars]],
-                                     y = .data[[user_y()$biovars]]),
-                        color = "steelblue", size = 4) +
-    ggtext::geom_richtext(aes(x = .data[[user_x()$biovars]],
-                              y = .data[[user_y()$biovars]], label = lab_md),
-                          stat = "unique", angle = 30,
-                          color = "white", fill = "steelblue",
-                          label.color = NA, hjust = 0, vjust = 0,
-                          family = "Playfair Display")
+    temp_species_plot()
   })
 
 
@@ -189,7 +179,8 @@ app_server <- function(input, output, session) {
         text = element_text(color = "white"),
         strip.text = element_text(color = "white"),
         axis.title.y = element_text(size = 20),
-        axis.title.x = element_text(size = 20)
+        axis.title.x = element_text(size = 20),
+        legend.position = "bottom"
       )
   })
   #%>% bindCache(user_soil_x(), user_soil_y(), input$select_species)

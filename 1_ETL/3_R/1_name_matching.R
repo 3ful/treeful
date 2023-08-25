@@ -37,30 +37,14 @@ return(stringdist)
 # As an example of possible other matching functions:
 # amatch <-  amatch(database_names[,flat_name], master_list[,flat_name], maxDist = 0.1)
 }
-############ MAIN: example of fuzzy matching and data extraxtion############ 
+############ MAIN: Create master list of botanical names ############ 
 # Load datasets
-# Master list with all European trees
-# master_list <- fread("2_Data/0_raw_data/eu_native_trees.csv")
-# master_list <- master_list[,.(latin_name=V1)]
 # Use trees4EU as master list, more coverage
 master_list <- data.table::fread("2_Data/0_raw_data/EUforestspecies_AMauri.csv") %>% 
   janitor::clean_names() %>% 
   dplyr::select(latin_name = species_name) %>% 
   distinct()
 master_list <- na.omit(master_list)
-
-# # TRY Database as an example
-# try_plant_db <- fread("2_Data/0_raw_data/Try_database_all_Species.txt")
-# setnames(try_plant_db,"AccSpeciesName","latin_name")
-# # Get fuzzy plant names
-# # The function requires both tables to be data.table, and the Species name to be latin_name
-# max_string_dist = 1 
-# try_matching_table <- get_fuzzy_plant_names(try_plant_db, master_list, max_string_dist)
-# # Now this needs to be checked manually and only proper matches need to be kept
-# try_matching_table_selection <- try_matching_table[distance<=1,]
-# # Now match all the species names in the TRY database names
-# 
-# try_db_selection <- try_plant_db[try_matching_table_selection[,.(data_set_name,master_list_name)], on = c(latin_name = "data_set_name"), nomatch = NULL]
 
 ############ OPEN TREES DATA BASE ############ 
 # Load and prepare database

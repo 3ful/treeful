@@ -28,6 +28,27 @@ tree_occurrence <- sf::st_read(conn, layer = "tree_dbs")
 
 
 ```{r}
+options(scipen=100000000)
+library(librarian)
+shelf(tidyverse, sf, hrbrthemes)
+
+
+tree_occurrence %>% 
+  #slice(1:1000000) %>% 
+  st_drop_geometry() %>% 
+  group_by(db) %>% 
+  summarise(n=n()) %>% 
+  ggplot(aes(x = reorder(db, +n), y = n)) +
+    geom_col(fill = "#6e944eff") +
+    theme_ipsum() +
+    coord_flip() +
+    labs(title = "Tree Occurrences imported", x = "Data Source", y = "n")
+
+
+```
+
+
+```{r}
 #| eval: false
 options(scipen=100000000)
 eu_grid <- sf::st_make_grid(sf::st_bbox(tree_occurrence),
@@ -38,7 +59,7 @@ eu_grid <- sf::st_make_grid(sf::st_bbox(tree_occurrence),
   sf::st_as_sf() %>% 
   tibble::rownames_to_column(var = "grid_id")
 
-tree_occurrence <- sf::st_join(tree_occurrence, eu_grid, join = st_within)
+tree_occurrence <- sf::st_join(st_make_valid(tree_occurrence), eu_grid, join = st_within)
 tree_grid <- tree_occurrence %>%  
   sf::st_drop_geometry() %>% 
   dplyr::select(master_list_name, db, grid_id)
@@ -49,7 +70,7 @@ tree_count <- tree_grid %>%
 eu_grid <- eu_grid %>% 
   dplyr::left_join(tree_count)
 
-tmap::tm_shape(eu_grid) + tmap::tm_polygons(col = "n", alpha = 0.5, id = "n", style = "log10_pretty")
+#tmap::tm_shape(eu_grid) + tmap::tm_polygons(col = "n", alpha = 0.5, id = "n", style = "log10_pretty")
   
 neutralocre <- "#f5efe2ff"
 

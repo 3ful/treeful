@@ -25,31 +25,81 @@ This container runs through the main script, fetching tree location data, gettin
 
 All processed data from the ETL pipeline ends up in here. We chose to also write rasters to postgis, although rasters for projects like this are typically stored on disk. Our final shiny app will never read an entire raster but merely extract values from user locations. 
 
-### Shiny Proxy Container
-
-Shiny proxy is used to orchestrate the app itself. 
 
 ### Shiny Container
 
-The actual app runs in this container, which is being called upon user request by shinyproxy. 
+The actual app runs as docker swarm and connects to the Postgis database.  
 
-## Getting Tree Location Data
+## Treeful ETL Pipeline: Obtaining and transforming tree occurrence data
 
-### Various academic data sources
+This section documents how tree occurrence data is obtained. At the end, we will have our tree locations with the corresponding bioclimatic variables in a postgis database. Additionally we write rasters and a few master data tables into postgis. 
 
-### GBIF
+First, we obtain data not included in this repository, namely EU Forest and Copernicus CDS raster files. These downloads will take a while. (Some datasets are neither downloaded, nor included in this repo. They've been shared privately with us)
 
-### European Tree Cadastres
+```{r}
+#| eval: false
+#| file: ../1_ETL/3_R/1_download_raw.R
+```
+
+### Getting Tree Location Data
+
+To produce reliable climate envelopes we would like to obtain as many trees from various biogeographical regions of Europe. This section details how we process them and produces a database with these occurrences:
+
+![Tree occurences in treeful per source database](occurrences.png)
+
+#### Academic data sources
+
+We used the [TRY plant trait database](https://www.try-db.org/TryWeb/Home.php) and [EU Forest](https://figshare.com/collections/A_high-resolution_pan-European_tree_occurrence_dataset/3288407). Both contain tree locations and botanical names. Both are academic, high-quality datasets with extensive data cleaning in place. We used EU Forest to generate our master list of botanical names. These trees will subsequently be used. A simple fuzzy matching is used to ensure `Sorbus Torminalis` and `Sorbus-torminalis` are matched as `Sorbus torminalis` (We used a conservative string dist=1). 
+
+```{r}
+#| eval: false
+#| file: ../1_ETL/3_R/1_name_matching.R
+```
+
+We finish this file with `rgbif::name_backbone_checklist()` where we obtain the GBIF taxo ID for each botanical name. This is part of our master data list. 
+
+#### European Tree Cadastres
+
+We wanted to include the proliferating corpus of tree cadastres of European cities. [We collected two dozen or so data sources into this file](https://github.com/3ful/treeful/blob/main/1_ETL/2_Data/0_raw_data/opendata_trees.xlsx). Since they're all unharmonized, extensive data cleaning happens here (we did not deal with CRS transformations but only kept datasets with EPSG:4326): 
+
+```{r}
+#| eval: false
+#| file: ../1_ETL/3_R/pre_processing/1_harmonize_cadastres.R
+```
 
 
+This writes a file with only botanical name, X, Y and source database for the next step. 
 
-## Getting Bioclimatic Variables
+#### GBIF
 
-### Why we chose what we chose
+The largest amount of our tree data comes from [GBIF](https://gbif.org/). We simply query a bounding box of Europe for all species from our master list, enriched already with GBIF taxo IDs. You could re-generate the dataset with most recently added tree occurrences with this (GBIF takes a while to prepare the dataset and you need to have your env variables GBIF_EMAIL, GBIF_PWD, GBIF_USER configured):
 
-Our ETL pipeline uses bioclimatic variables for the past and the future from copernicus CDS. 
+```{r}
+#| eval: false
 
-## Reading Climate Rasters into R
+gbif_download <- occ_download(
+    pred_in("taxonKey", tree_master_list$gbif_taxo_id),
+    #pred("taxonKey", 5284884),
+    # this is the bounding box of europe
+    pred_within("POLYGON((-15 75,-15 30,40 30,40 75,-15 75))"),
+    pred_lt("coordinateUncertaintyInMeters",1000), #downstream processing needs 1km accuracy
+    pred("hasCoordinate", TRUE),
+    pred("hasGeospatialIssue", FALSE), # remove GBIF default geospatial issues
+    pred("occurrenceStatus","PRESENT"),
+    pred_gte("year", 1960), #only keep trees seen after 1960
+    format = "SIMPLE_CSV")
+  #
+   occ_download_wait(gbif_download)
+```
+
+
+### Getting Bioclimatic Variables
+
+We tested [CHELSA](https://chelsa-climate.org/bioclim/), [worldclim](https://www.worldclim.org/data/bioclim.html) and Copernicus CDS to get bioclimatic variables. We prefer Copernicus for their extensive documentation and the convenient time frame of past bioclimatic data, from 1979-2018. This is where we expect that largest overlap with the life span of our trees from the occurrence dataset. 
+
+Our functions `getpastclimate()` and `getfutureclimate()` can theoretically be used to switch bioclimatic data sources but we have not implemented those. These functions are used to read our Copernicus raster files. 
+
+### Reading Climate Rasters into R
 
 In order to extract bioclimatic variables from each species location, we'll have to load raster files into R. The function described here will solve a few complexities:
 
@@ -65,11 +115,11 @@ What could and probably should not be done here: CRS-reprojections. Sometimes yo
 #| file: ../1_ETL/3_R/3_fn_get_climate_rasters.R
 ```
 
-## Merging Tree Locations and Bioclimatic Variables
+### Merging Tree Locations and Bioclimatic Variables
 
 On efficient functions and lots of RAM
 
-## Writing to PostGIS DB
+### Writing to PostGIS DB
 
 The bioclimatic and soil rasters used in this project are several GBs large and usually do not fit into memory. This snipped reads them as raster stack, writes the stack to the PostGIS DB and removes it. 
 
@@ -82,18 +132,26 @@ This section relies on the package rpostgis. Currently, there's no simple other 
 #| file: ../1_ETL/3_R/6_write_to_db.R
 ```
 
-## Shiny App Development
+### Shiny App Development
 
-## Database Deployment
+The shiny app itself is developed as package using the `golem` framework. 
 
-## Shiny App Deployment
+### Database Deployment
+
+### Shiny App Deployment
 
 Thanks to our Postgis database, the Shiny app itself is rather lightweight, does not need large files to be transferred and only does a minimum of plotting. 
+The docker-compose.yml file specifies that both the backend postgres database and the frontend shiny application will be launched. You could also run them on separate hosts.
 
 * Generate Dockerfile from app. Golem handles this. It is wise to double-check the Dockerfile before buidling. When adding new packages, ensure they're at the end of the Dockerfile in order to leverage build caching. 
 * **On your host:** clone the repository with git clone `https://github.com/3ful/treeful.git` and move to the directory with `cd ./treeful`
-*
 * Run stack with swarm and compose
+  * launch your docker swarm: `docker swarm init`
+  * In order to serve the same image to all nodes you need a docker registry. Create one with: `docker service create --name registry --publish published=5000,target=5000 registry:2`
+  * Push images to registry: `docker compose push`
+  * Now, deploy your swarm: `docker stack deploy --compose-file docker-compose.yml treeful`
+  * Now you can easily scale up your shiny app to 3 replicas with `docker service scale treeful_frontend=3`
+  * You can watch visitors of your frontend app with `docker service logs treeful_frontend -f`
 * 
 
 
