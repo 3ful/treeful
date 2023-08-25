@@ -24,16 +24,15 @@ golem::fill_desc(
   pkg_description = "PKG_DESC.", # The Description of the package containing the App
   author_first_name = "Christoph", # Your First Name
   author_last_name = "Trost", # Your Last Name
-  author_email = "port@datenlabor.eu", # Your Email
+  author_email = "post@datenlabor.eu", # Your Email
   repo_url = NULL, # The URL of the GitHub Repo (optional),
-  pkg_version = "0.0.0.9000" # The Version of the package containing the App
+  pkg_version = "0.0.1.0" # The Version of the package containing the App
 )
 
 ## Set {golem} options ----
 golem::set_golem_options()
 
 ## Install the required dev dependencies ----
-golem::install_dev_deps()
 
 ## Create Common Files ----
 ## See ?usethis for more information
@@ -55,7 +54,7 @@ golem::use_recommended_tests()
 
 ## Favicon ----
 # If you want to change the favicon (default is golem's one)
-golem::use_favicon() # path = "path/to/ico". Can be an online file.
+golem::use_favicon("inst/app/www/favicon.ico") # path = "path/to/ico". Can be an online file.
 # golem::remove_favicon() # Uncomment to remove the default favicon
 
 ## Add helper functions ----

@@ -1,4 +1,8 @@
-##################### Function to Get past climate ##################
+##################### Function to Get  climate Rasters ##################
+# In theory they can easily be adjusted to other climate raster providers. For some, snippets exist in the functions already but probably wont work 
+# in the entire workflow of treeful. All processing here is only tested with Copernicus
+# you pass a provider and a bioclimatic var like bio01 or bio13 to the function and it returns one raster. you can stack them later on. 
+
 
 getpastclimate <- function(source = "copernicus", bioclim = "bio01") {
   if (source == "climateeu") {
@@ -19,13 +23,13 @@ getpastclimate <- function(source = "copernicus", bioclim = "bio01") {
     
     bio_path <- toupper(bioclim)
 
-    bio_raster <- raster(paste0("2_Data/0_raw_data/past/", bio_path, "_era5-to-1km_1979-2018-mean_v1.0.nc"))
+    bio_raster <- terra::rast(paste0("2_Data/0_raw_data/past/", bio_path, "_era5-to-1km_1979-2018-mean_v1.0.nc"))
     # convert bioclim as per copernicus documentation. for some reasone case_when does not work here.     
     if (bioclim %in% c("bio01", "bio02", "bio04", "bio05", "bio06", "bio07", "bio08", "bio09", "bio10", "bio11")) 
-    {bio_raster <- calc(bio_raster, function(x) {x - 273.15})
-    } else if (bioclim == "bio12") {bio_raster <- calc(bio_raster, function(x) {x*3600*24*365*1000})
-    } else if (bioclim %in% c("bio13", "bio14")) {bio_raster <- calc(bio_raster, function(x) {x*3600*24*30.5*1000})
-    } else if (bioclim %in% c("bio16", "bio17", "bio18", "bio19")) {bio_raster <- calc(bio_raster, function(x) {x*3600*24*91.3*1000})
+    {bio_raster <- bio_raster - 273.15
+    } else if (bioclim == "bio12") {bio_raster <- bio_raster*3600*24*365*1000
+    } else if (bioclim %in% c("bio13", "bio14")) {bio_raster <- bio_raster*3600*24*30.5*1000
+    } else if (bioclim %in% c("bio16", "bio17", "bio18", "bio19")) {bio_raster <- bio_raster*3600*24*91.3*1000
     }
     # a bit unclear if bio13-bio19 can and should also be comverted like bio12. probably not as theyre not on annual reference period
 
@@ -80,7 +84,7 @@ getpastclimate <- function(source = "copernicus", bioclim = "bio01") {
   
   
   return(bio_raster)
-  
+  rm(bio_raster)
   
 }
 
@@ -88,7 +92,7 @@ getpastclimate <- function(source = "copernicus", bioclim = "bio01") {
 #################### Get Future Climate ##################
 # for now using climate projection model MPI-ESM1-2-LR and socio-econ pathway 245 
 
-getfutureclimate <- function(source = "chelsa") {
+getfutureclimate <- function(source = "copernicus", bioclim = "bio01") {
   if(source == "chelsa") {
     future_raster <- raster::stack(c("2_Data/1_output/CHELSA_cropped/CHELSA_bio1_2041-2070_gfdl-esm4_ssp370_V.2.1.tif", 
                     "2_Data/1_output/CHELSA_cropped/CHELSA_bio12_2041-2070_gfdl-esm4_ssp370_V.2.1.tif"))
@@ -103,17 +107,29 @@ getfutureclimate <- function(source = "chelsa") {
     names(future_raster)[1] <- "bio01"
     names(future_raster)[12] <- "bio12"
   } else if (source == "copernicus") {
-    future_raster_bio01 <- raster::stack("2_Data/0_raw_data/future/BIO01_hadgem2-cc_rcp45_r1i1p1_1960-2099-mean_v1.0.nc")$X2050.01.01
-    future_raster_bio12 <- raster::stack("2_Data/0_raw_data/future/BIO12_hadgem2-cc_rcp45_r1i1p1_1960-2099-mean_v1.0.nc")$X2050.01.01
+
+    bio_path <- toupper(bioclim)
+
+    bio_raster <- terra::rast(paste0("2_Data/0_raw_data/future/", bio_path, "_hadgem2-cc_rcp45_r1i1p1_1960-2099-mean_v1.0.nc"))
+    #$X2050.01.01
+    names(bio_raster) <- terra::time(bio_raster)
+    bio_raster <- bio_raster$`2050-01-01`
+    # convert bioclim as per copernicus documentation. for some reason case_when does not work here.     
+    if (bioclim %in% c("bio01", "bio02", "bio04", "bio05", "bio06", "bio07", "bio08", "bio09", "bio10", "bio11")) 
+    {bio_raster <- bio_raster - 273.15
+    } else if (bioclim == "bio12") {bio_raster <- bio_raster*3600*24*365*1000
+    } else if (bioclim %in% c("bio13", "bio14")) {bio_raster <- bio_raster*3600*24*30.5*1000
+    } else if (bioclim %in% c("bio16", "bio17", "bio18", "bio19")) {bio_raster <- bio_raster*3600*24*91.3*1000
+    }
     
-    future_raster_bio01 <- calc(future_raster_bio01, function(x) {x - 273.15})
-    future_raster_bio12 <- calc(future_raster_bio12, function(x) {x*3600*24*365*1000})  
-    
-    future_raster <- raster::stack(future_raster_bio01, future_raster_bio12)
-    names(future_raster)[1] <- "bio01"
-    names(future_raster)[2] <- "bio12"
   }
   
-  return(future_raster)
+  return(bio_raster)
+  rm(bio_raster)
 }
 
+getsoilproperties <- function(variable = "STU_EU_DEPTH_ROOTS") {
+  soil_layer <- terra::rast(paste0("2_Data/0_raw_data/soil/", variable, "_4326.tif"))
+  return(soil_layer)
+  rm(soil_layer)
+}

@@ -1,0 +1,8 @@
+Sys.setenv("COPERNICUS_KEY" = read_lines("../1_ETL/0_secrets/copernicus_key.txt"))
+Sys.setenv("COPERNICUS_UID" = read_lines("../1_ETL/0_secrets/copernicus_uid.txt"))
+Sys.setenv("GBIF_EMAIL" = read_lines("../1_ETL/0_secrets/gbif_email.txt"))
+Sys.setenv("GBIF_PWD" = read_lines("../1_ETL/0_secrets/gbif_pw.txt"))
+Sys.setenv("GBIF_USER" = read_lines("../1_ETL/0_secrets/gbif_uid.txt"))
+Sys.setenv("POSTGRES_PW" = read_lines("../1_ETL/0_secrets/postgres_pw.txt"))
+Sys.setenv("POSTGRES_HOST" = read_lines("../1_ETL/0_secrets/postgres_host.txt"))
+Sys.setenv("POSTGRES_DB" = "treeful-test")

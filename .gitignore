@@ -1,11 +1,15 @@
 .DS_Store
 *.tif
+1_ETL/figs
 # History files
 .Rhistory
 1_ETL/0_secrets/
 .Rapp.history
 1_ETL/2_Data/1_output/*
 1_ETL/2_Data/0_raw_data/tree_cadastres/*json
+1_ETL/2_Data/0_raw_data/past
+1_ETL/2_Data/0_raw_data/future
+1_ETL/2_Data/0_raw_data/soil
 1_ETL/2_Data/0_raw_data/copernicus
 !*1_ETL/2_Data/0_raw_data/copernicus/README.md
 1_ETL/2_Data/0_raw_data/tree_cadastres/*.csv
@@ -16,6 +20,8 @@
 !*1_ETL/2_Data/1_output/README.md
 3_shiny_frontend/data/*
 3_shiny_frontend/data-raw/*
+*tracker.js
+optout.html
 
 # Session Data files
 .RData

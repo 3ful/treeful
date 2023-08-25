@@ -4,6 +4,9 @@
 .httr-oauth
 .DS_Store
 /data/
+/tests/run*
+/tests/recording*
 *.tar.gz
 /data/tree_db.csv
 tree_db.csv
+.quarto

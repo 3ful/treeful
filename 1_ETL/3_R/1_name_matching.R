@@ -37,24 +37,14 @@ return(stringdist)
 # As an example of possible other matching functions:
 # amatch <-  amatch(database_names[,flat_name], master_list[,flat_name], maxDist = 0.1)
 }
-############ MAIN: example of fuzzy matching and data extraxtion############ 
+############ MAIN: Create master list of botanical names ############ 
 # Load datasets
-# Master list with all European trees
-master_list <- fread("2_Data/0_raw_data/eu_native_trees.csv")
-master_list <- master_list[,.(latin_name=V1)]
-
-# # TRY Database as an example
-# try_plant_db <- fread("2_Data/0_raw_data/Try_database_all_Species.txt")
-# setnames(try_plant_db,"AccSpeciesName","latin_name")
-# # Get fuzzy plant names
-# # The function requires both tables to be data.table, and the Species name to be latin_name
-# max_string_dist = 1 
-# try_matching_table <- get_fuzzy_plant_names(try_plant_db, master_list, max_string_dist)
-# # Now this needs to be checked manually and only proper matches need to be kept
-# try_matching_table_selection <- try_matching_table[distance<=1,]
-# # Now match all the species names in the TRY database names
-# 
-# try_db_selection <- try_plant_db[try_matching_table_selection[,.(data_set_name,master_list_name)], on = c(latin_name = "data_set_name"), nomatch = NULL]
+# Use trees4EU as master list, more coverage
+master_list <- data.table::fread("2_Data/0_raw_data/EUforestspecies_AMauri.csv") %>% 
+  janitor::clean_names() %>% 
+  dplyr::select(latin_name = species_name) %>% 
+  distinct()
+master_list <- na.omit(master_list)
 
 ############ OPEN TREES DATA BASE ############ 
 # Load and prepare database
@@ -116,6 +106,17 @@ trees4f_db_matching_table_selection <- trees4f_db_matching_table[distance<=1,]
 trees4f_db_selection <- trees4f_db[trees4f_db_matching_table_selection[,.(data_set_name,master_list_name)], on = c(latin_name = "data_set_name"), nomatch = NULL]
 # open_trees_db_selection2 <- open_trees_db[latin_name %in% open_trees_matching_table_selection[,data_set_name]]
 
+
+
+
+# enhance master list with GBIF taxo IDs and write master list to file
+tree_master_list <- master_list %>% 
+  mutate(gbif_taxo_id = name_backbone_checklist(name=.$latin_name)$usageKey) %>% 
+  # remove  unmatched or genus level taxo matches
+  filter(str_length(gbif_taxo_id) > 5 & !is.na(gbif_taxo_id))
+
+fwrite(tree_master_list,"2_Data/1_output/eu_native_trees_master.csv")
+tree_master_list <- fread("2_Data/1_output/eu_native_trees_master.csv") 
 
 
 rm(open_trees_db, open_trees_matching_table, open_trees_matching_table_selection, try_trees, try_trees_matching_table, 

@@ -13,6 +13,9 @@
 #' @import raster
 #' @import rpostgis
 #' @import DBI
+#' @import wesanderson
+#' @import ggplot2
+#' @import tibble
 #' @noRd
 
 # library(tidyverse)
@@ -21,24 +24,22 @@
 # library(leaflet)
 # #library(sf)
 # #library(raster)
-library(ggplot2)
-library(tibble)
+# library(ggplot2)
+# library(tibble)
+
+shinyOptions(cache = cachem::cache_mem(max_size = 500e6))
+# Sys.setenv("POSTGRES_PW" = read_lines("/run/secrets/postgres_pw"))
+# Sys.setenv("POSTGRES_HOST" = read_lines("/run/secrets/postgres_host"))
+# Sys.setenv("POSTGRES_DB" = "treeful-test")
+
+#Sys.setlocale("LC_TIME","de_DE.UTF-8")
 
 app_server <- function(input, output, session) {
-  # Your application server logic
 
-  username <- Sys.getenv("SHINYPROXY_USERNAME")
-  Sys.setlocale("LC_TIME","de_DE.UTF-8")
-
-  backend_con <- DBI::dbConnect(RPostgres::Postgres(),
-                        dbname = "treeful-test",
-                        host= "192.168.178.148",
-                        port="5432",
-                        user="postgres",
-                        password="mysecretpassword")
-  #on.exit(DBI::dbDisconnect(backend_con), add = TRUE)
-
-  output$map <- renderLeaflet({leaflet()%>% addTiles()})
+  output$map <- renderLeaflet({leaflet()%>% addTiles() %>% leaflet.extras::addSearchOSM() %>%
+      leaflet::setView(lat = 48.17, lng = 17.49, zoom = 4) %>%
+      addMarkers(lat = 51.3069, lng = 11.0012)
+    })
 
   observe({
     click <- input$map_click
@@ -48,82 +49,175 @@ app_server <- function(input, output, session) {
 
   })
 
-  make_query <- function(map_point, layer = "", band = 1) {
-    return(paste0("SELECT g.pt_geom, ST_Value(ST_Band(r.rast, ARRAY[", band, "]), g.pt_geom) AS biovar
-      FROM public.", layer, " AS r
-      INNER JOIN
-      (SELECT ST_Transform(ST_SetSRID(ST_MakePoint(", map_point$lon, ",", map_point$lat, "), 4326),4326) As pt_geom) AS g
-      ON r.rast && g.pt_geom;"))
-  }
+  observeEvent(input$nextpage, {
+    validate(
+      need(input$map_click, 'Bitte Standort auf der Karte wählen!')
+    )
+    updateTabsetPanel(session = session, inputId = "tabs", selected = "visualizeTab")
+  })
 
-  get_user_climate <- function(connection = backend_con, lat = input$map_click$lat, lon = input$map_click$lng) {
-    map_point <- sf::st_as_sf(tibble(lat = lat, lon = lon), coords = c("lon", "lat"), crs = 4326, remove =FALSE)
-
-    #get past at map location
-    bio01_hist <- RPostgreSQL::dbGetQuery(connection,make_query(map_point, layer = "pastbio01", band = 1))$biovar
-    bio12_hist <- RPostgreSQL::dbGetQuery(connection,make_query(map_point, layer = "pastbio12", band = 1))$biovar
-
-
-    bio01_future <- RPostgreSQL::dbGetQuery(connection,make_query(map_point, layer = "future", band = 1))$biovar
-    bio12_future <-  RPostgreSQL::dbGetQuery(connection,make_query(map_point, layer = "future", band = 2))$biovar
-
-    return(tibble(bio01_future, bio12_future,
-                  bio01_hist, bio12_hist
-    ))
-  }
-  user_climate1 <- reactive({
-    req(input$map_click)
-    get_user_climate()
+  # construct user point as sf
+  map_point <-
+    reactive({
+      sf::st_as_sf(tibble::tibble(lat = input$map_click$lat, lon = input$map_click$lng), coords = c("lon", "lat"), crs = 4326, remove =FALSE)
     })
 
-  output$user_location <- renderDT(user_climate1())
+  user_climate_wide <- reactive({
+    req(input$map_click)
 
-  #tree_db <- data.table::fread("data/tree_db.csv")
-  species <- DBI::dbGetQuery(backend_con, paste0("SELECT DISTINCT master_list_name FROM tree_dbs"))
+    past_biovars <- purrr::map_dfr(biovars_c, get_biolayer, layer = "past", map_point = map_point())  %>% dplyr::mutate(layer = "past")
+    future_biovars <- purrr::map_dfr(biovars_c, get_biolayer, layer = "future", map_point = map_point())  %>% dplyr::mutate(layer = "future")
+    soil <- purrr::map_dfr(soil_vars_c, get_biolayer, layer = "soil", map_point = map_point()) %>% dplyr::mutate(layer = "soil")
+    dplyr::bind_rows(past_biovars, future_biovars, soil)
+  })
 
-  updateSelectInput(session, "select_species", choices = species$master_list_name, selected = "Sorbus torminalis")
+  user_climate_long <- reactive({
+    req(input$map_click)
+    past_biovars <- purrr::map_dfr(biovars_c, get_biolayer, layer = "past", map_point = map_point()) %>% tidyr::pivot_longer(everything()) %>% dplyr::mutate(layer = "past")
+    future_biovars <- purrr::map_dfr(biovars_c, get_biolayer, layer = "future", map_point = map_point()) %>% tidyr::pivot_longer(everything()) %>% dplyr::mutate(layer = "future")
+    soil <- purrr::map_dfr(soil_vars_c, get_biolayer, layer = "soil", map_point = map_point()) %>% tidyr::pivot_longer(everything()) %>% dplyr::mutate(layer = "soil")
+    dplyr::bind_rows(past_biovars, future_biovars, soil)
+  })
 
-  # tree_occurrence <- reactive(tree_db[master_list_name %in% c(input$select_species), ]
-  # )
-  #selection <- reactive(input$select_species)
+  output$user_location <- DT::renderDT(user_climate_long(), server = FALSE)
 
-  tree_occurrence <- reactive(
+  # trees_quantiles <- DBI::dbGetQuery(backend_con, paste0("SELECT * FROM trees_quantiles"))
+  # trees_quantiles <- tidyr::pivot_longer(trees_quantiles, cols = dplyr::ends_with(c("_val"))) %>%
+  #   dplyr::select(dplyr::everything(), -dplyr::ends_with("quant"), -unpack, "bio01_quant") %>%
+  #   dplyr::rename(quart = bio01_quant) %>%
+  #   dplyr::mutate(name = toupper(stringr::str_remove(name, "_val")))
+
+
+  updateSelectInput(session, "select_species", choices = species$latin_name, selected = "Sorbus torminalis")
+
+
+  tree_occurrence <- reactive({
+    waiter <- waiter::Waiter$new(id = "species_plot")
+    waiter$show()
+    on.exit(waiter$hide())
     DBI::dbGetQuery(backend_con, paste0(
       "SELECT * FROM tree_dbs WHERE master_list_name ='", input$select_species, "';"))
-  )
+  }) %>% bindCache(Sys.Date(), input$select_species)
 
   output$selected_species_control <- renderText({ paste0(nrow(tree_occurrence()), " Baumstandorte gefunden") })
 
-  output$user_input_plot <- renderPlot({
-    ggplot2::ggplot(data = user_climate1()) +
-      ggplot2::geom_point(aes(x = bio12_hist, y = bio01_hist), color = "blue") +
-      ggplot2::geom_label(aes(x = bio12_hist, y = bio01_hist, label = "Klima 1979-2018")) +
-      ggplot2::geom_point(aes(x = bio12_future, y = bio01_future), color = "darkred") +
-      ggplot2::geom_label(aes(x = bio12_future, y = bio01_future, label = "Klima 2050")) +
-      ggplot2::geom_segment(aes(x = bio12_hist, y = bio01_hist, xend = bio12_future, yend = bio01_future), color = "black") +
-      hrbrthemes::theme_ipsum() +
-      ggplot2::labs(title = paste0("Jahrestemperatur und Jahresniederschlag am gewählten Standort"),
-           subtitle = paste0(""))
+  output$selected_species_descr <- renderText({ dplyr::filter(species, latin_name == input$select_species)$descr_de })
+  output$selected_species_wiki <- renderUI({
+    tags$a(paste0(dplyr::filter(species, latin_name == input$select_species)$latin_name, " bei Wikipedia"),
+           href = dplyr::filter(species, latin_name == input$select_species)$url,
+           target = "_blank")
+    })
+
+  output$selected_species_gbif <- renderUI({
+    tags$a(paste0(dplyr::filter(species, latin_name == input$select_species)$latin_name, " bei GBIF"),
+           href = paste0("https://www.gbif.org/species/", dplyr::filter(species, latin_name == input$select_species)$gbif_taxo_id),
+                         target = "_blank")
   })
 
-  output$species_plot <- renderPlot({
-    ggplot2::ggplot(data = tree_occurrence()) +
-    #ggplot2::geom_point(aes(x = bio12_copernicus_1979_2018, y = bio01_copernicus_1979_2018, color = db), alpha = 0.1, lwd = 0) +
-    geom_hex(aes(x = bio12_copernicus_1979_2018, y = bio01_copernicus_1979_2018), bins = 70) +
-    #stat_density_2d(aes(x = bio12_copernicus_1979_2018, y = bio01_copernicus_1979_2018, fill = ..level..), geom = "polygon", colour="white") +
-    scale_fill_continuous(type = "viridis") +
-    ggplot2::geom_point(data = user_climate1(), aes(x = bio12_hist, y = bio01_hist), color = "darkolivegreen4", size = 4) +
-    ggplot2::geom_point(data = user_climate1(), aes(x = bio12_future, y = bio01_future), color = "darkolivegreen", size = 4) +
-    #scale_color_paletteer_d("wesanderson::Royal1") +
+  output$selected_species_img <- renderUI({
+    tags$a(
+      tags$img(src = paste0("https://", dplyr::filter(species, latin_name == input$select_species)$image_url)),
+      href = dplyr::filter(species, latin_name == input$select_species)$url,
+      target = "_blank"
+    )
+  })
+
+  lab_md <- c("Dein Standort **1979-2018**", "Dein Standort **2050**")
+
+  user_x <- reactive({
+    dplyr::filter(biovars, descr_de == input$select_biovar1[1])
+  })
+  user_y <- reactive({
+    dplyr::filter(biovars, descr_de == input$select_biovar2[1])
+  })
+
+
+  temp_species_plot <- reactive({
+    ggplot2::ggplot(data = dplyr::filter(user_climate_wide(), layer %in% c("past", "future"))) +
+    ggplot2::geom_point(data = tree_occurrence(), ggplot2::aes(x = .data[[user_x()$biovars]],
+                            y = .data[[user_y()$biovars]], color = db),
+                        alpha = 0.1, stroke = 0) +
+    scale_color_paletteer_d("wesanderson::Royal1") +
     #ggplot2::facet_wrap(~master_list_name) +
     hrbrthemes::theme_ipsum() +
-    ggplot2::labs(title = paste0("Jahrestemperatur und Jahresniederschlag"),
+    ggplot2::labs(title = paste0(user_x()$descr_de, " und ",
+                                 user_y()$descr_de),
+                  x = user_x()$descr_de,
+                  y = user_y()$descr_de,
          subtitle = paste0("")) +
-      ggplot2::theme(plot.background = element_rect(fill = "black"),
-          text = element_text(color = "white"),
-          strip.text = element_text(color = "white"))
+      ggplot2::theme(
+        plot.background = element_rect(fill = "#222222"),
+        text = element_text(color = "white"),
+        strip.text = element_text(color = "white"),
+        axis.title.y = element_text(size = 20),
+        axis.title.x = element_text(size = 20),
+        legend.position = "bottom"
+        )
   })
-  # observeEvent(chronik_filtered(), {
-  #   updateSelectInput(session, "county_timeline_option1", choices = unique(chronik_filtered()$county), selected = unique(chronik_filtered()$county))
-  # })
+  #%>% bindCache(user_x(), user_y(), input$select_species)
+
+  output$species_plot <- renderPlot({
+    validate(
+      need(input$map_click, 'Bitte Standort auf der Karte wählen!')
+    )
+    temp_species_plot() +
+      ggplot2::geom_point(ggplot2::aes(x = .data[[user_x()$biovars]],
+                                       y = .data[[user_y()$biovars]]),
+                          color = "darkolivegreen4", size = 4) +
+      ggtext::geom_richtext(aes(x = .data[[user_x()$biovars]],
+                                y = .data[[user_y()$biovars]], label = c("Dein Ort 1979-2018", "Dein Ort 2050")),
+                            stat = "unique", angle = 30,
+                            color = "white", fill = "steelblue",
+                            label.color = NA, hjust = 0, vjust = 0,
+                            family = "Playfair Display")
+  })
+
+
+  user_soil_x <- reactive({
+    dplyr::filter(soil_vars, descr_de == input$select_soilvar1[1])
+  })
+  user_soil_y <- reactive({
+    dplyr::filter(soil_vars, descr_de == input$select_soilvar2[1])
+  })
+
+  temp_soil_plot <- reactive({
+    ggplot2::ggplot(data = dplyr::filter(user_climate_wide(), layer %in% c("soil"))) +
+      ggplot2::geom_point(data = tree_occurrence(), ggplot2::aes(x = .data[[user_soil_x()$soilvars]],
+                                       y = .data[[user_soil_y()$soilvars]], color = db),
+                          alpha = 0.1, stroke = 0) +
+      scale_color_paletteer_d("wesanderson::Royal1") +
+      hrbrthemes::theme_ipsum() +
+      ggplot2::labs(title = paste0(user_soil_x()$descr_de, " und ",
+                                   user_soil_y()$descr_de),
+                    x = user_soil_x()$descr_de,
+                    y = user_soil_y()$descr_de,
+                    subtitle = paste0("")) +
+      ggplot2::theme(
+        plot.background = element_rect(fill = "#222222"),
+        text = element_text(color = "white"),
+        strip.text = element_text(color = "white"),
+        axis.title.y = element_text(size = 20),
+        axis.title.x = element_text(size = 20),
+        legend.position = "bottom"
+      )
+  })
+  #%>% bindCache(user_soil_x(), user_soil_y(), input$select_species)
+
+
+  output$soil_plot <- renderPlot({
+    validate(
+      need(input$map_click, 'Bitte Standort auf der Karte wählen!')
+    )
+    temp_soil_plot() +
+
+        ggplot2::geom_point(ggplot2::aes(x = .data[[user_soil_x()$soilvars]],
+                                         y = .data[[user_soil_y()$soilvars]]),
+                            color = "darkolivegreen4", size = 4) +
+        ggtext::geom_richtext(aes(x = .data[[user_soil_x()$soilvars]],
+                                  y = .data[[user_soil_y()$soilvars]], label = "Bodenwerte an deinem Standort"),
+                              stat = "unique", angle = 30,
+                              color = "white", fill = "steelblue",
+                              label.color = NA, hjust = 0, vjust = 0,
+                              family = "Playfair Display")
+    })
 }

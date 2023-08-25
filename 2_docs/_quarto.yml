@@ -8,14 +8,15 @@ book:
   reader-mode: true
   chapters:
     - index.qmd
+    - how-it-works.qmd
 
 format:
   html:
     toc: true
     toc-location: left
     theme: 
-      light: sandstone
       dark: darkly
+      light: sandstone
     mainfont: "sans-serif"
     embed-resources: true
     split_by: none

@@ -22,24 +22,24 @@
   #################### Get all common trees as per master list from GBIF  ###################
   # gbif post processing: https://ropensci.github.io/CoordinateCleaner/articles/Cleaning_GBIF_data_with_CoordinateCleaner.html
   # set up GBIF creds like this https://docs.ropensci.org/rgbif/articles/gbif_credentials.html
-  
-  # here you can reschedule a download. according to the parameters
+
+  #here you can reschedule a download. according to the parameters
   # gbif_download <- occ_download(
   #   pred_in("taxonKey", tree_master_list$gbif_taxo_id),
   #   #pred("taxonKey", 5284884),
   #   # this is the bounding box of europe
-  #   pred_within("POLYGON((-15 75,-15 30,40 30,40 75,-15 75))"), 
+  #   pred_within("POLYGON((-15 75,-15 30,40 30,40 75,-15 75))"),
   #   pred_lt("coordinateUncertaintyInMeters",1000), #downstream processing needs 1km accuracy
-  #   pred("hasCoordinate", TRUE), 
+  #   pred("hasCoordinate", TRUE),
   #   pred("hasGeospatialIssue", FALSE), # remove GBIF default geospatial issues
-  #   pred("occurrenceStatus","PRESENT"), 
+  #   pred("occurrenceStatus","PRESENT"),
   #   pred_gte("year", 1960), #only keep trees seen after 1960
-  #   format = "SIMPLE_CSV")  
-  # 
-  # occ_download_wait(gbif_download) 
+  #   format = "SIMPLE_CSV")
+  # # 
+  #  occ_download_wait(gbif_download) 
   # 
 # we use a pre-run static download. this will not include recently added trees. 
-rgbif::occ_download_get("0027501-230530130749713") %>%
+rgbif::occ_download_get("0014991-230810091245214") %>%
     occ_download_import() %>%
     setNames(tolower(names(.))) %>% # set lowercase column names to work with CoordinateCleaner
     filter(!coordinateuncertaintyinmeters %in% c(301,3036,999,9999)) %>% 
