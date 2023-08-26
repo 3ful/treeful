@@ -19,10 +19,10 @@ services:
       deploy:
         resources:
             limits:
-              cpus: 2
+              cpus: '2'
               memory: 4096M
             reservations:
-              cpus: 1
+              cpus: '1'
               memory: 1024M
   frontend:
     build: "./3_shiny_frontend/"
@@ -39,11 +39,16 @@ services:
     deploy:
       resources:
           limits:
-            cpus: 2
+            cpus: '2'
             memory: 4096M
           reservations:
-            cpus: 1
+            cpus: '1'
             memory: 1024M
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
 
 #   etl:
 #     # building container to fetch tree dbs and raster data and stick into postgres
