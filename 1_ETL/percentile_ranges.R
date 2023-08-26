@@ -8,7 +8,7 @@ library(librarian)
 shelf(data.table,stringr, sf,ggplot2,moments)
 
 # Load data, extract list of tree names
-trees <- fread("~/Downloads/tree_db.csv")
+trees <- fread("2_Data/1_output/tree_db.csv") %>% dplyr::select(-geometry)
 tree_names <- unique(trees[,master_list_name,])
 tree_names
 bioclim_vars <- colnames(trees)

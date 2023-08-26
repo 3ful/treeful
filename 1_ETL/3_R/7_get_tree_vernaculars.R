@@ -1,7 +1,7 @@
 library(librarian)
 shelf(rvest)
 
-tree_master_list <- fread("2_Data/1_output/eu_native_trees_master.csv") 
+tree_master_list <- fread("2_Data/1_output/eu_native_trees_master.csv")
 
 wikipedia <- function(search_terms, lang = c("en", "de", "es", "fr")) {
   if (missing(search_terms)) {
@@ -62,6 +62,7 @@ tree_master_list <- tree_master_list %>%
   mutate(image_url = stringr::str_remove(image_url, "^\\/\\/"))
 
 cat("writing master list with drescriptions to postgres")
+fwrite(tree_master_list, "2_Data/1_output/eu_native_trees_master.csv")
 con <- DBI::dbConnect(RPostgres::Postgres(), 
                       dbname = Sys.getenv("POSTGRES_DB"),
                       host= "192.168.178.148", 
@@ -69,7 +70,7 @@ con <- DBI::dbConnect(RPostgres::Postgres(),
                       user="postgres",
                       password=Sys.getenv("POSTGRES_PW"))
 
-RPostgres::dbWriteTable(con, "tree_master_list", tree_master_list)
+RPostgres::dbWriteTable(con, "tree_master_list", tree_master_list, overwrite = TRUE)
 
 DBI::dbDisconnect(conn = con)
 
