@@ -47,8 +47,18 @@ if (!file.exists("2_Data/1_output/tree_db.csv")) {
   
   ######################### The heart of it all: getting bioclimatic vars for each tree ##########
   # ATTENTION with namespaces here. stringdist and raster both have an extract function. took me only an hour to figure out. 
+  cat(paste0("Cutting down tree db to species with n>1500, currently at ", nrow(tree_dbs)))
   
-  cat(paste0("Starting extraction for ", nrow(tree_dbs), " tree occurrences"))
+  tree_count <- tree_dbs %>% 
+    group_by(master_list_name) %>% 
+    summarise(n=n()) %>% 
+    filter(n>1500)
+  
+  tree_dbs <- tree_dbs %>% 
+    filter(master_list_name %in% tree_count$master_list_name)
+  gc()
+  
+  cat(paste0("Cut small species occurrences. Starting extraction for ", nrow(tree_dbs), " tree occurrences"))
   
   
   bio_vars <- c("bio01", "bio02", "bio03", "bio04", "bio05", "bio06", "bio07", "bio08", 

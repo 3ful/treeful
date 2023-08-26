@@ -4045,8 +4045,7 @@ vertical-align: -.125em;
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#about-this-book" id="toc-about-this-book" class="nav-link active" data-scroll-target="#about-this-book">About this Book</a>
-  <ul class="collapse">
+  <li><a href="#about-this-book" id="toc-about-this-book" class="nav-link active" data-scroll-target="#about-this-book">About this Book</a></li>
   <li><a href="#contribute" id="toc-contribute" class="nav-link" data-scroll-target="#contribute">Contribute</a></li>
   <li><a href="#who-is-behind-this" id="toc-who-is-behind-this" class="nav-link" data-scroll-target="#who-is-behind-this">Who is behind this</a></li>
   <li><a href="#about-this-project-and-technical-approach" id="toc-about-this-project-and-technical-approach" class="nav-link" data-scroll-target="#about-this-project-and-technical-approach">About this Project and technical Approach</a></li>
@@ -4067,7 +4066,6 @@ vertical-align: -.125em;
   <li><a href="#shiny-app-development" id="toc-shiny-app-development" class="nav-link" data-scroll-target="#shiny-app-development">Shiny App Development</a></li>
   <li><a href="#database-deployment" id="toc-database-deployment" class="nav-link" data-scroll-target="#database-deployment">Database Deployment</a></li>
   <li><a href="#shiny-app-deployment" id="toc-shiny-app-deployment" class="nav-link" data-scroll-target="#shiny-app-deployment">Shiny App Deployment</a></li>
-  </ul></li>
   </ul>
 </nav>
 </nav>
@@ -4106,9 +4104,10 @@ vertical-align: -.125em;
 
 </header>
 
-<section id="about-this-book" class="level1 unnumbered">
-<h1 class="unnumbered">About this Book</h1>
+<section id="about-this-book" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="about-this-book">About this Book</h2>
 <p>This book is the documentation for Treeful, an R Shiny application helping people plant trees based on species distribution modelling.</p>
+</section>
 <section id="contribute" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="contribute">Contribute</h2>
 </section>
@@ -4825,10 +4824,11 @@ Warning
 </section>
 <section id="shiny-app-development" class="level2">
 <h2 class="anchored" data-anchor-id="shiny-app-development">Shiny App Development</h2>
-<p>The shiny app itself is developed as package using the <code>golem</code> framework.</p>
+<p>The shiny app itself is developed as package using the <code>golem</code> framework. Most of the server and ui code explains itself.</p>
 </section>
 <section id="database-deployment" class="level2">
 <h2 class="anchored" data-anchor-id="database-deployment">Database Deployment</h2>
+<p>We use the docker image postgis/postgis and only add raster extension to it with a short init script.</p>
 <div class="cell" data-file="../1_ETL/4_postgres/Dockerfile">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode dockerfile code-with-copy"><code class="sourceCode dockerfile"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>from postgis/postgis</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co"># need to enable raster extentions</span></span>
@@ -4860,7 +4860,6 @@ Warning
 </ul>
 
 
-</section>
 </section>
 
 </main> <!-- /main -->
