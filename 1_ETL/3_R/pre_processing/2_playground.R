@@ -157,10 +157,14 @@ for (i in 1:length(global_CHELSA_files)) {
 
 
 
+################## create master list
+
+# take EU trees, distinct trees, keep only where n() of final tree db would be over 1500
 
 
 
 
-### make some hulls with gbif
+
+
 
 

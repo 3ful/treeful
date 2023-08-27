@@ -10,6 +10,14 @@ format: html
 When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
 
 ```{r}
+library(librarian)
+shelf(tidyverse)
+
+source("../dev-secrets.R")
+```
+
+
+```{r}
 #| eval: false
  conn <- DBI::dbConnect(RPostgres::Postgres(),
                         dbname = "treeful-test",
@@ -18,7 +26,7 @@ When you click the **Render** button a document will be generated that includes 
                         user="postgres",
                         password=Sys.getenv("POSTGRES_PW"))
 
-tree_db <- data.table::fread("../../../data/tree_db.csv")
+#tree_db <- data.table::fread("../../../data/tree_db.csv")
 
 tree_occurrence <- DBI::dbGetQuery(conn, paste0(
       "SELECT * FROM tree_dbs;"))
@@ -51,37 +59,85 @@ tree_occurrence %>%
 
 ```{r}
 #| eval: false
+
+# get europe country shapes
+europe <- giscoR::gisco_get_countries(
+  spatialtype = "RG",
+  region = "Europe",
+  epsg = "4326"
+)
+
+# make another shape of Europe without overseas territories. 
+df <- data.frame(
+  lat = c(75, 30, 30, 75, 75),
+  lon = c(-15, -15, 40, 40, -15)
+)
+
+polygon <- df %>%
+  st_as_sf(coords = c("lon", "lat"), crs = 4326) %>%
+  summarise(geometry = st_combine(geometry)) %>%
+  st_cast("POLYGON")
+
+### generate density maps for all tree secies
 options(scipen=100000000)
-eu_grid <- sf::st_make_grid(sf::st_bbox(tree_occurrence),
+tree_master_list <- data.table::fread("../1_ETL/2_Data/1_output/eu_native_trees_master.csv")
+
+
+#tree_db <- sf::st_read(conn, query = paste0("SELECT master_list_name, geometry FROM tree_dbs;"))
+
+# sf throws error bc of spherical geometry
+# https://github.com/r-spatial/sf/issues/1762
+sf_use_s2(F)
+
+eu_grid <- sf::st_make_grid(polygon,
   n = c(100,100),
   what = 'polygons',
-  square = FALSE,
-  flat_topped = TRUE) %>%
+  square = TRUE) %>%
   sf::st_as_sf() %>% 
   tibble::rownames_to_column(var = "grid_id")
 
-tree_occurrence <- sf::st_join(st_make_valid(tree_occurrence), eu_grid, join = st_within)
-tree_grid <- tree_occurrence %>%  
-  sf::st_drop_geometry() %>% 
-  dplyr::select(master_list_name, db, grid_id)
-tree_count <- tree_grid %>% 
-  dplyr::group_by(grid_id) %>% 
-  dplyr::count()
 
-eu_grid <- eu_grid %>% 
-  dplyr::left_join(tree_count)
+for (i in 1:nrow(tree_master_list)) {
+  tree_occurrence <- sf::st_read(conn,
+                                 query = paste0("SELECT master_list_name, geometry FROM tree_dbs WHERE master_list_name = '", tree_master_list$latin_name[i], "';"))
+    
+  tree_occurrence <- st_filter(x = tree_occurrence, y = polygon, .predicate = st_within)
+    
+  tree_occurrence <- sf::st_join(tree_occurrence, eu_grid, join = st_within)
+  
+  tree_grid <- tree_occurrence %>%  
+    sf::st_drop_geometry() %>% 
+    dplyr::select(master_list_name, grid_id)
+  
+  tree_count <- tree_grid %>% 
+    dplyr::group_by(grid_id) %>% 
+    dplyr::count()
+
+  tree_eu_grid <- eu_grid %>% 
+    dplyr::left_join(tree_count)
 
 #tmap::tm_shape(eu_grid) + tmap::tm_polygons(col = "n", alpha = 0.5, id = "n", style = "log10_pretty")
   
 neutralocre <- "#f5efe2ff"
-
-  ggplot2::ggplot() +
-  ggplot2::geom_sf(data = eu_grid, aes(fill = n), color = "white", lwd = 0) +
-  viridis::scale_fill_viridis(direction = -1, option = "D", na.value = NA, trans = "log", breaks = c(10,100,1000,10000,100000)) +
-  ggplot2::labs(title = paste0(nrow(tree_occurrence), " Tree Locations"), fill = "") +
+#, breaks = c(10,100,1000,10000,100000)
+  tree_distro_plot <- ggplot2::ggplot() +
+  ggplot2::geom_sf(data = europe, fill = neutralocre, color = "white") +
+  ggplot2::geom_sf(data = tree_eu_grid, aes(fill = n), color = "white", lwd = 0) +
+  viridis::scale_fill_viridis(direction = -1, option = "D", na.value = NA, trans = "log", breaks = breaks_log(n = 6)) +
+  ggplot2::labs(title = paste0(nrow(tree_occurrence), " Locations of ", tree_master_list$latin_name[i]), fill = "") +
   ggplot2::theme_void() +
   ggplot2::theme(legend.position = "bottom", 
-        legend.direction = "horizontal", legend.key.width = ggplot2::unit(2, "cm"))
+        legend.direction = "horizontal", legend.key.width = ggplot2::unit(2, "cm")) +
+    coord_sf(
+  xlim = c(-15, 40),
+  ylim = c(30, 75))
+  ggsave(plot = tree_distro_plot, filename = paste0("tree_distribution/",str_replace_all(tree_master_list$latin_name[i], " ", "_"), ".png"  ))
+  print(paste0("Saved ", tree_master_list$latin_name[i]))
+}
+
+
+
+
 ```
 
 

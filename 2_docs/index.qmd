@@ -38,6 +38,7 @@ First, we obtain data not included in this repository, namely EU Forest and Cope
 
 ```{r}
 #| eval: false
+#| code-fold: true
 #| file: ../1_ETL/3_R/1_download_raw.R
 ```
 
@@ -136,6 +137,7 @@ This section relies on the package rpostgis. Currently, there's no simple other 
 
 ```{r}
 #| eval: false
+#| code-fold: true
 #| file: ../1_ETL/3_R/6_write_to_db.R
 ```
 
@@ -149,6 +151,7 @@ We use the docker image postgis/postgis and only add raster extension to it with
 
 ```{Dockerfile}
 #| eval: false
+#| code-fold: true
 #| file: ../1_ETL/4_postgres/Dockerfile
 ```
 

@@ -47,8 +47,18 @@ if (!file.exists("2_Data/1_output/tree_db.csv")) {
   
   ######################### The heart of it all: getting bioclimatic vars for each tree ##########
   # ATTENTION with namespaces here. stringdist and raster both have an extract function. took me only an hour to figure out. 
+  cat(paste0("Cutting down tree db to species with n>1500, currently at ", nrow(tree_dbs)))
   
-  cat(paste0("Starting extraction for ", nrow(tree_dbs), " tree occurrences"))
+  tree_count <- tree_dbs %>% 
+    group_by(master_list_name) %>% 
+    summarise(n=n()) %>% 
+    filter(n>1500)
+  
+  tree_dbs <- tree_dbs %>% 
+    filter(master_list_name %in% tree_count$master_list_name)
+  gc()
+  
+  cat(paste0("Cut small species occurrences. Starting extraction for ", nrow(tree_dbs), " tree occurrences"))
   
   
   bio_vars <- c("bio01", "bio02", "bio03", "bio04", "bio05", "bio06", "bio07", "bio08", 
@@ -138,9 +148,9 @@ sf::st_write(tree_dbs, dsn = con, table = "trees",
              append = FALSE)
 
 ################ Computing percentiles and writing to DB ################
-quantile_df <- function(x, probs = c(0.1, 0.25, 0.5, 0.75, 0.9)) {
+quantile_df <- function(x, probs = seq(0,1, by = 0.01)) {
   tibble(
-    val = quantile(x, probs, na.rm = TRUE),
+    val = quantile(x, probs, na.rm = TRUE, names = F),
     quant = probs
   )
 }
@@ -149,11 +159,21 @@ bioclim_quantiles <- tree_dbs %>%
   group_by(master_list_name) %>% 
   reframe(across(starts_with(c("BIO", "STU")), quantile_df), .unpack = TRUE) %>% 
   janitor::clean_names() %>% 
-  unnest(names_sep = "_") 
+  unnest(names_sep = "_") %>% 
+  select(everything(), -ends_with("_quant"), bio01_quant) %>% 
+  select(master_list_name, percentile = bio01_quant, everything())
     
 RPostgres::dbWriteTable(con, "trees_quantiles", bioclim_quantiles, append = FALSE, overwrite = TRUE)
 
-rm(tree_dbs)
+tree_db_sample_size <- group_by(trees, master_list_name) %>% 
+  summarise(n=n())
+
+tree_master_list <- fread("2_Data/1_output/eu_native_trees_master.csv") %>% 
+  left_join(tree_db_sample_size, by = c("latin_name" = "master_list_name"))
+
+fwrite(tree_master_list, "2_Data/1_output/eu_native_trees_master.csv")
+
+rm(tree_dbs, tree_db_sample_size, tree_master_list)
 gc()
 
 DBI::dbDisconnect(conn = con)

@@ -16,6 +16,14 @@ services:
           type: bind
           source: ./1_ETL/4_postgres
           target: /var/lib/postgresql/data
+      deploy:
+        resources:
+            limits:
+              cpus: '2'
+              memory: 4096M
+            reservations:
+              cpus: '1'
+              memory: 1024M
   frontend:
     build: "./3_shiny_frontend/"
     image: "treeful"
@@ -28,6 +36,19 @@ services:
       POSTGRES_DB: treeful-test
       POSTGRES_PW_FILE: /run/secrets/postgres_pw
       POSTGRES_HOST_FILE: /run/secrets/postgres_host
+    deploy:
+      resources:
+          limits:
+            cpus: '2'
+            memory: 4096M
+          reservations:
+            cpus: '1'
+            memory: 1024M
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
 
 #   etl:
 #     # building container to fetch tree dbs and raster data and stick into postgres
