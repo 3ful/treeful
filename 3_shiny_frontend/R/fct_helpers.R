@@ -52,7 +52,7 @@ bio_extract <- function(map_point. = map_point, experiment = "rcp45", future_dat
                               paste0(biovars$biovars, "_", future_date))
 
   bio_future <- terra::extract(x = future_raster, y = map_point.) %>%
-    dplyr::rename_with(everything(), .fn = ~ stringr::str_remove(.x, "_(5|6|7)"))
+    dplyr::rename_with(everything(), .fn = ~ stringr::str_remove(.x, "_(4|5|6|7)"))
   rm(future_raster)
 
   ###### Get Soil Values
@@ -80,3 +80,54 @@ bio_extract <- function(map_point. = map_point, experiment = "rcp45", future_dat
 
 
 
+
+
+
+
+
+percentile_ranges <- DBI::dbReadTable(conn = backend_con, "percentile_ranges")
+
+closest_match <- function(biovar_match = biovar, user_climate = user_climate_wide()) {
+  sought <- as.numeric(dplyr::select(dplyr::filter(user_climate, dimension == "future"), all_of(biovar_match)))
+
+  percentile_ranges %>%
+    filter(bioclim_variable ==  biovar_match) %>%
+    group_by(species) %>%
+    filter(abs(value - sought) == min(abs(value - sought))) %>%
+    group_by(species, bioclim_variable) %>%
+    summarise(centile = max(abs(centile)), .groups = "drop") %>%
+    ungroup()
+
+}
+
+
+#
+#
+# ranking_suitability <- function() {
+#
+#   just_test <- tst$BIO01[2]
+#
+#   dplyr::tbl(backend_con, "percentile_ranges") %>%
+#     # dplyr::select(c("BIO01", "BIO05", "BIO06", "BIO08", "BIO09", "BIO11", "BIO11",
+#     #                 "BIO12", "BIO13", "BIO14", "BIO16", "BIO17", "BIO18", "BIO19")) %>%
+#     #dplyr::select(c("BIO01")) %>%
+#     filter(species == "Abies alba" & bioclim_variable == "BIO01") %>%
+#     arrange(abs(value - just_test))
+#     # tbl(sql("SELECT * FROM public.percentile_ranges
+#     # WHERE species = 'Abies alba' and bioclim_variable = 'BIO01'
+#     #         ORDER BY ABS( value - 8) "))
+#     filter(bioclim_variable == "BIO01" & abs(.$value - tst$BIO01[2]) == min(abs(.$value - tst$BIO01[2])))
+#     # filter(ActivityTypeNameOfActivity %in% c("Assistance/support transmitted") &
+#     #          StatusCodeOfBeneficiary == "Operational Data") %>%
+#     # filter(ActivityPrecisionNameOfActivity %in% c("PROT - Ad hoc assistance", "Socio-economic", "PROT - Funeral reimbursement") |
+#     #          is.na(ActivityPrecisionNameOfActivity)) %>%
+#     #filter(FileIDOfBeneficiary =="UAK-106253-01") %>%
+#     filter(history_id == "70db42d6-30a6-ed11-83af-005056940158") %>%
+#     distinct() %>%
+#     collect()
+#
+# }
+#
+#
+#
+#

@@ -40,6 +40,16 @@ app_ui <- function(request) {
                  ))
                  # start page ###############################################################
         ),
+        tabPanel(title = "Ranking",
+                 id    = "ranking",
+                 value = "ranking",
+                 fluidRow(
+                   column(width = 2,
+                   ),
+                   column(width = 10,
+                          DTOutput("ranking", fill = FALSE))
+                  )
+                 ),
         tabPanel(title = "🌳 Klimahüllen",
                  id    = "visualizeTab",
                  value = "visualizeTab",

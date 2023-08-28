@@ -36,6 +36,9 @@ shinyOptions(cache = cachem::cache_mem(max_size = 500e6))
 
 app_server <- function(input, output, session) {
 
+
+  #################### Processing of User location, Map, leaflet #######################
+
   output$map <- renderLeaflet({leaflet()%>% addTiles() %>% leaflet.extras::addSearchOSM() %>%
       leaflet::setView(lat = 48.17, lng = 17.49, zoom = 4) %>%
       addMarkers(lat = 51.3069, lng = 11.0012)
@@ -72,22 +75,7 @@ app_server <- function(input, output, session) {
 
   })
 
-  # user_climate_long <- reactive({
-  #   req(input$map_click)
-  #   bio_extract(map_point. = map_point(), experiment = )
-  # })
-
   output$user_location <- DT::renderDT(user_climate_wide(), server = FALSE)
-
-  # trees_quantiles <- DBI::dbGetQuery(backend_con, paste0("SELECT * FROM trees_quantiles"))
-  # trees_quantiles <- tidyr::pivot_longer(trees_quantiles, cols = dplyr::ends_with(c("_val"))) %>%
-  #   dplyr::select(dplyr::everything(), -dplyr::ends_with("quant"), -unpack, "bio01_quant") %>%
-  #   dplyr::rename(quart = bio01_quant) %>%
-  #   dplyr::mutate(name = toupper(stringr::str_remove(name, "_val")))
-
-
-  updateSelectInput(session, "select_species", choices = species$latin_name, selected = "Sorbus torminalis")
-
 
   tree_occurrence <- reactive({
     waiter <- waiter::Waiter$new(id = "species_plot")
@@ -96,6 +84,34 @@ app_server <- function(input, output, session) {
     DBI::dbGetQuery(backend_con, paste0(
       "SELECT * FROM tree_dbs WHERE master_list_name ='", input$select_species, "';"))
   }) %>% bindCache(Sys.Date(), input$select_species)
+
+
+  ################### Ranking ################
+
+
+  ranking <- reactive({
+    req(user_climate_wide())
+    purrr::map_dfr(names(biovars_c), closest_match, user_climate = user_climate_wide()) %>%
+      filter(bioclim_variable %in% c("BIO01", "BIO05", "BIO06", "BIO08", "BIO09", "BIO10", "BIO11", "BIO12", "BIO13",
+                                     "BIO14", "BIO16", "BIO17", "BIO18", "BIO19")) %>%
+      group_by(species) %>%
+      mutate(bioclim_n = n()) %>%
+      ungroup() %>%
+      mutate(score = 100 - centile) %>%
+      group_by(species) %>%
+      summarise(summed_score = sum(score)) %>%
+      arrange(desc(summed_score)) %>%
+      slice(1:20) %>%
+      dplyr::left_join(species, by = c("species" = "latin_name"))
+  })
+
+
+  output$ranking <- DT::renderDT(ranking(), server = FALSE)
+
+
+  ################# UI-linked reactives ####################
+
+  updateSelectInput(session, "select_species", choices = species$latin_name, selected = "Sorbus torminalis")
 
   output$selected_species_control <- renderText({ paste0(nrow(tree_occurrence()), " Baumstandorte gefunden") })
 
@@ -119,6 +135,11 @@ app_server <- function(input, output, session) {
       target = "_blank"
     )
   })
+
+
+
+  ################### Plotting Charts, labels, Reactives on that########################
+
 
   lab_md <- c("Dein Standort **1979-2018**", "Dein Standort **2050**")
 
