@@ -1,4 +1,4 @@
-
+setwd("1_ETL/")
 source("3_R/00_setup.R")
 # so that keyring works headless we set backend to encrypted file. twice for good measure. 
 options(keyring_backend = "file")
@@ -19,7 +19,7 @@ if (!file.exists("2_Data/0_raw_data/past/BIO01_era5-to-1km_1979-2018-mean_v1.0.n
   source("3_R/1_download_raw.R")
   sendstatus("Downloaded Copernicus Raster files")
 } else {
-  sendstatus("No need to download CDS raster files, tables exists in postgres. Proceeding. ")
+  sendstatus("No need to download CDS raster files, Files exist on disk. ")
 }
 DBI::dbDisconnect(conn = con)
 
