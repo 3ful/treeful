@@ -35,39 +35,49 @@ get_biolayer <- function(band = 1, layer = "past", map_point = map_point()) {
   return(biovar)
 }
 
-bio_extract <- function(map_point = map_point, modus = "past", biovar = "bio01", experiment = "rcp45", future_date = "2050-01-01") {
+# function to extract all biovars from raster files on disk for user location, projection scenario and future date
+bio_extract <- function(map_point = map_point, experiment = "rcp45", future_date = "2050-01-01") {
 
-  if (modus == "past") {
-    bio_raster <- terra::rast(paste0("../1_ETL/2_Data/0_raw_data/copernicus/", biovars$biovars, "_era5-to-1km_1979-2018-mean_v1.0.nc"))
+  ##### Get Past values
+  bio_past <- terra::extract(x = terra::rast(paste0("../1_ETL/2_Data/0_raw_data/copernicus/", biovars$biovars, "_era5-to-1km_1979-2018-mean_v1.0.nc")),
+                             y = map_point) %>%
+    rename_with(everything(), .fn = ~ paste0("past_", .x))
 
-  } else if (modus == "future") {
+
+  ###### Get Future Values
   biovars <- tibble::tibble(biovars = c("BIO01", "BIO17", "BIO19"))
   bio_dates <- c("1979-01-01", "1989-01-01", "2009-01-01", "2030-01-01", "2050-01-01", "2070-01-01", "2090-01-01")
-  bio_raster <- terra::rast(paste0("../1_ETL/2_Data/0_raw_data/future/", biovars$biovars, "_hadgem2-cc_",
-                                   experiment, "_r1i1p1_1960-2099-mean_v1.0.nc")
-                            )
-  #names(bio_raster) <- terra::time(bio_raster)
-  #bio_raster <- bio_raster$`2050-01-01`
-  bio_raster <- terra::subset(bio_raster, paste0(bio_path, "_", 5))
 
-  bio_extract <- terra::extract(x = bio_raster, y = map_point) %>%
+  future_raster <- terra::subset(
+    terra::rast(paste0("../1_ETL/2_Data/0_raw_data/future/", biovars$biovars, "_hadgem2-cc_",
+                                                 experiment, "_r1i1p1_1960-2099-mean_v1.0.nc")),
+                              paste0(bio_path, "_", 5))
+
+  bio_future <- terra::extract(x = future_raster, y = map_point) %>%
     rename_with(everything(), .fn = ~ str_remove(.x, "_5")) %>%
-    # when temp, conert from kelvin to degree
+    rename_with(everything(), .fn = ~ paste0("future_", .x))
+
+  rm(bio_raster)
+
+  ###### Get Soil Values
+  soil_layer <- terra::rast(paste0("2_Data/0_raw_data/soil/", soil_vars$soilvars, "_4326.tif"))
+  bio_past <- terra::extract(x = bio_soil, y = map_point)
+
+
+  dplyr::bind_cols(bio_past, bio_future) %>%
+  # when temp, conert from kelvin to degree
     mutate(across(.cols = ends_with(c("01", "05", "06", "08", "09", "10", "11")), ~ (.x - 273.15), .names = "{.col}")) %>%
     # when annual precip, compute for 365 days
     mutate(across(.cols = ends_with(c("12")), ~ (.x *3600*24*365*1000), .names = "{.col}")) %>%
     # when monthly preci, computer for month
     mutate(across(.cols = ends_with(c("13", "14")), ~ (.x *3600*24*30.5*1000), .names = "{.col}")) %>%
     # when quarterly precip compute for 91.3 days.
-    mutate(across(.cols = ends_with(c("16", "17", "18", "19")), ~ (.x *3600*24*91.3*1000), .names = "{.col}"))
+    mutate(across(.cols = ends_with(c("16", "17", "18", "19")), ~ (.x *3600*24*91.3*1000), .names = "{.col}")) %>%
+    bind_cols(bio_soil) %>%
+    return(.)
 
-  } else if (modus == "soil") {
 
-  }
 
-  rm(bio_raster)
-
-  return(bio_raster)
 }
 
 

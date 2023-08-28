@@ -8,7 +8,6 @@ book:
   reader-mode: true
   chapters:
     - index.qmd
-    - how-it-works.qmd
 
 format:
   html:

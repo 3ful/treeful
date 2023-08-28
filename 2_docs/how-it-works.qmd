@@ -168,6 +168,25 @@ ggplot() +
 
 ```
 
+```{r}
+#| eval: false
+library(hrbrthemes)
+library(ggpubr)
+eu_trees_sample_size <- tree_dbs %>% 
+  filter(db == "trees4f") %>% 
+  group_by(master_list_name) %>% 
+  summarise(n=n())
+
+ggplot(filter(tree_dbs, db == "trees4f" & master_list_name %in% filter(eu_trees_sample_size, n>200)$master_list_name), aes(x = BIO01)) + geom_histogram() + stat_central_tendency(type = "mean", linetype = "dashed") + 
+  stat_central_tendency(type = "median", linetype = "dotted") + 
+  facet_wrap(~master_list_name, scales = "free_y") + 
+  theme_ipsum() + labs(title = "Histogram for Trees4EU database, Mean dashed ----, Median dotted ····", 
+                       subtitle = paste0("Using ", 
+                                         nrow(filter(tree_dbs, db == "trees4f" & master_list_name %in% filter(eu_trees_sample_size, n>200)$master_list_name)), " occurrences of ", length(unique(filter(tree_dbs, db == "trees4f" & master_list_name %in% filter(eu_trees_sample_size, n>200)$master_list_name)$master_list_name)), " species"))
+
+ggsave(filename = "../2_docs/bio1_distribution_trees4f.png", width = 20, height = 14)
+```
+
 
 You can add options to executable code like this 
 

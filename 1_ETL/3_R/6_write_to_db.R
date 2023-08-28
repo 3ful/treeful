@@ -1,4 +1,4 @@
-print("large data transfer out starting. Writing all Rasters as rasterstack to Postgres")
+print("large data transfer out starting. Writing all Rasters as rasterstack to Postgres. WE DO NOT RECOMMEND THIS APPROACH")
 
 con <- backend_con()
 

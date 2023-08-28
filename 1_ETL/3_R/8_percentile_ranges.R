@@ -8,10 +8,10 @@ library(librarian)
 shelf(data.table,stringr, sf,ggplot2,moments)
 
 # Load data, extract list of tree names
-#trees <- fread("2_Data/1_output/tree_db.csv") %>% dplyr::select(-geometry)
-trees <- tree_dbs %>% 
-  dplyr::select(-geometry) %>% 
-  dplyr::filter(db = "trees4f")
+trees <- fread("2_Data/1_output/tree_db.csv") %>% dplyr::select(-geometry) %>% 
+#trees <- tree_dbs %>% 
+#  dplyr::select(-geometry) %>% 
+  dplyr::filter(db == "trees4f")
 tree_names <- unique(trees[,master_list_name,])
 tree_names
 bioclim_vars <- colnames(trees)
@@ -75,12 +75,13 @@ con <- backend_con()
 
 if (!RPostgres::dbExistsTable(conn = con, name = "percentile_ranges")) {
   # writing trees to postgres DB
-  sendstatus("writing tree db to postgres")
-  con <- backend_con()
+  #sendstatus("writing tree db to postgres")
   
-  sf::st_write(tree_dbs, dsn = con, table = "trees",
-               append = FALSE)
+  RPostgres::dbWriteTable(conn = con, name = "percentile_ranges", percentile_ranges, overwrite = TRUE)
+  
+  
 }
+DBI::dbDisconnect(conn = con)
 
 # percentile_ranges <- fread("2_Data/1_Output/all_percentile_ranges_extra_wide.csv")
 # # Extract the whole line for the tree and bioclim and then rank it like this:
