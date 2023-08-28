@@ -31,7 +31,7 @@ if (!file.exists("2_Data/1_output/tree_db.csv")) {
     #sf::st_crop(st_bbox(bio01)) %>% 
     mutate(db = "gbif")
   
-  print("got all dbs and turned them into sf")
+  sendstatus("got all dbs and turned them into sf")
   rm(gbif_trees, trees4f_db_selection, open_trees_db_selection, try_trees_selection)
   ######################## bind all three sources into one ####################################
   
@@ -47,7 +47,7 @@ if (!file.exists("2_Data/1_output/tree_db.csv")) {
   
   ######################### The heart of it all: getting bioclimatic vars for each tree ##########
   # ATTENTION with namespaces here. stringdist and raster both have an extract function. took me only an hour to figure out. 
-  cat(paste0("Cutting down tree db to species with n>1500, currently at ", nrow(tree_dbs)))
+  sendstatus(paste0("Cutting down tree db to species with n>1500, currently at ", nrow(tree_dbs)))
   
   tree_count <- tree_dbs %>% 
     group_by(master_list_name) %>% 
@@ -58,7 +58,7 @@ if (!file.exists("2_Data/1_output/tree_db.csv")) {
     filter(master_list_name %in% tree_count$master_list_name)
   gc()
   
-  cat(paste0("Cut small species occurrences. Starting extraction for ", nrow(tree_dbs), " tree occurrences"))
+  sendstatus(paste0("Cut small species occurrences. Starting extraction for ", nrow(tree_dbs), " tree occurrences"))
   
   
   bio_vars <- c("bio01", "bio02", "bio03", "bio04", "bio05", "bio06", "bio07", "bio08", 
@@ -92,7 +92,7 @@ if (!file.exists("2_Data/1_output/tree_db.csv")) {
     getpastclimate(source = "copernicus", bioclim = "bio18"),
     getpastclimate(source = "copernicus", bioclim = "bio19")
   )
-  print("read and stacked bioclim rasters. starting bioclim extraction")
+  sendstatus("read and stacked bioclim rasters. starting bioclim extraction")
   
   tree_dbs <- tree_dbs %>% 
     mutate(terra::extract(bioclim_stack, ., ID = F)) 
@@ -118,7 +118,7 @@ if (!file.exists("2_Data/1_output/tree_db.csv")) {
                   getsoilproperties("SMU_EU_S_TAWC"),
                   getsoilproperties("STU_EU_T_TAWC"),
                   getsoilproperties("STU_EU_S_TAWC"))
-  print("read and stacked soil rasters. starting soil extraction")
+  sendstatus("read and stacked soil rasters. starting soil extraction")
   tree_dbs <- tree_dbs %>% 
     mutate(terra::extract(soil_stack, ., ID = F)) %>% 
     mutate(across(.cols = starts_with(c("BIO", "STU", "SMU")), ~ round(.x, digits = 2), .names = "{.col}"))
@@ -129,41 +129,37 @@ if (!file.exists("2_Data/1_output/tree_db.csv")) {
   # tree_dbs <- tree_dbs %>% 
   #   st_drop_geometry()
   ################################ write it all to csv #################################
-  print("saving DB to disk")
+  sendstatus("saving DB to disk")
   data.table::fwrite(x = tree_dbs, file = "2_Data/1_output/tree_db.csv")
 } else {
-  print("tree db exists, reading from disk/n")
+  sendstatus("tree db exists, reading from disk/n")
   tree_dbs <- fread("2_Data/1_output/tree_db.csv")
 }
 
 # writing trees to postgres DB
-print("writing tree db to postgres")
-con <- DBI::dbConnect(RPostgres::Postgres(), 
-                      dbname = Sys.getenv("POSTGRES_DB"),
-                      host= "192.168.178.148", 
-                      port="5432",
-                      user="postgres",
-                      password=Sys.getenv("POSTGRES_PW"))
+sendstatus("writing tree db to postgres")
+con <- backend_con()
+
 sf::st_write(tree_dbs, dsn = con, table = "trees",
              append = FALSE)
 
 ################ Computing percentiles and writing to DB ################
-quantile_df <- function(x, probs = seq(0,1, by = 0.01)) {
-  tibble(
-    val = quantile(x, probs, na.rm = TRUE, names = F),
-    quant = probs
-  )
-}
-
-bioclim_quantiles <- tree_dbs %>% 
-  group_by(master_list_name) %>% 
-  reframe(across(starts_with(c("BIO", "STU")), quantile_df), .unpack = TRUE) %>% 
-  janitor::clean_names() %>% 
-  unnest(names_sep = "_") %>% 
-  select(everything(), -ends_with("_quant"), bio01_quant) %>% 
-  select(master_list_name, percentile = bio01_quant, everything())
-    
-RPostgres::dbWriteTable(con, "trees_quantiles", bioclim_quantiles, append = FALSE, overwrite = TRUE)
+# quantile_df <- function(x, probs = seq(0,1, by = 0.01)) {
+#   tibble(
+#     val = quantile(x, probs, na.rm = TRUE, names = F),
+#     quant = probs
+#   )
+# }
+# 
+# bioclim_quantiles <- tree_dbs %>% 
+#   group_by(master_list_name) %>% 
+#   reframe(across(starts_with(c("BIO", "STU")), quantile_df), .unpack = TRUE) %>% 
+#   janitor::clean_names() %>% 
+#   unnest(names_sep = "_") %>% 
+#   select(everything(), -ends_with("_quant"), bio01_quant) %>% 
+#   select(master_list_name, percentile = bio01_quant, everything())
+#     
+# RPostgres::dbWriteTable(con, "trees_quantiles", bioclim_quantiles, append = FALSE, overwrite = TRUE)
 
 tree_db_sample_size <- group_by(trees, master_list_name) %>% 
   summarise(n=n())

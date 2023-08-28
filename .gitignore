@@ -1,5 +1,6 @@
 .DS_Store
 *.tif
+blastula.json
 1_ETL/figs
 # History files
 .Rhistory

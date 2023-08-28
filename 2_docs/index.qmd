@@ -34,7 +34,11 @@ The actual app runs as docker swarm and connects to the Postgis database.
 
 This section documents how tree occurrence data is obtained. At the end, we will have our tree locations with the corresponding bioclimatic variables in a postgis database. Additionally we write rasters and a few master data tables into postgis. 
 
+### Get Climate Projection data & other external datasets
+
 First, we obtain data not included in this repository, namely EU Forest and Copernicus CDS raster files. These downloads will take a while. (Some datasets are neither downloaded, nor included in this repo. They've been shared privately with us)
+
+We have used Copernicus CMIP5 regional projections, with RPC4.5 and RPC8.5 experiments from the NorESM1-M (NCC, Norway) model. The datasets can be built and obtained [here](https://cds.climate.copernicus.eu/cdsapp#!/dataset/sis-biodiversity-cmip5-regional?tab=form). Our code contains a short helper script for the automated download (set env vars for CDS login before)
 
 ```{r}
 #| eval: false
