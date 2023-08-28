@@ -138,12 +138,12 @@ if (!file.exists("2_Data/1_output/tree_db.csv")) {
 
 con <- backend_con()
 
-if (!RPostgres::dbExistsTable(conn = con, name = "trees")) {
+if (!RPostgres::dbExistsTable(conn = con, name = "tree_dbs")) {
   # writing trees to postgres DB
   sendstatus("writing tree db to postgres")
   con <- backend_con()
   
-  sf::st_write(tree_dbs, dsn = con, table = "trees",
+  sf::st_write(tree_dbs, dsn = con, table = "tree_dbs",
                append = FALSE)
 }
 ################ Computing percentiles and writing to DB ################
