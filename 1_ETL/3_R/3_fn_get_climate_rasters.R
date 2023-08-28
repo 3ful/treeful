@@ -92,7 +92,7 @@ getpastclimate <- function(source = "copernicus", bioclim = "bio01") {
 #################### Get Future Climate ##################
 # for now using climate projection model MPI-ESM1-2-LR and socio-econ pathway 245 
 
-getfutureclimate <- function(source = "copernicus", bioclim = "bio01") {
+getfutureclimate <- function(source = "copernicus", bioclim = "bio01", experiment = "rcp45", future_date = `2050-01-01`) {
   if(source == "chelsa") {
     future_raster <- raster::stack(c("2_Data/1_output/CHELSA_cropped/CHELSA_bio1_2041-2070_gfdl-esm4_ssp370_V.2.1.tif", 
                     "2_Data/1_output/CHELSA_cropped/CHELSA_bio12_2041-2070_gfdl-esm4_ssp370_V.2.1.tif"))
@@ -110,10 +110,11 @@ getfutureclimate <- function(source = "copernicus", bioclim = "bio01") {
 
     bio_path <- toupper(bioclim)
 
-    bio_raster <- terra::rast(paste0("2_Data/0_raw_data/future/", bio_path, "_hadgem2-cc_rcp45_r1i1p1_1960-2099-mean_v1.0.nc"))
+    bio_raster <- terra::rast(paste0("2_Data/0_raw_data/future/", bio_path, "_noresm1-m_", experiment, "_r1i1p1_1960-2099-mean_v1.0.nc"))
     #$X2050.01.01
     names(bio_raster) <- terra::time(bio_raster)
-    bio_raster <- bio_raster$`2050-01-01`
+    #bio_raster <- bio_raster$`2050-01-01`
+    bio_raster <- terra::subset(bio_raster, future_date)
     # convert bioclim as per copernicus documentation. for some reason case_when does not work here.     
     if (bioclim %in% c("bio01", "bio02", "bio04", "bio05", "bio06", "bio07", "bio08", "bio09", "bio10", "bio11")) 
     {bio_raster <- bio_raster - 273.15
