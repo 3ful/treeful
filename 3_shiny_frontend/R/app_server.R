@@ -67,6 +67,7 @@ app_server <- function(input, output, session) {
 
   user_climate_wide <- reactive({
     req(input$map_click)
+    req(map_point())
 
     bio_extract(map_point. = map_point(), experiment = dplyr::filter(experiment, label == input$select_scenario)$id,
                 future_date = dplyr::filter(future_dates, year == input$select_future)$index

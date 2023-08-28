@@ -12,8 +12,8 @@ backend_con <- pool::dbPool(RPostgres::Postgres(),
                             #host= "db",
                             port="5432",
                             user="postgres",
-                            #password=read_lines(Sys.getenv("POSTGRES_PW_FILE")))
-                            password=Sys.getenv("POSTGRES_PW"))
+                            password=read_lines(Sys.getenv("POSTGRES_PW_FILE")))
+                            #password=Sys.getenv("POSTGRES_PW"))
 onStop(function() {
   pool::poolClose(backend_con)
 })
@@ -57,7 +57,7 @@ bio_extract <- function(map_point. = map_point, experiment = "rcp45", future_dat
 
   ###### Get Soil Values
   soil_layer <- terra::rast(paste0("../1_ETL/2_Data/0_raw_data/soil/", soil_vars$soilvars, "_4326.tif"))
-  bio_soil <- terra::extract(x = soil_layer, y = map_point)
+  bio_soil <- terra::extract(x = soil_layer, y = map_point.)
 
   bio_past %>%
     dplyr::mutate(dimension = "past") %>%
