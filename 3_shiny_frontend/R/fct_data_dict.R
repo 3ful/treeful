@@ -42,3 +42,10 @@ soil_vars <- tibble::tibble(soilvars = c("STU_EU_DEPTH_ROOTS","STU_EU_T_CLAY","S
                                          "Insges. verfügbarer Wassergehalt (PTF) Oberboden mm", "Insges. verfügbarer Wassergehalt (PTF) Unterboden mm"
                             )) %>%
   rowid_to_column()
+
+
+future_dates <- tibble(year = c("2030", "2050", "2070", "2090"),
+                       index = seq(4,7))
+
+experiment <- tibble(label = c("Mittleres Szenario (RCP4.5)", "Worst-Case Szenario (RCP8.5)"),
+                    id = c("rcp45", "rcp85"))

@@ -33,6 +33,9 @@ app_ui <- function(request) {
                           actionButton(inputId = "nextpage", label = "Bäume erkkunden")
                  ),
                  column(width = 4,
+                        selectInput('select_future', 'Jahrzehnt', choices = future_dates$year, multiple = F, selected = "2050"),
+                        selectInput('select_scenario', 'Szenario Klimaprojektion', choices = c("Mittleres Szenario (RCP4.5)", "Worst-Case Szenario (RCP8.5)"),
+                                    multiple = F, selected = "Mittleres Szenario (RCP4.5)"),
                         DTOutput("user_location", fill = FALSE)
                  ))
                  # start page ###############################################################
@@ -42,12 +45,12 @@ app_ui <- function(request) {
                  value = "visualizeTab",
                  fluidRow(
                    h2("Klimahüllen erstellen"),
-                      p("Für eine Baumart siehst du zwei Variablen. Daraus ergeben sich zweidimensionale Klimahüllen,
+                   p("Für eine Baumart siehst du zwei Variablen. Daraus ergeben sich zweidimensionale Klimahüllen,
                         eine Art Wohlfühlzone der Baumart."),
+                   selectInput('select_species', 'Baumart', choices = NULL, multiple = F),
                       column(3,
                              #selectInput('select_species', 'Baumart', choices = NULL, multiple = F),
                              #p(textOutput("selected_species_control")),
-                             selectInput('select_species', 'Baumart', choices = NULL, multiple = F),
                              p(textOutput("selected_species_descr")),
                              uiOutput("selected_species_wiki"),
                              uiOutput("selected_species_gbif"),

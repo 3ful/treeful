@@ -65,21 +65,19 @@ app_server <- function(input, output, session) {
   user_climate_wide <- reactive({
     req(input$map_click)
 
-    past_biovars <- purrr::map_dfr(biovars_c, get_biolayer, layer = "past", map_point = map_point())  %>% dplyr::mutate(layer = "past")
-    future_biovars <- purrr::map_dfr(biovars_c, get_biolayer, layer = "future", map_point = map_point())  %>% dplyr::mutate(layer = "future")
-    soil <- purrr::map_dfr(soil_vars_c, get_biolayer, layer = "soil", map_point = map_point()) %>% dplyr::mutate(layer = "soil")
-    dplyr::bind_rows(past_biovars, future_biovars, soil)
+    bio_extract(map_point. = map_point(), experiment = dplyr::filter(experiment, label == input$select_scenario)$id,
+                future_date = dplyr::filter(future_dates, year == input$select_future)$index
+                )
+
+
   })
 
-  user_climate_long <- reactive({
-    req(input$map_click)
-    past_biovars <- purrr::map_dfr(biovars_c, get_biolayer, layer = "past", map_point = map_point()) %>% tidyr::pivot_longer(everything()) %>% dplyr::mutate(layer = "past")
-    future_biovars <- purrr::map_dfr(biovars_c, get_biolayer, layer = "future", map_point = map_point()) %>% tidyr::pivot_longer(everything()) %>% dplyr::mutate(layer = "future")
-    soil <- purrr::map_dfr(soil_vars_c, get_biolayer, layer = "soil", map_point = map_point()) %>% tidyr::pivot_longer(everything()) %>% dplyr::mutate(layer = "soil")
-    dplyr::bind_rows(past_biovars, future_biovars, soil)
-  })
+  # user_climate_long <- reactive({
+  #   req(input$map_click)
+  #   bio_extract(map_point. = map_point(), experiment = )
+  # })
 
-  output$user_location <- DT::renderDT(user_climate_long(), server = FALSE)
+  output$user_location <- DT::renderDT(user_climate_wide(), server = FALSE)
 
   # trees_quantiles <- DBI::dbGetQuery(backend_con, paste0("SELECT * FROM trees_quantiles"))
   # trees_quantiles <- tidyr::pivot_longer(trees_quantiles, cols = dplyr::ends_with(c("_val"))) %>%
@@ -133,7 +131,7 @@ app_server <- function(input, output, session) {
 
 
   temp_species_plot <- reactive({
-    ggplot2::ggplot(data = dplyr::filter(user_climate_wide(), layer %in% c("past", "future"))) +
+    ggplot2::ggplot(data = dplyr::filter(user_climate_wide(), dimension %in% c("past", "future"))) +
     ggplot2::geom_point(data = tree_occurrence(), ggplot2::aes(x = .data[[user_x()$biovars]],
                             y = .data[[user_y()$biovars]], color = db),
                         alpha = 0.1, stroke = 0) +
@@ -144,7 +142,7 @@ app_server <- function(input, output, session) {
                                  user_y()$descr_de),
                   x = user_x()$descr_de,
                   y = user_y()$descr_de,
-         subtitle = paste0("")) +
+         subtitle = paste0("Für den gewählten Standort wird ",  input$select_scenario, " angezeigt im Jahr ", input$select_future)) +
       ggplot2::theme(
         plot.background = element_rect(fill = "#222222"),
         text = element_text(color = "white"),
@@ -165,7 +163,8 @@ app_server <- function(input, output, session) {
                                        y = .data[[user_y()$biovars]]),
                           color = "darkolivegreen4", size = 4) +
       ggtext::geom_richtext(aes(x = .data[[user_x()$biovars]],
-                                y = .data[[user_y()$biovars]], label = c("Dein Ort 1979-2018", "Dein Ort 2050")),
+                                y = .data[[user_y()$biovars]],
+                                label = c("Dein Standort **1979-2018**", paste0("Dein Standort **", input$select_future, "**"))),
                             stat = "unique", angle = 30,
                             color = "white", fill = "steelblue",
                             label.color = NA, hjust = 0, vjust = 0,
