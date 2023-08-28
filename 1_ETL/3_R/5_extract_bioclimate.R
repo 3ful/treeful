@@ -136,13 +136,16 @@ if (!file.exists("2_Data/1_output/tree_db.csv")) {
   tree_dbs <- fread("2_Data/1_output/tree_db.csv")
 }
 
-# writing trees to postgres DB
-sendstatus("writing tree db to postgres")
 con <- backend_con()
 
-sf::st_write(tree_dbs, dsn = con, table = "trees",
-             append = FALSE)
-
+if (!RPostgres::dbExistsTable(conn = con, name = "trees")) {
+  # writing trees to postgres DB
+  sendstatus("writing tree db to postgres")
+  con <- backend_con()
+  
+  sf::st_write(tree_dbs, dsn = con, table = "trees",
+               append = FALSE)
+}
 ################ Computing percentiles and writing to DB ################
 # quantile_df <- function(x, probs = seq(0,1, by = 0.01)) {
 #   tibble(
@@ -161,7 +164,7 @@ sf::st_write(tree_dbs, dsn = con, table = "trees",
 #     
 # RPostgres::dbWriteTable(con, "trees_quantiles", bioclim_quantiles, append = FALSE, overwrite = TRUE)
 
-tree_db_sample_size <- group_by(trees, master_list_name) %>% 
+tree_db_sample_size <- group_by(tree_dbs, master_list_name) %>% 
   summarise(n=n())
 
 tree_master_list <- fread("2_Data/1_output/eu_native_trees_master.csv") %>% 

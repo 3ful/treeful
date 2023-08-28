@@ -57,7 +57,12 @@ gc()
 #source("3_R/6_write_to_db.R")
 
 ## writing wikipedia-enriched master db to postgres
-cat("writing all to postgres")
+sendstatus("Getting tree narratives from Wikipedia")
 source("3_R/7_get_tree_vernaculars.R")
+
+
+### Compute centiles from mean
+sendstatus("Computing centiles from mean")
+source("3_R/8_percentile_ranges.R")
 
 ###### EOF ####

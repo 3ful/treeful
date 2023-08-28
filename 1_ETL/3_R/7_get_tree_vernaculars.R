@@ -61,14 +61,9 @@ for (i in 1:nrow(tree_master_list)) {
 tree_master_list <- tree_master_list %>% 
   mutate(image_url = stringr::str_remove(image_url, "^\\/\\/"))
 
-cat("writing master list with drescriptions to postgres")
+sendstatus("writing master list with drescriptions to postgres")
 fwrite(tree_master_list, "2_Data/1_output/eu_native_trees_master.csv")
-con <- DBI::dbConnect(RPostgres::Postgres(), 
-                      dbname = Sys.getenv("POSTGRES_DB"),
-                      host= "192.168.178.148", 
-                      port="5432",
-                      user="postgres",
-                      password=Sys.getenv("POSTGRES_PW"))
+con <- backend_con()
 
 RPostgres::dbWriteTable(con, "tree_master_list", tree_master_list, overwrite = TRUE)
 
