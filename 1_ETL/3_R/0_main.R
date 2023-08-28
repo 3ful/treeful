@@ -15,7 +15,7 @@ keyring::keyring_create("ecmwfr", password = read_lines("/run/secrets/keyring_pw
 # open postgis connection
 con <- backend_con()
 
-if (!file.exists("2_Data/0_raw_data/past/BIO01_era5-to-1km_1979-2018-mean_v1.0.nc") & !RPostgres::dbExistsTable(conn = con, name = "past")) {
+if (!file.exists("2_Data/0_raw_data/past/BIO01_era5-to-1km_1979-2018-mean_v1.0.nc")) {
   source("3_R/1_download_raw.R")
   sendstatus("Downloaded Copernicus Raster files")
 } else {
@@ -53,8 +53,8 @@ source("3_R/5_extract_bioclimate.R")
 gc()
 
 ## writing rasters to postgres
-cat("writing all to postgres")
-source("3_R/6_write_to_db.R")
+#cat("writing all to postgres")
+#source("3_R/6_write_to_db.R")
 
 ## writing wikipedia-enriched master db to postgres
 cat("writing all to postgres")
