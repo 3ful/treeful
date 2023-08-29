@@ -52,21 +52,21 @@ services:
       #   max_attempts: 3
       #   window: 120s
 
-  etl:
-    # building container to fetch tree dbs and raster data and stick into postgres
-    build: 1_ETL/
-    image: treeful_etl
-    volumes:
-      - .:/home/rstudio
-    secrets:
-      - postgres_pw
-      - postgres_host
-      - copernicus_key
-      - copernicus_uid
-      - gbif_email
-      - gbif_pw
-      - gbif_uid
-      - keyring_pw
+  # etl:
+  #   # building container to fetch tree dbs and raster data and stick into postgres
+  #   build: 1_ETL/
+  #   image: treeful_etl
+  #   volumes:
+  #     - .:/home/rstudio
+  #   secrets:
+  #     - postgres_pw
+  #     - postgres_host
+  #     - copernicus_key
+  #     - copernicus_uid
+  #     - gbif_email
+  #     - gbif_pw
+  #     - gbif_uid
+  #     - keyring_pw
 secrets:
       postgres_pw:
         file: ./1_ETL/0_secrets/postgres_pw.txt
