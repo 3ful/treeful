@@ -19,6 +19,11 @@ blastula.json
 !*1_ETL/2_Data/0_raw_data/wc2.1_30s/README.md
 1_ETL/2_Data/1_output/*
 !*1_ETL/2_Data/1_output/README.md
+!1_ETL/2_Data/1_output/
+!1_ETL/2_Data/1_output/tree_profiles/
+
+
+
 3_shiny_frontend/data/*
 3_shiny_frontend/data-raw/*
 *tracker.js
