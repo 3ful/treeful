@@ -32,10 +32,10 @@ Imports:
     RPostgreSQL,
     sf,
     shiny (>= 1.7.2),
-    shinyFeedback,
     shinythemes,
+    stringr,
+    terra,
     tibble,
-    tidyr,
     waiter,
     wesanderson
 Suggests: 

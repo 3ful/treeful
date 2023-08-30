@@ -32,7 +32,7 @@ app_ui <- function(request) {
                  value = "settingTab",
                  fluidRow(
                    column(width = 6,
-                          htmltools::includeMarkdown(file.path("www", "intro.md")),
+                          htmltools::includeMarkdown(file.path("inst", "app", "www", "intro.md")),
                           shiny::img(src = "assets/bmbf.jpg", width = "200vw", align = "center"),
                           includeHTML("inst/app/www/optout.html")
 
@@ -58,10 +58,11 @@ app_ui <- function(request) {
                       column(3,
                              #selectInput('select_species', 'Baumart', choices = NULL, multiple = F),
                              #p(textOutput("selected_species_control")),
-                             p(textOutput("selected_species_descr")),
-                             uiOutput("selected_species_wiki"),
-                             uiOutput("selected_species_gbif"),
-                             uiOutput("selected_species_img"),
+                             # p(textOutput("selected_species_descr")),
+                             # uiOutput("selected_species_wiki"),
+                             # uiOutput("selected_species_gbif"),
+                             # uiOutput("selected_species_img"),
+                             uiOutput("explorer_card"),
                              p(textOutput("selected_species_control"))
                       ), column(width = 9,
                                 shiny::fluidRow(
@@ -97,11 +98,7 @@ app_ui <- function(request) {
                          klimatische Verhältnisse. Ob die Baumart zum Boden passt, giftig oder invasiv ist steht in den Steckbriefen und Links,
                          sollte jedoch selbst recherchiert werden. Keine Gewähr für fehlende Angaben.
                          "),
-                       layout_column_wrap(
-                         width = 1/2,
-                         #height = 400,
-                       uiOutput("cards")
-                       )
+                       uiOutput("cards"),
       ),
       bslib::nav_panel(title = "🔎 Datenquellen",
                        value = "sources",
@@ -133,6 +130,10 @@ golem_add_external_resources <- function() {
   add_resource_path(
     'assets', app_sys('app/assets')
   )
+  add_resource_path(
+    'profiles', "../1_ETL/2_Data/1_output/tree_profiles/"
+  )
+
 
   tags$head(
     favicon(),
