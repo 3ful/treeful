@@ -66,7 +66,10 @@ chatGPT_API_KEY <- "your_key"
 
 trees <- fread("2_Data/1_Output/tree_names.csv")
 trees <- trees[,.(tree_names=paste(V1,tree_names))]
-tree <- trees[,tree_names][1]
+
+# For manual entering
+# tree <- trees[,tree_names][1]
+# trees <- trees[107:nrow(trees),]
 
 for (tree in trees[,tree_names]){
 prompt <- paste(prompt1,tree,prompt2,sep="")
@@ -83,18 +86,15 @@ writeLines(answer, file_path)
 print(cat("Markdown content has been saved to", file_path))
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
+trees <- fread("2_Data/1_Output/tree_names.csv")
+trees <- trees[,.(tree_names=paste(V1,tree_names))]
+trees[,file_names:=paste(str_replace_all(tree_names, " ", "_"),
+      ".md",
+      sep="")]
+existing_files <- as.data.table(list.files(path = "2_Data/1_Output/tree_profiles/", pattern = "*.md"))
+colnames(existing_files) <- "file_names"
+missing <- data.table(tree_names=trees[!(file_names %in% existing_files[,file_names]),tree_names])
+trees <- missing
 
 
 
