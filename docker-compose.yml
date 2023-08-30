@@ -25,10 +25,15 @@ services:
               cpus: '2'
               memory: 1024M
   frontend:
-    build: "./3_shiny_frontend/"
+    frontend:
+    build:
+      context: "./3_shiny_frontend/"
+      secrets:
+          - postgres_pw
+          - postgres_host
     image: "127.0.0.1:5000/treeful_frontend:0.0.2"
     volumes:
-      - ./1_ETL/2_Data/0_raw_data:/home/rstudio/1_ETL/2_Data/0_raw_data
+      - ./1_ETL/2_Data/0_raw_data:/srv/shiny-server/treeful/data
     ports:
       - "8080:3838"
     secrets:
