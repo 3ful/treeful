@@ -12,8 +12,8 @@ backend_con <- pool::dbPool(RPostgres::Postgres(),
                             #host= "db",
                             port="5432",
                             user="postgres",
-                            #password=read_lines(Sys.getenv("POSTGRES_PW_FILE")))
-                            password=Sys.getenv("POSTGRES_PW"))
+                            password=read_lines(Sys.getenv("POSTGRES_PW_FILE")))
+                          #  password=Sys.getenv("POSTGRES_PW"))
 onStop(function() {
   pool::poolClose(backend_con)
 })
@@ -100,21 +100,54 @@ closest_match <- function(biovar_match = biovar, user_climate = user_climate_wid
 
 }
 
-make_cards <- function(tree_image = image_url, tree_descr = descr_de) {
+
+make_explorer_cards <- function(tree_image = image_url, tree_descr = species, gbif = gbif_taxo_id, wikipedia = url) {
+  tree_descr <- str_replace_all(tree_descr, "\\s", "_")
+
   card(
-    height = 350,
-    full_screen = F,
+    max_height = "90vh",
+    full_screen = T,
+    tags$img(src =  paste0("https://", tree_image), class = "card-img-top"),
+    #card_image(file = NULL, src = paste0("https://", tree_image)) ,
+    p(class = "text-muted", htmltools::includeMarkdown(file.path("inst", "app", "www", "tree_profiles", paste0(tree_descr, ".md")))),
+    tags$a(paste0(tree_descr, " bei GBIF"),
+           href = paste0("https://www.gbif.org/species/", gbif),
+           target = "_blank"),
+    tags$a(paste0(tree_descr, " bei Wikipedia"),
+           href = wikipedia,
+           target = "_blank")
+
+  )
+  #bslib::card_image(file = paste0("https://", tree_image))
+}
+
+
+
+make_cards <- function(tree_index = rowid, tree_image = image_url, tree_descr = species, gbif = gbif_taxo_id, wikipedia = url, score = summed_score) {
+  tree_descr <- str_replace_all(tree_descr, "\\s", "_")
+
+  card(
+    max_height = "40vh",
+    full_screen = T,
     card_header(
+      tags$b(paste0("Rang ", tree_index)),tags$em(paste0(": ", score, "/1386")),
 
     ),
-    card_body(
-      fill = FALSE,
-      bslib::layout_column_wrap(width = 1/2,
-        shiny::img(src = paste0("https://", tree_image)),
-        p(class = "text-muted", tree_descr)
-      )
+    layout_sidebar(
+      fillable = TRUE,
+      sidebar = sidebar(
+        tags$img(src = paste0("https://", tree_image), max_height = "20vh"),
+        tags$a(paste0(tree_descr, " bei GBIF"),
+               href = paste0("https://www.gbif.org/species/", gbif),
+               target = "_blank"),
+        tags$a(paste0(tree_descr, " bei Wikipedia"),
+               href = wikipedia,
+               target = "_blank")
+      ),
+      p(class = "text-muted", includeMarkdown(file.path("profiles", paste0(tree_descr, ".md"))))
     )
   )
+    #bslib::card_image(file = paste0("https://", tree_image))
 }
 
 col_primary = "#6e944eff"

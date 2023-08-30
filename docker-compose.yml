@@ -2,7 +2,7 @@ version: '3'
 services:
   db:
       build: "1_ETL/4_postgres/."
-      #image: "postgis/postgis"
+      image: "127.0.0.1:5000/treeful_db:0.0.2"
       ports:
         - "5432:5432"
       secrets:
@@ -19,14 +19,14 @@ services:
       deploy:
         resources:
             limits:
-              cpus: '2'
-              memory: 4096M
+              cpus: '4'
+              memory: 8096M
             reservations:
-              cpus: '1'
+              cpus: '2'
               memory: 1024M
   frontend:
     build: "./3_shiny_frontend/"
-    image: "treeful"
+    image: "127.0.0.1:5000/treeful_frontend:0.0.2"
     volumes:
       - ./1_ETL/2_Data/0_raw_data:/home/rstudio/1_ETL/2_Data/0_raw_data
     ports:

@@ -30,14 +30,14 @@
 #library(ggtext)
 
 shinyOptions(cache = cachem::cache_mem(max_size = 500e6))
-# Sys.setenv("POSTGRES_PW" = read_lines("/run/secrets/postgres_pw"))
-# Sys.setenv("POSTGRES_HOST" = read_lines("/run/secrets/postgres_host"))
-# Sys.setenv("POSTGRES_DB" = "treeful-test")
+Sys.setenv("POSTGRES_PW" = read_lines("/run/secrets/postgres_pw"))
+Sys.setenv("POSTGRES_HOST" = read_lines("/run/secrets/postgres_host"))
+Sys.setenv("POSTGRES_DB" = "treeful-test")
 
 #Sys.setlocale("LC_TIME","de_DE.UTF-8")
 
 app_server <- function(input, output, session) {
-  bs_themer()
+  #bs_themer()
 
 
   #################### Processing of User location, Map, leaflet #######################
@@ -105,12 +105,10 @@ app_server <- function(input, output, session) {
       group_by(species) %>%
       summarise(summed_score = sum(score)) %>%
       arrange(desc(summed_score)) %>%
-      slice(1:20) %>%
-      dplyr::left_join(species, by = c("species" = "latin_name"))
+      slice(1:10) %>%
+      dplyr::left_join(species, by = c("species" = "latin_name")) %>%
+      rowid_to_column()
   })
-
-
-  #output$ranking <- DT::renderDT(ranking(), server = FALSE)
 
 
   ################# UI-linked reactives ####################
@@ -119,34 +117,31 @@ app_server <- function(input, output, session) {
 
   output$selected_species_control <- renderText({ paste0(nrow(tree_occurrence()), " Baumstandorte gefunden") })
 
-  output$selected_species_descr <- renderText({ dplyr::filter(species, latin_name == input$select_species)$descr_de })
-  output$selected_species_wiki <- renderUI({
-    tags$a(paste0(dplyr::filter(species, latin_name == input$select_species)$latin_name, " bei Wikipedia"),
-           href = dplyr::filter(species, latin_name == input$select_species)$url,
-           target = "_blank")
-    })
+  output$explorer_card <- renderUI({
+    select_steckbrief <- dplyr::filter(species, latin_name == input$select_species) %>%
+      dplyr::select(tree_image = image_url, tree_descr = latin_name,
+                    gbif = gbif_taxo_id, wikipedia = url)
 
-  output$selected_species_gbif <- renderUI({
-    tags$a(paste0(dplyr::filter(species, latin_name == input$select_species)$latin_name, " bei GBIF"),
-           href = paste0("https://www.gbif.org/species/", dplyr::filter(species, latin_name == input$select_species)$gbif_taxo_id),
-                         target = "_blank")
-  })
+    make_explorer_cards(tree_descr = select_steckbrief$tree_descr, tree_image = select_steckbrief$tree_image,
+                        gbif = select_steckbrief$gbif_taxo_id, wikipedia = select_steckbrief$wikipedia)
 
-  output$selected_species_img <- renderUI({
-    tags$a(
-      tags$img(src = paste0("https://", dplyr::filter(species, latin_name == input$select_species)$image_url)),
-      href = dplyr::filter(species, latin_name == input$select_species)$url,
-      target = "_blank"
-    )
+
   })
 
 
 
   ################### Make Steckbriefe ###########################
   output$cards <- renderUI(
-    purrr::map2(.x = ranking()$image_url, .y = ranking()$descr_de, make_cards)
+    purrr::pmap(.l = dplyr::select(ranking(), tree_index = rowid, tree_image = image_url, tree_descr = species,
+                                   gbif = gbif_taxo_id, wikipedia = url, score = summed_score),
+                .f = make_cards)
 
   )
+#
+#   output$cards_even <- renderUI(
+#     purrr::map2(.x = ranking()$image_url[c(2,4,6,8,10)], .y = str_replace_all(ranking()$species[c(2,4,6,8,10)], "\\s", "_"), make_cards)
+#
+#   )
 
 
 
@@ -182,9 +177,11 @@ app_server <- function(input, output, session) {
       ggplot2::theme(
         plot.background = element_rect(fill = col_fg),
         text = element_text(color = "white"),
+        plot.title = element_text(size = 24),
+        plot.subtitle = element_text(size = 20),
         strip.text = element_text(color = "white"),
-        axis.title.y = element_text(size = 20),
-        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 18),
+        axis.title.x = element_text(size = 18),
         legend.position = "bottom"
         )
   })
@@ -230,9 +227,11 @@ app_server <- function(input, output, session) {
       ggplot2::theme(
         plot.background = element_rect(fill = col_fg),
         text = element_text(color = "white"),
+        plot.title = element_text(size = 24),
+        plot.subtitle = element_text(size = 20),
         strip.text = element_text(color = "white"),
-        axis.title.y = element_text(size = 20),
-        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 18),
+        axis.title.x = element_text(size = 18),
         legend.position = "bottom"
       )
   })
