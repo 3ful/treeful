@@ -12,8 +12,8 @@ backend_con <- pool::dbPool(RPostgres::Postgres(),
                             #host= "db",
                             port="5432",
                             user="postgres",
-                            password=read_lines(Sys.getenv("POSTGRES_PW_FILE")))
-                            #password=Sys.getenv("POSTGRES_PW"))
+                            #password=read_lines(Sys.getenv("POSTGRES_PW_FILE")))
+                            password=Sys.getenv("POSTGRES_PW"))
 onStop(function() {
   pool::poolClose(backend_con)
 })
@@ -100,6 +100,28 @@ closest_match <- function(biovar_match = biovar, user_climate = user_climate_wid
 
 }
 
+make_cards <- function(tree_image = image_url, tree_descr = descr_de) {
+  card(
+    height = 350,
+    full_screen = F,
+    card_header(
+
+    ),
+    card_body(
+      fill = FALSE,
+      bslib::layout_column_wrap(width = 1/2,
+        shiny::img(src = paste0("https://", tree_image)),
+        p(class = "text-muted", tree_descr)
+      )
+    )
+  )
+}
+
+col_primary = "#6e944eff"
+col_secondary = "#deeed4ff"
+col_fg = "#2b2b40ff"
+col_warning = "#c65534c5"
+col_danger = "#c75634ff"
 
 #
 #

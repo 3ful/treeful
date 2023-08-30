@@ -10,7 +10,7 @@
 ###################################
 #### CURRENT FILE: DEV SCRIPT #####
 ###################################
-
+add_resource_path("assets", app_sys("app/www/assets"))
 # Engineering
 
 usethis::use_package( "data.table" )
@@ -42,6 +42,8 @@ usethis::use_package( "tidyr" )
 usethis::use_package( "tidyverse", type = "depends")
 usethis::use_package( "wesanderson" )
 usethis::use_package( "shinyFeedback" )
+usethis::use_package( "bslib" )
+usethis::use_package( "ggtext" )
 
 usethis::use_package( "waiter" )
 
