@@ -12,8 +12,8 @@ backend_con <- pool::dbPool(RPostgres::Postgres(),
                             #host= "db",
                             port="5432",
                             user="postgres",
-                            password=read_lines(Sys.getenv("POSTGRES_PW_FILE")))
-                          #  password=Sys.getenv("POSTGRES_PW"))
+                            #password=read_lines(Sys.getenv("POSTGRES_PW_FILE")))
+                            password=Sys.getenv("POSTGRES_PW"))
 onStop(function() {
   pool::poolClose(backend_con)
 })
@@ -22,24 +22,24 @@ species <- DBI::dbGetQuery(backend_con, paste0("SELECT * FROM tree_master_list")
   dplyr::arrange(latin_name)
 
 # cobble together query, used for user climate
-make_query <- function(map_point = map_point(), layer = "", band = dplyr::filter(biovars, biovars == input$select_biovar)$rowid) {
-  return(paste0("SELECT g.pt_geom, ST_Value(ST_Band(r.rast, ARRAY[", band, "]), g.pt_geom) AS biovar
-        FROM public.", layer, " AS r
-        INNER JOIN
-        (SELECT ST_Transform(ST_SetSRID(ST_MakePoint(", map_point$lon, ",", map_point$lat, "), 4326),4326) As pt_geom) AS g
-        ON r.rast && g.pt_geom;"))
-}
-
-get_biolayer <- function(band = 1, layer = "past", map_point = map_point()) {
-  biovar <- RPostgreSQL::dbGetQuery(backend_con, make_query(map_point = map_point, layer = layer, band = band))$biovar
-  return(biovar)
-}
+# make_query <- function(map_point = map_point(), layer = "", band = dplyr::filter(biovars, biovars == input$select_biovar)$rowid) {
+#   return(paste0("SELECT g.pt_geom, ST_Value(ST_Band(r.rast, ARRAY[", band, "]), g.pt_geom) AS biovar
+#         FROM public.", layer, " AS r
+#         INNER JOIN
+#         (SELECT ST_Transform(ST_SetSRID(ST_MakePoint(", map_point$lon, ",", map_point$lat, "), 4326),4326) As pt_geom) AS g
+#         ON r.rast && g.pt_geom;"))
+# }
+#
+# get_biolayer <- function(band = 1, layer = "past", map_point = map_point()) {
+#   biovar <- RPostgreSQL::dbGetQuery(backend_con, make_query(map_point = map_point, layer = layer, band = band))$biovar
+#   return(biovar)
+# }
 
 # function to extract all biovars from raster files on disk for user location, projection scenario and future date
 bio_extract <- function(map_point. = map_point, experiment = "rcp45", future_date = 5) {
 
   ##### Get Past values
-  bio_past <- terra::extract(x = terra::rast(paste0("../1_ETL/2_Data/0_raw_data/past/", biovars$biovars, "_era5-to-1km_1979-2018-mean_v1.0.nc")),
+  bio_past <- terra::extract(x = terra::rast(paste0("data/past/", biovars$biovars, "_era5-to-1km_1979-2018-mean_v1.0.nc")),
                              y = map_point.)
 
   ###### Get Future Values
@@ -47,7 +47,7 @@ bio_extract <- function(map_point. = map_point, experiment = "rcp45", future_dat
   #bio_dates <- c("1979-01-01", "1989-01-01", "2009-01-01", "2030-01-01", "2050-01-01", "2070-01-01", "2090-01-01")
 
   future_raster <- terra::subset(
-    terra::rast(paste0("../1_ETL/2_Data/0_raw_data/future/", biovars$biovars, "_noresm1-m_",
+    terra::rast(paste0("data/future/", biovars$biovars, "_noresm1-m_",
                                                  experiment, "_r1i1p1_1960-2099-mean_v1.0.nc")),
                               paste0(biovars$biovars, "_", future_date))
 
@@ -56,7 +56,7 @@ bio_extract <- function(map_point. = map_point, experiment = "rcp45", future_dat
   rm(future_raster)
 
   ###### Get Soil Values
-  soil_layer <- terra::rast(paste0("../1_ETL/2_Data/0_raw_data/soil/", soil_vars$soilvars, "_4326.tif"))
+  soil_layer <- terra::rast(paste0("data/soil/", soil_vars$soilvars, "_4326.tif"))
   bio_soil <- terra::extract(x = soil_layer, y = map_point.)
 
   bio_past %>%
@@ -144,7 +144,7 @@ make_cards <- function(tree_index = rowid, tree_image = image_url, tree_descr = 
                href = wikipedia,
                target = "_blank")
       ),
-      p(class = "text-muted", includeMarkdown(file.path("profiles", paste0(tree_descr, ".md"))))
+      p(class = "text-muted", includeMarkdown(file.path("inst", "app", "www", "tree_profiles", paste0(tree_descr, ".md"))))
     )
   )
     #bslib::card_image(file = paste0("https://", tree_image))

@@ -229,6 +229,10 @@ We use the docker image postgis/postgis and only add raster extension to it with
 
 ## Shiny App Deployment
 
+### Running the package barebone in a Docker container
+
+This approach means the R process will simply launch the shiny app. For a more robust deployment, use the other options. 
+
 Thanks to our Postgis database, the Shiny app itself is rather lightweight, does not need large files to be transferred and only does a minimum of plotting. 
 The docker-compose.yml file specifies that both the backend postgres database and the frontend shiny application will be launched. You could also run them on separate hosts.
 
@@ -243,7 +247,14 @@ The docker-compose.yml file specifies that both the backend postgres database an
   * You can watch visitors of your frontend app with `docker service logs treeful_frontend -f`
 * 
 
+### Running in Shiny Server
 
+
+This currently a fairly cumbersome process. One isse is that the docker container installs the R package with the shiny app during build. There, secrets need to be available and the database needs to spun up. 
+
+### Running in Shinyproxy
+
+We abandoned this option. The main reason was that shinyproxy spins up containers for each user. Since this app requires a fair amount of Ram
 
 
 
