@@ -8,6 +8,7 @@ License: MIT + file LICENSE
 Depends: 
     tidyverse
 Imports: 
+    bslib,
     cachem,
     config (>= 0.3.1),
     data.table,
