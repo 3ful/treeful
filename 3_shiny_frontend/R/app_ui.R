@@ -131,7 +131,7 @@ golem_add_external_resources <- function() {
     'assets', app_sys('app/assets')
   )
   add_resource_path(
-    'profiles', "../1_ETL/2_Data/1_output/tree_profiles/"
+    'profiles', app_sys("app/tree_profiles")
   )
 
 

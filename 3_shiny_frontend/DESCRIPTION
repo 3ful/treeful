@@ -1,8 +1,7 @@
 Package: treeful
 Title: Treeful
-Version: 0.0.1.0
-Authors@R: 
-    person("Christoph", "Trost", , "post@datenlabor.eu", role = c("cre", "aut"))
+Version: 0.0.3.0
+Authors@R: person('Christoph', 'Trost', email = 'post@datenlabor.eu', role = c('cre', 'aut'))
 Description: PKG_DESC.
 License: MIT + file LICENSE
 Depends: 
@@ -24,6 +23,7 @@ Imports:
     leaflet.extras,
     markdown,
     paletteer,
+    pkgload,
     pool,
     purrr,
     raster,

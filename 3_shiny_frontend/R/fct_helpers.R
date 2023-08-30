@@ -12,8 +12,8 @@ backend_con <- pool::dbPool(RPostgres::Postgres(),
                             #host= "db",
                             port="5432",
                             user="postgres",
-                            #password=read_lines(Sys.getenv("POSTGRES_PW_FILE")))
-                            password=Sys.getenv("POSTGRES_PW"))
+                            password=read_lines(Sys.getenv("POSTGRES_PW_FILE")))
+                          #  password=Sys.getenv("POSTGRES_PW"))
 onStop(function() {
   pool::poolClose(backend_con)
 })
@@ -109,7 +109,7 @@ make_explorer_cards <- function(tree_image = image_url, tree_descr = species, gb
     full_screen = T,
     tags$img(src =  paste0("https://", tree_image), class = "card-img-top"),
     #card_image(file = NULL, src = paste0("https://", tree_image)) ,
-    p(class = "text-muted", includeMarkdown(file.path("inst", "app", "www", "tree_profiles", paste0(tree_descr, ".md")))),
+    p(class = "text-muted", htmltools::includeMarkdown(file.path("inst", "app", "www", "tree_profiles", paste0(tree_descr, ".md")))),
     tags$a(paste0(tree_descr, " bei GBIF"),
            href = paste0("https://www.gbif.org/species/", gbif),
            target = "_blank"),
@@ -144,7 +144,7 @@ make_cards <- function(tree_index = rowid, tree_image = image_url, tree_descr = 
                href = wikipedia,
                target = "_blank")
       ),
-      p(class = "text-muted", includeMarkdown(file.path("inst", "app", "www", "tree_profiles", paste0(tree_descr, ".md"))))
+      p(class = "text-muted", includeMarkdown(file.path("profiles", paste0(tree_descr, ".md"))))
     )
   )
     #bslib::card_image(file = paste0("https://", tree_image))
