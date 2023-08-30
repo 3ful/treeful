@@ -10,7 +10,7 @@ Die Nordmann-Tanne kann bei manchen Menschen allergische Reaktionen hervorrufen.
 Die Nordmann-Tanne ist für Menschen nicht giftig. Weder der Kontakt mit den Nadeln noch das Verschlucken von Teilen der Pflanze führen zu Vergiftungserscheinungen. Es besteht jedoch die Gefahr von Verletzungen durch die spitzen Nadeln, insbesondere bei unsachgemäßem Umgang.
 
 ## 4. Heimisch in Europa
-Die Abies nordmanniana ist in Europa heimisch und kommt vor allem in den Gebirgsregionen des Kaukasus vor. In vielen europäischen Ländern, darunter auch Deutschland, wird sie jedoch als Zierbaum oder Weihnachtsbaum angepflanzt.
+Die Abies nordmanniana ist in Europa heimisch, aber kommt vor allem in den Gebirgsregionen des Kaukasus vor. In vielen europäischen Ländern, darunter auch Deutschland, wird sie jedoch als Zierbaum oder Weihnachtsbaum angepflanzt.
 
 ## 5. Wachstumsbedingungen
 Die Nordmann-Tanne stellt bestimmte Anforderungen an ihre Wachstumsbedingungen:

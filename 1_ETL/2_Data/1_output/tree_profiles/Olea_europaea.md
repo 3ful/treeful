@@ -1,4 +1,4 @@
-# Olea europaea (Olive Tree)
+# Olea europaea (Olivenbaum)
 
 ## 1. Allgemeine Informationen und Vorkommen
 Die Olea europaea, auch bekannt als Olivenbaum, ist eine Pflanzenart aus der Familie der Ölbaumgewächse. Sie ist in den gemäßigten Klimazonen Europas heimisch und wird seit Jahrtausenden kultiviert. Der Olivenbaum ist bekannt für seine charakteristischen silbergrünen Blätter und seine Früchte, die als Oliven bezeichnet werden. Er ist eine wichtige Nutzpflanze und wird sowohl für die Herstellung von Olivenöl als auch für die Verwendung als Tafeloliven angebaut.

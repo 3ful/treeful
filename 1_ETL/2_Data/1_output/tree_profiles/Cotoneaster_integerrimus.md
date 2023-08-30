@@ -7,7 +7,7 @@ Die Cotoneaster integerrimus, auch bekannt als Zwergmispel, ist eine immergrüne
 Es gibt keine bekannten Allergien gegen die Zwergmispel. Sie gilt als relativ allergenarm und verursacht selten allergische Reaktionen.
 
 ## 3. Giftigkeit
-Die Beeren der Cotoneaster integerrimus sind für den Menschen ungiftig. Sie können bedenkenlos verzehrt werden. Es wird jedoch empfohlen, die Beeren vor dem Verzehr zu waschen, um mögliche Rückstände oder Verschmutzungen zu entfernen.
+Die Beeren der Cotoneaster integerrimus sind für den Menschen schwach giftig.
 
 ## 4. Heimisch in Europa
 Die Zwergmispel ist in ganz Europa verbreitet und wächst hauptsächlich in Gebirgsregionen. Sie ist in vielen Gärten und Parks als Zierpflanze anzutreffen und wird aufgrund ihrer attraktiven Blüten und Beeren geschätzt.

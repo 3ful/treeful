@@ -10,7 +10,7 @@ Die Carpinus orientalis gilt als wenig allergen. Ihre Blüten und Pollen lösen 
 Die Carpinus orientalis ist nicht giftig. Weder ihre Blätter noch ihre Früchte stellen eine Gefahr für Mensch oder Tier dar.
 
 ## Heimisch in Europa
-Die Orientalische Hainbuche ist in Europa heimisch und kommt in verschiedenen Ländern vor. Sie ist vor allem in waldreichen Gebieten zu finden und gedeiht gut in gemäßigtem Klima.
+Die Orientalische Hainbuche ist in Südosteuropa und Kleinasien heimisch. Der Laubbaum ist in Mitteleuropa nur sehr selten in Sammlungen zu finden.
 
 ## Wachstumsbedingungen
 Um optimal zu wachsen, benötigt die Carpinus orientalis bestimmte Wachstumsbedingungen.
