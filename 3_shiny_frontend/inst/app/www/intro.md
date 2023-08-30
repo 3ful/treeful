@@ -1,16 +1,19 @@
+<img src='assets/logo.png' align="left" height="139" style='padding-right:2vw'/>
+
 # Treeful - Besser Bäume pflanzen
 
-Diese Web-App liefert keine schnellen Antworten. Wir zeigen dir, welche Baumarten unter welchen klimatischen Bedingungen gedeihen und setzen diese ins Verhältnis zu deinem potenziellen Pflanzstandort. 
+Wir zeigen dir, welche Baumarten unter welchen klimatischen Bedingungen gedeihen und setzen diese ins Verhältnis zu deinem potenziellen Pflanzstandort. Als Shortcut bieten wir ein Ranking an und erlauben es dir, weitere Details von über 80 Baumarten zu erkunden. 
+
+<br>
 
 ## Wie funktioniert das?
 
-Auf der Karte rechts setzt du einen Punkt wo du einen Baum pflanzen möchtest. Auf der nächsten Seite kannst du dich durch Baumarten klicken die in Europa verbreitete  sind. Für jede Baumart kannst du die Wohlfühlzone des Baums erkunden. Die Wolke in den Grafiken zeigt wo der Baum vorkommt, je nachdem welche Klima-Variablen ausgewählt sind. 
+Auf der Karte **rechts setzt du einen Punkt wo du einen Baum pflanzen möchtest**. Auf der nächsten Seite kannst du dich durch Baumarten klicken die wahrscheinlich in der Zukunft bei dir ein passendes Klima vorfinden. 
 
-Sinnvolle Kombinationen der Variable:
-* BIO01 (Jahresdurchschnittstemperatur) und BIO12 (Jahresniederschlag)
-* BIO05 (Temperatur im wärmsten Monat) und BIO14 (Niederschlag im tockensten Monat)
+## Was funktioniert nicht?
 
-## Ergebnisse sind nur so genau wie Klimavorhersagen
+Bäume pflanzen sei gut überlegt. Unser Ranking gibt einen Anhaltspunkt, jedoch müssen trotzdem Steckbriefe vorher gelesen werden, der eigene Boden sollte erforscht sein. Allgemein ersetzt unsere App kein Gespräch mit der örtlichen FörsterIn. 
 
-Wir nutzen Klimavorhersagen vom Copernicus CDS, momentan lediglich RPC 4.5 für 2050. Das bedeutet: Copernicus versucht europaweit zu berechnen, welche Klima-Variablen an einem Standort herrschen werden nach verschiedenen Szenarien des Klimawandels. Diese Berechungen beruhen auf Wahrscheinlichkeiten und sind keine Vorhersagen. 
+Klimaprojektionen sind allgemein keine Vorhersagen sondern Wahrscheinlichkeiten. Mehr Informationen zu unseren Daten und Methoden sind in unserer Dokumentation zu finden. 
+
 

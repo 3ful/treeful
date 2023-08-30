@@ -16,6 +16,8 @@
 #' @import wesanderson
 #' @import ggplot2
 #' @import tibble
+#' @import bslib
+#' @import ggtext
 #' @noRd
 
 # library(tidyverse)
@@ -25,16 +27,17 @@
 # #library(sf)
 # #library(raster)
 # library(ggplot2)
-# library(tibble)
+#library(ggtext)
 
 shinyOptions(cache = cachem::cache_mem(max_size = 500e6))
-Sys.setenv("POSTGRES_PW" = read_lines("/run/secrets/postgres_pw"))
-Sys.setenv("POSTGRES_HOST" = read_lines("/run/secrets/postgres_host"))
-Sys.setenv("POSTGRES_DB" = "treeful-test")
+# Sys.setenv("POSTGRES_PW" = read_lines("/run/secrets/postgres_pw"))
+# Sys.setenv("POSTGRES_HOST" = read_lines("/run/secrets/postgres_host"))
+# Sys.setenv("POSTGRES_DB" = "treeful-test")
 
 #Sys.setlocale("LC_TIME","de_DE.UTF-8")
 
 app_server <- function(input, output, session) {
+  bs_themer()
 
 
   #################### Processing of User location, Map, leaflet #######################
@@ -56,7 +59,7 @@ app_server <- function(input, output, session) {
     validate(
       need(input$map_click, 'Bitte Standort auf der Karte wählen!')
     )
-    updateTabsetPanel(session = session, inputId = "tabs", selected = "visualizeTab")
+    updateTabsetPanel(session = session, inputId = "mainNavbar", selected = "ranking")
   })
 
   # construct user point as sf
@@ -76,7 +79,7 @@ app_server <- function(input, output, session) {
 
   })
 
-  output$user_location <- DT::renderDT(user_climate_wide(), server = FALSE)
+  #output$user_location <- DT::renderDT(user_climate_wide() %>% tidyr::pivot_longer(cols = where(is.numeric)) %>% filter(!is.na(value)), server = FALSE)
 
   tree_occurrence <- reactive({
     waiter <- waiter::Waiter$new(id = "species_plot")
@@ -107,7 +110,7 @@ app_server <- function(input, output, session) {
   })
 
 
-  output$ranking <- DT::renderDT(ranking(), server = FALSE)
+  #output$ranking <- DT::renderDT(ranking(), server = FALSE)
 
 
   ################# UI-linked reactives ####################
@@ -139,6 +142,15 @@ app_server <- function(input, output, session) {
 
 
 
+  ################### Make Steckbriefe ###########################
+  output$cards <- renderUI(
+    purrr::map2(.x = ranking()$image_url, .y = ranking()$descr_de, make_cards)
+
+  )
+
+
+
+
   ################### Plotting Charts, labels, Reactives on that########################
 
 
@@ -155,18 +167,20 @@ app_server <- function(input, output, session) {
   temp_species_plot <- reactive({
     ggplot2::ggplot(data = dplyr::filter(user_climate_wide(), dimension %in% c("past", "future"))) +
     ggplot2::geom_point(data = tree_occurrence(), ggplot2::aes(x = .data[[user_x()$biovars]],
-                            y = .data[[user_y()$biovars]], color = db),
+                            y = .data[[user_y()$biovars]]),
+                        color = col_warning,
                         alpha = 0.1, stroke = 0) +
-    scale_color_paletteer_d("wesanderson::Royal1") +
+    #scale_color_paletteer_d("wesanderson::Royal1") +
     #ggplot2::facet_wrap(~master_list_name) +
     hrbrthemes::theme_ipsum() +
-    ggplot2::labs(title = paste0(user_x()$descr_de, " und ",
+    labs(title = paste0(user_x()$descr_de, " und ",
                                  user_y()$descr_de),
                   x = user_x()$descr_de,
                   y = user_y()$descr_de,
-         subtitle = paste0("Für den gewählten Standort wird ",  input$select_scenario, " angezeigt im Jahr ", input$select_future)) +
+         subtitle = paste0("Habitat von ", input$select_species, " und dein Standort im Vergleich")
+         ) +
       ggplot2::theme(
-        plot.background = element_rect(fill = "#222222"),
+        plot.background = element_rect(fill = col_fg),
         text = element_text(color = "white"),
         strip.text = element_text(color = "white"),
         axis.title.y = element_text(size = 20),
@@ -183,12 +197,12 @@ app_server <- function(input, output, session) {
     temp_species_plot() +
       ggplot2::geom_point(ggplot2::aes(x = .data[[user_x()$biovars]],
                                        y = .data[[user_y()$biovars]]),
-                          color = "darkolivegreen4", size = 4) +
+                          color = col_primary, size = 4) +
       ggtext::geom_richtext(aes(x = .data[[user_x()$biovars]],
                                 y = .data[[user_y()$biovars]],
                                 label = c("Dein Standort **1979-2018**", paste0("Dein Standort **", input$select_future, "**"))),
                             stat = "unique", angle = 30,
-                            color = "white", fill = "steelblue",
+                            color = col_fg, fill = col_secondary,
                             label.color = NA, hjust = 0, vjust = 0,
                             family = "Playfair Display")
   })
@@ -202,11 +216,11 @@ app_server <- function(input, output, session) {
   })
 
   temp_soil_plot <- reactive({
-    ggplot2::ggplot(data = dplyr::filter(user_climate_wide(), layer %in% c("soil"))) +
+    ggplot2::ggplot(data = dplyr::filter(user_climate_wide(), dimension %in% c("soil"))) +
       ggplot2::geom_point(data = tree_occurrence(), ggplot2::aes(x = .data[[user_soil_x()$soilvars]],
-                                       y = .data[[user_soil_y()$soilvars]], color = db),
-                          alpha = 0.1, stroke = 0) +
-      scale_color_paletteer_d("wesanderson::Royal1") +
+                                       y = .data[[user_soil_y()$soilvars]]),
+                          alpha = 0.1, stroke = 0, color = col_warning) +
+      #scale_color_paletteer_d("wesanderson::Royal1") +
       hrbrthemes::theme_ipsum() +
       ggplot2::labs(title = paste0(user_soil_x()$descr_de, " und ",
                                    user_soil_y()$descr_de),
@@ -214,7 +228,7 @@ app_server <- function(input, output, session) {
                     y = user_soil_y()$descr_de,
                     subtitle = paste0("")) +
       ggplot2::theme(
-        plot.background = element_rect(fill = "#222222"),
+        plot.background = element_rect(fill = col_fg),
         text = element_text(color = "white"),
         strip.text = element_text(color = "white"),
         axis.title.y = element_text(size = 20),
@@ -233,11 +247,11 @@ app_server <- function(input, output, session) {
 
         ggplot2::geom_point(ggplot2::aes(x = .data[[user_soil_x()$soilvars]],
                                          y = .data[[user_soil_y()$soilvars]]),
-                            color = "darkolivegreen4", size = 4) +
+                            color = col_primary, size = 4) +
         ggtext::geom_richtext(aes(x = .data[[user_soil_x()$soilvars]],
                                   y = .data[[user_soil_y()$soilvars]], label = "Bodenwerte an deinem Standort"),
                               stat = "unique", angle = 30,
-                              color = "white", fill = "steelblue",
+                              color = col_fg, fill = col_secondary,
                               label.color = NA, hjust = 0, vjust = 0,
                               family = "Playfair Display")
     })
