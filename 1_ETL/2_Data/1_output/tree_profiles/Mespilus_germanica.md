@@ -1,4 +1,4 @@
-# Mispel (Mespilus germanica)
+# Mespilus germanica (Mispel)
 
 ## Allgemeine Informationen und Vorkommen
 Die Mispel (Mespilus germanica) ist ein kleiner Baum oder Strauch, der zur Familie der Rosengewächse gehört. Sie ist in Europa heimisch und wird auch in anderen Teilen der Welt angebaut. Die Mispel ist bekannt für ihre essbaren Früchte, die eine birnenähnliche Form haben und einen süßen Geschmack haben, wenn sie überreif sind.

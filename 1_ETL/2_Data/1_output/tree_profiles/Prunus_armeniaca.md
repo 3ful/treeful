@@ -1,7 +1,7 @@
 # Prunus armeniaca (Aprikose)
 
 ## 1. Allgemeine Informationen und Vorkommen
-Die Prunus armeniaca, auch bekannt als Aprikose, ist ein Obstbaum aus der Familie der Rosengewächse. Sie stammt ursprünglich aus China und wird heute weltweit in gemäßigten Klimazonen angebaut. Die Aprikose ist für ihre leckeren Früchte bekannt, die einen süßen Geschmack und eine samtige Textur haben.
+Die Prunus armeniaca, auch bekannt als Aprikose, ist ein Obstbaum aus der Familie der Rosengewächse. Sie stammt wahrscheinlich ursprünglich aus China und wird heute weltweit in gemäßigten Klimazonen angebaut. Die Aprikose ist für ihre leckeren Früchte bekannt, die einen süßen Geschmack und eine samtige Textur haben.
 
 ## 2. Allergien
 Einige Menschen können allergisch auf Aprikosen reagieren. Die häufigsten allergischen Reaktionen umfassen Hautausschläge, Juckreiz und Schwellungen. In seltenen Fällen kann es zu schwerwiegenderen allergischen Reaktionen wie Atembeschwerden oder Anaphylaxie kommen. Personen mit einer Allergie gegen Aprikosen sollten den Verzehr vermeiden und bei Symptomen einen Arzt aufsuchen.

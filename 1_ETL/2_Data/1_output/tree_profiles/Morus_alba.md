@@ -1,7 +1,7 @@
 # Morus alba (Weiße Maulbeere)
 
 ## Allgemeine Informationen und Vorkommen
-Die Weiße Maulbeere (Morus alba) ist ein mittelgroßer Baum, der zur Familie der Maulbeergewächse gehört. Sie ist in Europa heimisch und kommt vor allem in gemäßigten Klimazonen vor. Die Weiße Maulbeere zeichnet sich durch ihre charakteristischen weißen Früchte aus, die essbar sind und oft zur Herstellung von Marmelade, Saft oder Wein verwendet werden.
+Die Weiße Maulbeere (Morus alba) ist ein mittelgroßer Baum, der zur Familie der Maulbeergewächse gehört. Die Weiße Maulbeere zeichnet sich durch ihre charakteristischen weißen Früchte aus, die essbar sind und oft zur Herstellung von Marmelade, Saft oder Wein verwendet werden.
 
 ## Allergien
 Es gibt keine bekannten Allergien gegen die Weiße Maulbeere. Die meisten Menschen können die Früchte bedenkenlos konsumieren.
@@ -10,7 +10,7 @@ Es gibt keine bekannten Allergien gegen die Weiße Maulbeere. Die meisten Mensch
 Die Weiße Maulbeere ist nicht giftig und kann sicher verzehrt werden. Sowohl die Früchte als auch die Blätter sind ungiftig.
 
 ## In Europa heimisch
-Die Weiße Maulbeere ist in Europa beheimatet und wurde seit langem in verschiedenen Ländern kultiviert. Sie ist vor allem in Südeuropa weit verbreitet und wird auch in anderen Teilen Europas angebaut.
+Die Weiße Maulbeere war vor dem Anbau durch den Menschen in China beheimatet. Da sie die wichtigste Maulbeer-Art für die Seidenraupenzucht darstellt, wird sie auch in vielen anderen klimatisch geeigneten Regionen außerhalb Chinas gepflanzt. In Deutschland ist sie nicht nur recht häufig in Parks, sondern gelegentlich auch als Hecke anzutreffen.
 
 ## Wachstumsbedingungen
 Die Weiße Maulbeere bevorzugt bestimmte Wachstumsbedingungen, um optimal gedeihen zu können.

@@ -1,7 +1,7 @@
-# Frangula rupestris (Steinweidenginster)
+# Frangula rupestris (Felsen- Faulbaum)
 
 ## 1. Allgemeine Informationen und Vorkommen
-Frangula rupestris, auch bekannt als Steinweidenginster, ist eine Pflanzenart aus der Familie der Rhamnaceae. Sie ist in Europa heimisch und kommt vor allem in Gebirgsregionen vor. Diese Pflanze wächst als Strauch und kann eine Höhe von bis zu 2 Metern erreichen. Ihre Blüten sind gelb und erscheinen im Frühling.
+Frangula rupestris, auch bekannt als Felsen- Faulbaum, ist eine Pflanzenart aus der Familie der Rhamnaceae. Sie ist in Europa heimisch und kommt vor allem in Gebirgsregionen vor. Diese Pflanze wächst als Strauch und kann eine Höhe von bis zu 2 Metern erreichen. Ihre Blüten sind gelb und erscheinen im Frühling.
 
 ## 2. Allergien
 Es gibt keine bekannten Allergien in Bezug auf Frangula rupestris.

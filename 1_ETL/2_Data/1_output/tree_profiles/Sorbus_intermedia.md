@@ -7,7 +7,7 @@ Die Schwedische Mehlbeere (Sorbus intermedia) ist ein Laubbaum, der zur Familie 
 Die Schwedische Mehlbeere ist bekannt dafür, bei manchen Menschen allergische Reaktionen auszulösen. Pollen von Sorbus intermedia können bei sensiblen Personen allergische Symptome wie Niesen, tränende Augen und Atembeschwerden verursachen. Es wird empfohlen, Vorsichtsmaßnahmen zu treffen, wenn man anfällig für Pollenallergien ist.
 
 ## 3. Giftigkeit
-Die Beeren der Schwedischen Mehlbeere sind für den Menschen ungiftig und können sogar roh verzehrt werden. Allerdings sollten die Beeren vor dem Verzehr gründlich gewaschen werden, da sie einen bitteren Geschmack haben können. Bei Tieren kann der Verzehr größerer Mengen an Beeren jedoch zu Verdauungsproblemen führen.
+Die Beeren der Schwedischen Mehlbeere sind für den Menschen ungiftig und können sogar roh verzehrt werden. Allerdings sollten die Beeren vor dem Verzehr gründlich gewaschen werden. Bei Tieren kann der Verzehr größerer Mengen an Beeren jedoch zu Verdauungsproblemen führen.
 
 ## 4. Heimisch in Europa
 Die Schwedische Mehlbeere ist in ganz Europa heimisch und kommt vor allem in gemäßigten Klimazonen vor. Sie wächst in Wäldern, an Waldrändern, in Parks und Gärten. Aufgrund ihrer Anpassungsfähigkeit und ihres attraktiven Erscheinungsbildes wird sie auch häufig als Zierbaum in Gärten und Parks gepflanzt.

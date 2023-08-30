@@ -1,7 +1,7 @@
-# Phillyrea latifolia (Breitblättrige Baumheide)
+# Phillyrea latifolia (Breitblättrige Steinlinde)
 
 ## Allgemeine Informationen und Vorkommen
-Phillyrea latifolia, auch bekannt als Breitblättrige Baumheide, ist ein immergrüner Strauch, der in Europa heimisch ist. Er gehört zur Familie der Ölbaumgewächse (Oleaceae) und kann eine Höhe von bis zu 5 Metern erreichen. Die Pflanze ist in verschiedenen Regionen Europas verbreitet, einschließlich des Mittelmeerraums und Teilen von Mitteleuropa.
+Phillyrea latifolia, auch bekannt als Breitblättrige Steinlinde, ist ein immergrüner Strauch, der in Europa heimisch ist. Er gehört zur Familie der Ölbaumgewächse (Oleaceae) und kann eine Höhe von bis zu 5 Metern erreichen. Die Pflanze ist in verschiedenen Regionen Europas verbreitet, einschließlich des Mittelmeerraums und Teilen von Mitteleuropa.
 
 ## Allergien
 Phillyrea latifolia ist bekannt dafür, allergische Reaktionen bei manchen Menschen auszulösen. Die Pollen der Pflanze können Allergien hervorrufen, insbesondere bei Personen mit empfindlichen Atemwegen. Es wird empfohlen, den Kontakt mit der Pflanze zu vermeiden, wenn man allergisch auf Pollen reagiert.
@@ -23,7 +23,7 @@ Die Pflanze benötigt eine ausgewogene Versorgung mit Nährstoffen. Es wird empf
 Phillyrea latifolia gedeiht am besten an sonnigen Standorten. Die Pflanze benötigt mindestens 6 Stunden direkte Sonneneinstrahlung pro Tag, um optimal zu wachsen.
 
 ### Temperaturen
-Die Breitblättrige Baumheide ist an gemäßigte Temperaturen angepasst und kann leichten Frost vertragen. Sie bevorzugt jedoch wärmere Temperaturen und gedeiht am besten in Regionen mit milden Wintern und warmen Sommern.
+Die Breitblättrige Steinlinde ist an gemäßigte Temperaturen angepasst und kann leichten Frost vertragen. Sie bevorzugt jedoch wärmere Temperaturen und gedeiht am besten in Regionen mit milden Wintern und warmen Sommern.
 
 ### Feuchtigkeit
 Die Pflanze benötigt eine mäßige Bewässerung, um optimal zu wachsen. Der Boden sollte gleichmäßig feucht gehalten werden, jedoch keine Staunässe aufweisen. Eine gute Drainage ist wichtig, um Wurzelfäule zu vermeiden.

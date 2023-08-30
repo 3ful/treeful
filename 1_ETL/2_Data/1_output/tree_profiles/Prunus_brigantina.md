@@ -1,7 +1,7 @@
-# Prunus brigantina (Steppen-Kirsche)
+# Prunus brigantina (Briançon Pflaume)
 
 ## Allgemeine Informationen und Vorkommen
-Die Prunus brigantina, auch bekannt als Steppen-Kirsche, ist eine Pflanzenart aus der Gattung Prunus innerhalb der Familie der Rosengewächse. Sie ist in Europa heimisch und kommt vor allem in Steppen- und Trockengebieten vor. Diese Pflanze zeichnet sich durch ihre attraktiven Blüten und Früchte aus.
+Die Prunus brigantina, auch bekannt als Briançon Pflaume, ist eine Pflanzenart aus der Gattung Prunus innerhalb der Familie der Rosengewächse. Sie ist in Europa heimisch und kommt vor allem in Steppen- und Trockengebieten vor. Diese Pflanze zeichnet sich durch ihre attraktiven Blüten und Früchte aus.
 
 ## Allergien
 Es gibt keine bekannten Allergien im Zusammenhang mit der Prunus brigantina.
@@ -20,7 +20,7 @@ Die Prunus brigantina gedeiht am besten in gut durchlässigen Böden. Sie bevorz
 Für ein gesundes Wachstum benötigt die Prunus brigantina eine ausgewogene Versorgung mit Nährstoffen. Eine regelmäßige Düngung mit einem organischen Dünger ist empfehlenswert.
 
 ### Sonnenlicht
-Die Steppen-Kirsche benötigt viel Sonnenlicht, um optimal zu wachsen. Sie sollte an einem sonnigen Standort gepflanzt werden, der möglichst frei von Schatten ist.
+Die Briançon Pflaume benötigt viel Sonnenlicht, um optimal zu wachsen. Sie sollte an einem sonnigen Standort gepflanzt werden, der möglichst frei von Schatten ist.
 
 ### Temperaturen
 Die Prunus brigantina ist an trockene und heiße Bedingungen angepasst. Sie verträgt hohe Temperaturen gut und kommt auch mit kühleren Temperaturen zurecht. Allerdings sollte sie vor starkem Frost geschützt werden.

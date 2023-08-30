@@ -1,5 +1,4 @@
 # Pyrus amygdaliformis (Mandelblättrige Birne)
-![Pyrus amygdaliformis](https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Pyrus_amygdaliformis.jpg/320px-Pyrus_amygdaliformis.jpg)
 
 ## 1. Allgemeine Informationen und Vorkommen
 Die Pyrus amygdaliformis, auch bekannt als Mandelblättrige Birne, ist ein Laubbaum, der in Europa heimisch ist. Sie gehört zur Familie der Rosengewächse (Rosaceae) und zur Gattung der Birnen (Pyrus). Die Birne zeichnet sich durch ihre charakteristischen mandelförmigen Blätter aus, die ihr den Namen "amygdaliformis" verleihen. Sie ist in verschiedenen Regionen Europas verbreitet, insbesondere in Südeuropa.

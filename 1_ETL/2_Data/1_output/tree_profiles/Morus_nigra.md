@@ -1,7 +1,7 @@
 # Morus nigra (Schwarze Maulbeere)
 
 ## 1. Allgemeine Informationen und Vorkommen
-Die Schwarze Maulbeere (Morus nigra) ist ein Laubbaum aus der Familie der Maulbeergewächse (Moraceae). Sie ist in Europa heimisch und kommt vor allem in den gemäßigten Klimazonen vor. Die Schwarze Maulbeere ist für ihre köstlichen Früchte bekannt, die sowohl roh als auch in verschiedenen Gerichten verwendet werden können.
+Die Schwarze Maulbeere (Morus nigra) ist ein Laubbaum aus der Familie der Maulbeergewächse (Moraceae). Sie kommt vor allem in den gemäßigten Klimazonen vor. Die Schwarze Maulbeere ist für ihre köstlichen Früchte bekannt, die sowohl roh als auch in verschiedenen Gerichten verwendet werden können.
 
 ## 2. Allergien
 Die Schwarze Maulbeere kann bei einigen Menschen allergische Reaktionen hervorrufen. Dies betrifft insbesondere Personen, die bereits an einer Allergie gegen andere Früchte aus der Familie der Maulbeergewächse leiden. Symptome können Hautausschlag, Juckreiz, Schwellungen oder Atembeschwerden sein. Bei Verdacht auf eine Allergie sollte ein Arzt konsultiert werden.
@@ -10,7 +10,7 @@ Die Schwarze Maulbeere kann bei einigen Menschen allergische Reaktionen hervorru
 Die Früchte der Schwarzen Maulbeere sind für den Menschen ungiftig und können bedenkenlos verzehrt werden. Es gibt keine bekannten Vergiftungsfälle durch diese Pflanze.
 
 ## 4. Heimisch in Europa
-Die Schwarze Maulbeere ist in Europa heimisch und wird seit langem in verschiedenen Regionen kultiviert. Sie ist vor allem in Südeuropa verbreitet, kann aber auch in gemäßigten Klimazonen gedeihen.
+Die Schwarze Maulbeere ist ursprünglich in Westasien beheimatet. Sie wurde allerdings spätestens um 1500 herum bereits in Südeuropa gepflanzt. Im Mittelmeerraum und in den südöstlichen USA ist sie mittlerweile eingebürgert. In Mitteleuropa ist sie dagegen selten zu finden, da sie nur in den wärmsten Lagen gut gedeiht.
 
 ## 5. Wachstumsbedingungen
 ### 5.1 Bodenbedingungen
