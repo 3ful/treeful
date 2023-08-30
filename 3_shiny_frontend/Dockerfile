@@ -36,6 +36,7 @@ RUN Rscript -e 'remotes::install_version("ggtext",upgrade="never", version = "0.
 RUN Rscript -e 'remotes::install_version("DT",upgrade="never", version = "0.28")'
 RUN Rscript -e 'remotes::install_version("tidyverse",upgrade="never", version = "2.0.0")'
 RUN Rscript -e 'remotes::install_version("xfun",upgrade="never", version = "0.40")'
+RUN Rscript -e 'remotes::install_version("bslib",upgrade="never", version = "0.5.0")'
 ARG CACHE_DATE=2023-08-22
 RUN mkdir /home/rstudio/treeful/
 COPY ./ /home/rstudio/treeful/
