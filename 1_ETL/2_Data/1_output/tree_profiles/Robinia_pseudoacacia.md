@@ -1,7 +1,6 @@
 # Robinie (Robinia pseudoacacia)
 
-Die Robinie (Robinia pseudoacacia) ist ein Baum, der in Europa heimisch ist. Sie gehört zur Familie der Hülsenfrüchtler und wird auch als Scheinakazie bezeichnet. Die Robinie ist bekannt für ihre auffälligen weißen Blüten und ihre dornigen Äste.
-
+Die Robinie (Robinia pseudoacacia) stammt aus Nordamerika und wird überall in Europa seit fast 400 Jahren in Parks und Gärten gepflanzt. Sie wächst inzwischen auch wild.
 ## Allergien
 
 Obwohl die Robinie eine schöne Baumart ist, kann sie bei einigen Menschen Allergien auslösen. Die Pollen der Robinie können bei empfindlichen Personen allergische Reaktionen wie Heuschnupfen verursachen. Es ist ratsam, sich von der Robinie fernzuhalten, wenn man allergisch auf ihre Pollen reagiert.
@@ -12,7 +11,7 @@ Die Robinie ist nicht giftig für Menschen. Sowohl die Blätter als auch die Sam
 
 ## Verbreitung in Europa
 
-Die Robinie ist in Europa heimisch und kommt in vielen Ländern vor. Sie wächst in Wäldern, Parks und Gärten. Aufgrund ihrer Schönheit und ihres schnellen Wachstums wird die Robinie oft als Zierbaum angepflanzt.
+Die Gewöhnliche Robinie ist im atlantischen Nordamerika beheimatet. Aufgrund ihrer Schönheit und ihres schnellen Wachstums wird die Robinie oft auch in Europa als Zierbaum angepflanzt.
 
 ## Wachstumsbedingungen
 

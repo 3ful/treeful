@@ -1,7 +1,7 @@
-# Acer cappadocicum (Kaukasus-Blumenhartriegel)
+# Acer cappadocicum (Kolchischer Ahorn)
 
 ## 1. Allgemeine Informationen und Vorkommen
-- Acer cappadocicum, auch bekannt als Kaukasus-Blumenhartriegel, ist ein Laubbaum.
+- Acer cappadocicum, auch bekannt als Kolchischer Ahorn, ist ein Laubbaum.
 - Diese Baumart stammt ursprünglich aus dem Kaukasus und ist in Europa heimisch.
 - Acer cappadocicum kann eine Höhe von bis zu 20 Metern erreichen.
 - Die Blätter sind grün und haben eine typische handförmige Struktur.
@@ -16,7 +16,7 @@
 - Die Früchte können jedoch bei übermäßigem Verzehr zu Magenbeschwerden führen.
 
 ## 4. In Europa heimisch
-- Acer cappadocicum ist in Europa heimisch, insbesondere in den Kaukasusregionen.
+- Acer cappadocicum ist in Europa heimisch. Das Verbreitungsgebiet des Kolchischen Ahorns erstreckt sich vom Süden Italiens über den Kaukasusraum in Westasien nach Osten bis zum Himalaja und in den westlichen Teil Chinas.
 - In vielen europäischen Ländern wird diese Baumart als Zierbaum in Parks und Gärten angepflanzt.
 
 ## 5. Wachstumsbedingungen

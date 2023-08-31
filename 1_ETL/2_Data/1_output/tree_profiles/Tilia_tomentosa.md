@@ -14,7 +14,7 @@ Die Silberlinde ist nicht giftig für Menschen oder Tiere. Weder ihre Blätter n
 
 ## 4. Heimisch in Europa
 
-Die Silberlinde ist in Europa beheimatet und kommt vor allem in Mitteleuropa vor. Sie ist ein weit verbreiteter Baum und kann in vielen europäischen Ländern gefunden werden. Aufgrund ihrer Schönheit und ihres dekorativen Aussehens wird sie oft in Gärten, Parks und Alleen in ganz Europa angepflanzt.
+Die Silber-Linde ist in Südosteuropa und in Kleinasien beheimatet und tritt dort als waldbildender Baum in Erscheinung.
 
 ## 5. Wachstumsbedingungen
 

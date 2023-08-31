@@ -10,7 +10,7 @@ Der Tatarische Ahorn ist nicht bekannt für allergische Reaktionen. Seine Pollen
 Der Tatarische Ahorn gilt als ungiftig für Menschen und Tiere. Weder die Blätter noch die Rinde oder das Holz enthalten giftige Substanzen. Es besteht keine Gefahr bei Berührung oder Verzehr.
 
 ## 4. Heimisch in Europa
-Der Tatarische Ahorn ist in Europa beheimatet und kommt vor allem in Osteuropa, im Kaukasus und in einigen Teilen Mitteleuropas vor. In Deutschland ist er vor allem in den östlichen Bundesländern anzutreffen.
+Der Tatarische Ahorn ist in Europa beheimatet und kommt vor allem in Osteuropa und in einigen Teilen Mitteleuropas vor.
 
 ## 5. Wachstumsbedingungen
 Der Tatarische Ahorn bevorzugt bestimmte Wachstumsbedingungen, um optimal gedeihen zu können.

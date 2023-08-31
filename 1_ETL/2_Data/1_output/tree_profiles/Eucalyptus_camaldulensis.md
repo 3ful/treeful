@@ -1,7 +1,7 @@
-# Eukalyptus camaldulensis (Eukalyptusbaum)
+# Eukalyptus camaldulensis (Roter Eukalyptusbaum)
 
 ## Allgemeine Informationen und Vorkommen
-Der Eukalyptus camaldulensis, auch bekannt als Eukalyptusbaum, ist ein großer, immergrüner Baum, der zur Familie der Myrtengewächse gehört. Ursprünglich stammt er aus Australien und ist dort weit verbreitet. Aufgrund seiner Beliebtheit als Zierbaum wurde er jedoch auch in vielen anderen Ländern eingeführt und ist heute in verschiedenen Regionen der Welt anzutreffen.
+Der Eukalyptus camaldulensis, auch bekannt als Roter Eukalyptusbaum, ist ein großer, immergrüner Baum, der zur Familie der Myrtengewächse gehört. Ursprünglich stammt er aus Australien und ist dort weit verbreitet. Aufgrund seiner Beliebtheit als Zierbaum wurde er jedoch auch in vielen anderen Ländern eingeführt und ist heute in verschiedenen Regionen der Welt anzutreffen.
 
 ## Allergien
 Es gibt keine bekannten Allergien gegen den Eukalyptus camaldulensis. Die meisten Menschen vertragen den Baum gut.

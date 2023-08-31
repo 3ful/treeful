@@ -10,7 +10,7 @@ Betula humilis kann bei einigen Menschen Allergien auslösen. Die Pollen der Nie
 Die Niedrige Birke ist nicht bekannt für ihre Giftigkeit. Weder die Rinde noch die Blätter oder der Saft dieser Pflanze sind giftig. Es gibt keine bekannten Berichte über Vergiftungen durch Betula humilis.
 
 ## 4. Verbreitung in Europa
-Die Betula humilis ist in Europa heimisch und kommt in verschiedenen Ländern vor. Sie ist vor allem in subarktischen Regionen wie Skandinavien und Russland zu finden. In Deutschland und Polen ist sie ebenfalls anzutreffen. Diese Pflanze hat sich an die klimatischen Bedingungen in Europa angepasst und ist daher in vielen Teilen des Kontinents verbreitet.
+Die Betula humilis ist in Europa heimisch und kommt in verschiedenen Ländern vor. Sie ist vor allem in subarktischen Regionen wie Skandinavien und Russland zu finden. In Deutschland und Polen ist sie ebenfalls anzutreffen.
 
 ## 5. Wachstumsbedingungen
 Die Niedrige Birke hat spezifische Anforderungen an ihre Wachstumsbedingungen. Hier sind einige wichtige Faktoren zu beachten:

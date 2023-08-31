@@ -1,7 +1,7 @@
 # Paliurus spina-christi (Christusdorn)
 
 ## 1. Allgemeine Informationen und Vorkommen
-Der Christusdorn (Paliurus spina-christi) ist ein laubabwerfender Strauch oder kleiner Baum, der zur Familie der Kreuzdorngewächse gehört. Er ist in verschiedenen Regionen Europas, Asiens und Nordafrikas verbreitet. Der Christusdorn zeichnet sich durch seine charakteristischen Dornen und seine auffälligen, gelben Blüten aus.
+Der Christusdorn (Paliurus spina-christi) ist ein laubabwerfender Strauch oder kleiner Baum, der zur Familie der Kreuzdorngewächse gehört. Er ist im südlichen Europa, Asiens und Nordafrikas verbreitet. Der Christusdorn zeichnet sich durch seine charakteristischen Dornen und seine auffälligen, gelben Blüten aus.
 
 ## 2. Allergien
 Es gibt keine bekannten Allergien im Zusammenhang mit dem Christusdorn.

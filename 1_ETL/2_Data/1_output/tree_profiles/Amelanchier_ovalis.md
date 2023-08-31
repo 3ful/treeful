@@ -7,7 +7,7 @@ Die Felsenbirne, auch bekannt als Amelanchier ovalis, ist eine Pflanzenart aus d
 Die Felsenbirne ist im Allgemeinen nicht als allergieauslösend bekannt. Allerdings können manche Personen empfindlich auf Pollen reagieren, die während der Blütezeit freigesetzt werden. Bei bekannter Pollenallergie sollte daher Vorsicht geboten sein.
 
 ## Giftigkeit
-Die Felsenbirne ist für Menschen ungiftig und kann bedenkenlos verzehrt werden. Sowohl die Früchte als auch die Blätter enthalten keine bekannten giftigen Substanzen.
+Die mehlig-süß schmeckenden Früchtesind essbar. Blätter und Samen der Felsenbirne enthalten geringe Mengen cyanogener Glykoside (d. h. Blausäure abspaltender Glykoside). Nach dem Verzehr von unreifen Früchten oder großer Mengen zerkauter Samen können Magen-Darm-Beschwerden auftreten. Unzerkaute Samen werden unverdaut wieder ausgeschieden. Nach dem unbeabsichtigten Zerbeißen einiger Samen sind jedoch keine Vergiftungssymptome zu erwarten – ähnlich wie bei Apfelkernen, die auch cyanogene Glykoside enthalten.
 
 ## In Europa heimisch
 Die Felsenbirne ist eine heimische Pflanzenart in Europa. Sie kommt in verschiedenen Ländern vor, darunter Deutschland, Österreich, Schweiz, Frankreich und viele andere. In diesen Regionen ist sie oft in Wäldern, Gärten und Parks anzutreffen.

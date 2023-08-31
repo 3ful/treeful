@@ -1,4 +1,4 @@
-# Quercus ithaburensis (Quercus ithaburensis)
+# Quercus ithaburensis (-)
 
 ## Allgemeine Informationen und Vorkommen
 Quercus ithaburensis, auch bekannt als Ithaburenseiche, ist eine Baumart aus der Gattung der Eichen (Quercus) und gehört zur Familie der Buchengewächse (Fagaceae). Sie ist in Europa heimisch und kommt hauptsächlich in den Mittelmeerländern vor, insbesondere in Spanien, Italien, Griechenland und der Türkei. Diese Eichenart bevorzugt trockene und warme Regionen.

@@ -10,7 +10,7 @@ Obwohl Juniperus virginiana keine starken allergischen Reaktionen hervorruft, k�
 Juniperus virginiana ist nicht als giftig für Menschen bekannt. Allerdings können die Beeren des Virginischen Wacholders bei Verzehr zu Magenbeschwerden führen. Es wird empfohlen, die Beeren nicht zu essen.
 
 ## 4. Ursprünglich aus Europa
-Im Gegensatz zu seinem Namen ist Juniperus virginiana nicht in Europa heimisch. Es ist eine nordamerikanische Pflanze und hat ihren Ursprung in den Vereinigten Staaten und Kanada.
+Juniperus virginiana ist nicht in Europa heimisch. Es ist eine nordamerikanische Pflanze und hat ihren Ursprung in den Vereinigten Staaten und Kanada.
 
 ## 5. Wachstumsbedingungen
 Juniperus virginiana gedeiht unter verschiedenen Wachstumsbedingungen.

@@ -1,4 +1,4 @@
-# Sorbus mougeotii (Mougeot's Whitebeam)
+# Sorbus mougeotii (Vogesen-Mehlbeere)
 
 ## 1. Allgemeine Informationen und Vorkommen
 Sorbus mougeotii, auch bekannt als Mougeot-Weißdorn, ist ein mittelgroßer Baum, der in Europa heimisch ist. Er gehört zur Gattung der Weißdorne (Sorbus) und zur Familie der Rosengewächse (Rosaceae). Sorbus mougeotii ist in verschiedenen Ländern Europas verbreitet, einschließlich Frankreich, Deutschland, Österreich und der Schweiz. Er wächst in Wäldern, Gebirgsregionen und auch in städtischen Gebieten.

@@ -1,7 +1,7 @@
 # Ulmus canescens (Grauulme)
 
 ## 1. Allgemeine Informationen und Vorkommen
-Die Grauulme (Ulmus canescens) ist ein mittelgroßer Laubbaum, der in Europa heimisch ist. Sie gehört zur Familie der Ulmengewächse (Ulmaceae) und ist eng mit der Feldulme (Ulmus minor) verwandt. Die Grauulme kommt in verschiedenen Regionen Europas vor, insbesondere in Mitteleuropa, Skandinavien und Osteuropa.
+Die Grauulme (Ulmus canescens) ist ein mittelgroßer Laubbaum, der in Europa heimisch ist. Sie gehört zur Familie der Ulmengewächse (Ulmaceae) und ist eng mit der Feldulme (Ulmus minor) verwandt. Die Grauulme kommt insbesondere in mediterranen Regionen vor.
 
 ## 2. Allergien
 Die Grauulme ist für Allergiker in der Regel unbedenklich. Sie produziert keine stark allergenen Pollen und verursacht daher selten allergische Reaktionen.
@@ -10,7 +10,7 @@ Die Grauulme ist für Allergiker in der Regel unbedenklich. Sie produziert keine
 Die Grauulme ist nicht als giftig bekannt. Weder die Rinde noch die Blätter oder Früchte enthalten toxische Substanzen. Sie kann bedenkenlos in der Nähe von Menschen und Tieren angepflanzt werden.
 
 ## 4. Heimisch in Europa
-Die Grauulme ist in Europa beheimatet und kommt natürlicherweise in verschiedenen Ländern vor. Sie ist besonders in Mitteleuropa verbreitet und gedeiht gut in den gemäßigten Klimazonen Europas.
+Die Grauulme ist in Europa beheimatet und kommt natürlicherweise in mediterranen Regionen vor.
 
 ## 5. Wachstumsbedingungen
 Die Grauulme stellt keine besonders hohen Ansprüche an ihre Wachstumsbedingungen. Sie kann in verschiedenen Umgebungen gedeihen, solange grundlegende Bedingungen erfüllt sind.

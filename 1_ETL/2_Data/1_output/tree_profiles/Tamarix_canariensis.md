@@ -1,7 +1,7 @@
 # Tamarix canariensis (Kanarische Tamariske)
 
 ## 1. Allgemeine Informationen und Vorkommen
-Die Kanarische Tamariske, wissenschaftlich bekannt als Tamarix canariensis, ist ein immergrüner Strauch oder Baum, der zur Familie der Tamariskengewächse gehört. Ursprünglich stammt sie von den Kanarischen Inseln, Nordafrika und dem Mittelmeerraum. Heutzutage ist sie jedoch auch in anderen Teilen Europas weit verbreitet.
+Die Kanarische Tamariske, wissenschaftlich bekannt als Tamarix canariensis, ist ein immergrüner Strauch oder Baum, der zur Familie der Tamariskengewächse gehört. Ursprünglich stammt sie von den Kanarischen Inseln. Heutzutage ist sie jedoch auch in anderen Teilen Europas weit verbreitet.
 
 ## 2. Allergien
 Es gibt keine bekannten Allergien in Bezug auf die Kanarische Tamariske.

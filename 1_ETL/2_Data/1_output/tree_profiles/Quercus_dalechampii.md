@@ -1,7 +1,7 @@
-# Quercus dalechampii (Quercus dalechampii)
+# Quercus dalechampii (-)
 
 ## Allgemeine Informationen und Vorkommen
-Quercus dalechampii, auch bekannt als Winter-Linde, ist ein Laubbaum, der in Europa heimisch ist. Er gehört zur Familie der Buchengewächse (Fagaceae) und ist in verschiedenen Regionen Europas verbreitet. Diese Baumart zeichnet sich durch ihre mittelgroße Wuchshöhe und ihre charakteristische Form aus.
+Quercus dalechampii, ist ein Laubbaum, der in südost Europa heimisch ist. Er gehört zur Familie der Buchengewächse (Fagaceae) und ist in verschiedenen Regionen Europas verbreitet. Diese Baumart zeichnet sich durch ihre mittelgroße Wuchshöhe und ihre charakteristische Form aus.
 
 ## Allergien
 Quercus dalechampii ist bekannt dafür, allergische Reaktionen bei manchen Menschen hervorzurufen. Insbesondere Pollen von Quercus dalechampii können bei Allergikern zu Beschwerden wie Heuschnupfen führen. Personen mit einer Pollenallergie sollten daher Vorsicht walten lassen, wenn sie sich in der Nähe dieser Baumart aufhalten.
@@ -10,8 +10,7 @@ Quercus dalechampii ist bekannt dafür, allergische Reaktionen bei manchen Mensc
 Quercus dalechampii ist nicht bekannt für seine giftigen Eigenschaften. Weder die Blätter noch die Rinde oder das Holz dieser Baumart sind für Mensch oder Tier giftig. Es besteht keine Gefahr einer Vergiftung durch den Kontakt mit Quercus dalechampii.
 
 ## In Europa heimisch
-Quercus dalechampii ist in Europa heimisch und findet sich in verschiedenen Ländern des Kontinents. Insbesondere in Mitteleuropa ist diese Baumart weit verbreitet. Sie ist ein integraler Bestandteil der europäischen Flora und prägt die Landschaften vieler Regionen.
-
+Quercus dalechampii ist in südost Europa beheimatet.
 ## Wachstumsbedingungen
 Quercus dalechampii bevorzugt bestimmte Wachstumsbedingungen, um optimal gedeihen zu können. Diese umfassen:
 
