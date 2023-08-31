@@ -33,7 +33,7 @@ RUN Rscript -e 'remotes::install_version("DT",upgrade="never", version = "0.28")
 RUN Rscript -e 'remotes::install_version("xfun",upgrade="never", version = "0.40")'
 RUN Rscript -e 'remotes::install_version("bslib",upgrade="never", version = "0.5.0")'
 ARG CACHE_DATE=2023-08-22
-RUN mkdir /srv/shiny-server/treeful
+RUN rm -rf /srv/shiny-server/*
 COPY ./ /srv/shiny-server/
 COPY treeful_*.tar.gz /app.tar.gz
 #RUN R -e 'remotes::install_local("/app.tar.gz",upgrade="never")'
