@@ -1,0 +1,6 @@
+Stations_ID;Stationsname;Geo. Laenge [Grad];Geo. Breite [Grad];Stationshoehe [m];Geberhoehe ueber Grund [m];Von_Datum;Bis_Datum;Geraetetyp Name;Messverfahren;eor;
+656;Braunlage;10.6;51.72;607;1;19990909;20010528;Ceilometer LD 40;Wolkenhöhenmessung, elektr.;eor;
+656;Braunlage;10.6;51.72;607.3;1;20010529;20040324;Ceilometer LD 40;Wolkenhöhenmessung, elektr.;eor;
+656;Braunlage;10.6;51.72;607.3;1;20070521;20180909;Ceilometer LD 40;Wolkenhöhenmessung, elektr.;eor;
+656;Braunlage;10.6;51.72;607.3;1.55;20180910;20230426;Wolkenhöhenmessgerät CHM 15k "NIMBUS";Wolkenhöhenmessung, elektr.;eor;
+generiert: 10.05.2023 --  Deutscher Wetterdienst  --

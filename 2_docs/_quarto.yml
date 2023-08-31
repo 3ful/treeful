@@ -2,13 +2,23 @@ project:
   type: book
 
 book:
+  cookie-consent: true
   title: "Treeful Docs"
   author: "Christoph Trost"
+  contributor: "Jakob Kutsch"
+  illustrator: "Elisabeth Hecker"
   date: "2023-06-20"
   reader-mode: true
+  repo-url: https://github.com/3ful/treeful
+  cover-image: logo.png
+  favicon: logo.png
+  license: MIT License
   chapters:
     - index.qmd
-
+navbar:
+    tools:
+      - icon: github
+        href: https://github.com/3ful/treeful
 format:
   html:
     toc: true

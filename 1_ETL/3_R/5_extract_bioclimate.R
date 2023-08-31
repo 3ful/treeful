@@ -1,10 +1,6 @@
 #################### LOad DBs, merge, turn into SF, extract bioclim #############################
-pipe_message = function(.data, status) {message(status); .data}
-
 
 if (!file.exists("2_Data/1_output/tree_db.csv")) {
-  
-  #gbif_trees <- data.table::fread(file = "2_Data/1_output/gbif_eu_trees.csv")
   
   ######################## turn name-matched data.tables into SF ###################
   trees4f_sf <- trees4f_db_selection %>% 
@@ -27,8 +23,6 @@ if (!file.exists("2_Data/1_output/tree_db.csv")) {
     left_join(dplyr::select(tree_master_list, master_list_name = latin_name, gbif_taxo_id), by = c("taxonkey" = "gbif_taxo_id")) %>% 
     filter(!is.na(x) & !is.na(y) & !is.na(master_list_name)) %>% 
     st_as_sf(coords = c("y", "x"), crs = 4326) %>% 
-    # this will only keep observation inside Europe, i.e. the bounding box of the copernicus raster
-    #sf::st_crop(st_bbox(bio01)) %>% 
     mutate(db = "gbif")
   
   sendstatus("got all dbs and turned them into sf")
@@ -46,7 +40,6 @@ if (!file.exists("2_Data/1_output/tree_db.csv")) {
   gc()
   
   ######################### The heart of it all: getting bioclimatic vars for each tree ##########
-  # ATTENTION with namespaces here. stringdist and raster both have an extract function. took me only an hour to figure out. 
   sendstatus(paste0("Cutting down tree db to species with n>1500, currently at ", nrow(tree_dbs)))
   
   tree_count <- tree_dbs %>% 
@@ -59,14 +52,6 @@ if (!file.exists("2_Data/1_output/tree_db.csv")) {
   gc()
   
   sendstatus(paste0("Cut small species occurrences. Starting extraction for ", nrow(tree_dbs), " tree occurrences"))
-  
-  
-  bio_vars <- c("bio01", "bio02", "bio03", "bio04", "bio05", "bio06", "bio07", "bio08", 
-                "bio09", "bio10", "bio11", "bio12", "bio13", "bio14", "bio15", "bio16", "bio17", "bio18", "bio19")
-  
-  soil_vars <- c("STU_EU_DEPTH_ROOTS","STU_EU_T_CLAY","STU_EU_S_CLAY","STU_EU_T_SAND","STU_EU_S_SAND","STU_EU_T_SILT","STU_EU_S_SILT",
-                 "STU_EU_T_OC","STU_EU_S_OC","STU_EU_T_BD","STU_EU_S_BD","STU_EU_T_GRAVEL","STU_EU_S_GRAVEL",
-                 "SMU_EU_T_TAWC","SMU_EU_S_TAWC","STU_EU_T_TAWC", "STU_EU_S_TAWC")
   
   tree_dbs <- tree_dbs %>% 
     st_as_sf(crs = 4326)
@@ -146,23 +131,7 @@ if (!RPostgres::dbExistsTable(conn = con, name = "tree_dbs")) {
   sf::st_write(tree_dbs, dsn = con, table = "tree_dbs",
                append = FALSE)
 }
-################ Computing percentiles and writing to DB ################
-# quantile_df <- function(x, probs = seq(0,1, by = 0.01)) {
-#   tibble(
-#     val = quantile(x, probs, na.rm = TRUE, names = F),
-#     quant = probs
-#   )
-# }
-# 
-# bioclim_quantiles <- tree_dbs %>% 
-#   group_by(master_list_name) %>% 
-#   reframe(across(starts_with(c("BIO", "STU")), quantile_df), .unpack = TRUE) %>% 
-#   janitor::clean_names() %>% 
-#   unnest(names_sep = "_") %>% 
-#   select(everything(), -ends_with("_quant"), bio01_quant) %>% 
-#   select(master_list_name, percentile = bio01_quant, everything())
-#     
-# RPostgres::dbWriteTable(con, "trees_quantiles", bioclim_quantiles, append = FALSE, overwrite = TRUE)
+
 
 tree_db_sample_size <- group_by(tree_dbs, master_list_name) %>% 
   summarise(n=n())

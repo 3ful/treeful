@@ -32,7 +32,7 @@ services:
           - postgres_host
     image: "127.0.0.1:5000/treeful_frontend:0.0.3"
     volumes:
-      - ./1_ETL/2_Data/1_output/tree_profiles:/srv/shiny-server/insta/app/tree_profiles
+      - ./1_ETL/2_Data/1_output/tree_profiles:/srv/shiny-server/inst/app/tree_profiles
       - ./1_ETL/2_Data/0_raw_data:/srv/shiny-server/data
     ports:
       - "8080:3838"

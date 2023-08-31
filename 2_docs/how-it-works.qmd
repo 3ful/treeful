@@ -3,11 +3,8 @@ title: "How it works"
 format: html
 ---
 
-## Quarto
+## Code Snippets to generate some illustrative Charts
 
-## Running Code
-
-When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
 
 ```{r}
 library(librarian)
@@ -185,6 +182,164 @@ ggplot(filter(tree_dbs, db == "trees4f" & master_list_name %in% filter(eu_trees_
                                          nrow(filter(tree_dbs, db == "trees4f" & master_list_name %in% filter(eu_trees_sample_size, n>200)$master_list_name)), " occurrences of ", length(unique(filter(tree_dbs, db == "trees4f" & master_list_name %in% filter(eu_trees_sample_size, n>200)$master_list_name)$master_list_name)), " species"))
 
 ggsave(filename = "../2_docs/bio1_distribution_trees4f.png", width = 20, height = 14)
+```
+
+
+
+
+```{r}
+#| eval: false
+
+col_primary = "#6e944eff"
+col_secondary = "#deeed4ff"
+col_fg = "#2b2b40ff"
+col_warning = "#c65534c5"
+col_danger = "#c75634ff"
+
+backend_con <- pool::dbPool(RPostgres::Postgres(),
+                            dbname = "treeful-test",
+                            host= "192.168.178.148",
+                            #host= "db",
+                            port="5432",
+                            user="postgres",
+                            #password=read_lines(Sys.getenv("POSTGRES_PW_FILE")))
+                            password=Sys.getenv("POSTGRES_PW"))
+
+species <- DBI::dbGetQuery(backend_con, paste0("SELECT * FROM tree_master_list")) %>%
+  dplyr::arrange(latin_name)
+
+source("../3_shiny_frontend/R/fct_data_dict.R")
+
+
+bio_extract <- function(map_point. = map_point, experiment = "rcp45", future_date = 5) {
+
+  ##### Get Past values
+  bio_past <- terra::extract(x = terra::rast(paste0("../1_ETL/2_Data/0_raw_data/past/", biovars$biovars, "_era5-to-1km_1979-2018-mean_v1.0.nc")),
+                             y = map_point.)
+
+  ###### Get Future Values
+  ###### CAREFUL, future_date is index of raster. 5 = 2050, 6 = 2070, 7 = 2090
+  #bio_dates <- c("1979-01-01", "1989-01-01", "2009-01-01", "2030-01-01", "2050-01-01", "2070-01-01", "2090-01-01")
+
+  future_raster <- terra::subset(
+    terra::rast(paste0("../1_ETL/2_Data/0_raw_data/future/", biovars$biovars, "_noresm1-m_",
+                                                 experiment, "_r1i1p1_1960-2099-mean_v1.0.nc")),
+                              paste0(biovars$biovars, "_", future_date))
+
+  bio_future <- terra::extract(x = future_raster, y = map_point.) %>%
+    dplyr::rename_with(everything(), .fn = ~ stringr::str_remove(.x, "_(4|5|6|7)"))
+  rm(future_raster)
+
+  ###### Get Soil Values
+  soil_layer <- terra::rast(paste0("../1_ETL/2_Data/0_raw_data/soil/", soil_vars$soilvars, "_4326.tif"))
+  bio_soil <- terra::extract(x = soil_layer, y = map_point.)
+
+  bio_past %>%
+    dplyr::mutate(dimension = "past") %>%
+    dplyr::bind_rows(dplyr::mutate(bio_future, dimension = "future")) %>%
+  # when temp, conert from kelvin to degree
+    dplyr::mutate(across(.cols = ends_with(c("01", "05", "06", "08", "09", "10", "11")), ~ (.x - 273.15), .names = "{.col}")) %>%
+    # when annual precip, compute for 365 days
+    dplyr::mutate(across(.cols = ends_with(c("12")), ~ (.x *3600*24*365*1000), .names = "{.col}")) %>%
+    # when monthly preci, computer for month
+    dplyr::mutate(across(.cols = ends_with(c("13", "14")), ~ (.x *3600*24*30.5*1000), .names = "{.col}")) %>%
+    # when quarterly precip compute for 91.3 days.
+    dplyr::mutate(across(.cols = ends_with(c("16", "17", "18", "19")), ~ (.x *3600*24*91.3*1000), .names = "{.col}")) %>%
+    dplyr::bind_rows(dplyr::mutate(bio_soil, dimension = "soil")) %>%
+    dplyr::select(dimension, dplyr::everything(), -ends_with("_ID")) %>%
+    return(.)
+}
+
+
+tree_occurrence <- DBI::dbGetQuery(backend_con, paste0(
+      "SELECT * FROM tree_dbs WHERE master_list_name ='", species, "';"))
+
+
+wetter <- read_delim("dwd/produkt_klima_jahr_19310101_20221231_00656.txt") %>% 
+  janitor::clean_names() %>% 
+  mutate(ja_rr = as.numeric(ja_rr)) %>% 
+  filter(ja_rr > 0) %>% 
+  mutate(ja_tx = as.numeric(ja_tx)) %>% 
+  filter(ja_tx > 0) %>% 
+  mutate(date = lubridate::ymd(mess_datum_beginn)) %>% 
+  mutate(month = as.Date(cut.Date(date, breaks = "month"))) %>% 
+  mutate(year = as.Date(cut.Date(date, breaks = "year"))) %>% 
+  group_by(year) %>% 
+  summarise(rain = sum(ja_rr), werte = n(), temp = mean(ja_tx)) %>% 
+  filter(year > as.Date("2009-01-01"))
+
+
+
+
+map_point <- sf::st_as_sf(tibble::tibble(lat = 51.7458, lon = 10.5630), coords = c("lon", "lat"), crs = 4326, remove =FALSE)
+
+
+species <- "Picea abies"
+scenario <- "rcp85"
+future_dates <- 6
+
+user_bio_extract <- bio_extract(map_point. = map_point, experiment = scenario, future_date = 6)
+
+userx <- dplyr::filter(biovars, biovars == varx[1])
+usery <- dplyr::filter(biovars, biovars == vary[1])
+
+varx <- "BIO01"
+vary <- "BIO12"
+
+varx <- "BIO05"
+vary <- "BIO14"
+
+
+ ggplot2::ggplot(data = dplyr::filter(user_bio_extract, dimension %in% c("past", "future"))) +
+    ggplot2::geom_point(data = tree_occurrence, ggplot2::aes(x = .data[[varx]],
+                            y = .data[[vary]]),
+                        color = col_warning,
+                        alpha = 0.1, stroke = 0) +
+   # stat_central_tendency(data = tree_occurrence, ggplot2::aes(x = .data[[varx]],
+   #                          y = .data[[vary]]), type = "mean", linetype = "dashed") +
+    geom_hline(yintercept = mean(tree_occurrence$BIO12, na.rm=TRUE), color = col_fg, linetype = "dotted", alpha = 0.8) +
+   geom_vline(xintercept = mean(tree_occurrence$BIO01, na.rm=TRUE), color = col_fg, linetype = "dotted", alpha = 0.8) +
+    #scale_color_paletteer_d("wesanderson::Royal1") +
+    #ggplot2::facet_wrap(~master_list_name) +
+    hrbrthemes::theme_ipsum() +
+    labs(title = paste0(userx$descr_de, " und ",
+                                 usery$descr_de),
+                  x = userx$descr_de,
+                  y = usery$descr_de,
+         subtitle = paste0("Habitat von ", species, " im Vergleich zu 2070-Projektionen und DWD Stationsdaten 2010-2022 von Braunlage im Harz"), 
+         caption = "Klimaszenario RPC8.5, Modell NorESM1-M"
+         ) +
+      ggplot2::theme(
+        #plot.background = element_rect(fill = col_fg),
+        #text = element_text(color = "white"),
+        plot.title = element_text(size = 24),
+        plot.subtitle = element_text(size = 20),
+        #strip.text = element_text(color = "white"),
+        axis.title.y = element_text(size = 18),
+        axis.title.x = element_text(size = 18),
+        legend.position = "bottom"
+        ) +
+      ggplot2::geom_point(ggplot2::aes(x = .data[[userx$biovars]],
+                                       y = .data[[usery$biovars]]),
+                          color = col_primary, size = 4) +
+      ggtext::geom_richtext(aes(x = .data[[userx$biovars]],
+                                y = .data[[usery$biovars]],
+                                label = c("Harz **1979-2018**", paste0("Harz **", "2070", "**"))),
+                            stat = "unique", angle = 30,
+                            color = col_fg, fill = col_secondary,
+                            label.color = NA, hjust = 0, vjust = 0,
+                            family = "Playfair Display") +
+    ggplot2::geom_point(data = wetter, aes(x = temp,
+                                y = rain),
+                          color = col_primary, size = 2) +
+   ggtext::geom_richtext(data = wetter, aes(x = temp,
+                                y = rain,
+                                label = lubridate::year(year)),
+                            stat = "unique", angle = 0, size = 3,
+                            color = col_fg, fill = col_secondary,
+                            label.color = NA, hjust = 0, vjust = 0,
+                            family = "Playfair Display") +
+   annotate("text", x = 5, y = 500, label = paste0("Habitatsbereich von ", nrow(tree_occurrence), " Fichten"))
 ```
 
 

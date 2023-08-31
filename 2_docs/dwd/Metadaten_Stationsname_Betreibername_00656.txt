@@ -1,0 +1,7 @@
+Stations_ID;Stationsname;Von_Datum;Bis_Datum
+   656;Braunlage;18780601;
+
+Stations_ID;Betreibername;Von_Datum;Bis_Datum
+   656;Wetterdienst;18780601;19521110
+   656;DWD;19521111;
+generiert: 10.05.2023 --  Deutscher Wetterdienst  --

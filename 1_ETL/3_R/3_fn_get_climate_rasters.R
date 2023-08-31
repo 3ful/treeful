@@ -89,46 +89,6 @@ getpastclimate <- function(source = "copernicus", bioclim = "bio01") {
 }
 
 
-#################### Get Future Climate ##################
-# for now using climate projection model MPI-ESM1-2-LR and socio-econ pathway 245 
-
-getfutureclimate <- function(source = "copernicus", bioclim = "bio01", experiment = "rcp45", future_date = `2050-01-01`) {
-  if(source == "chelsa") {
-    future_raster <- raster::stack(c("2_Data/1_output/CHELSA_cropped/CHELSA_bio1_2041-2070_gfdl-esm4_ssp370_V.2.1.tif", 
-                    "2_Data/1_output/CHELSA_cropped/CHELSA_bio12_2041-2070_gfdl-esm4_ssp370_V.2.1.tif"))
-    names(future_raster)[1] <- "bio01"
-    names(future_raster)[2] <- "bio12"
-    future_raster$bio01 <- raster::calc(future_raster$bio01, function(x) { x / 10 - 273.15 })
-    future_raster$bio12 <- raster::calc(future_raster$bio12, function(x) { x / 10})
-    
-  } else if (source == "worldclim") {
-    future_raster <- geodata::cmip6_tile(model = "MPI-ESM1-2-LR", lon = 11.01684, lat = 51.28691, 
-                                         ssp = "245", time = "2041-2060", var = "bioc", path = "2_Data/0_raw_data/", res = 5)
-    names(future_raster)[1] <- "bio01"
-    names(future_raster)[12] <- "bio12"
-  } else if (source == "copernicus") {
-
-    bio_path <- toupper(bioclim)
-
-    bio_raster <- terra::rast(paste0("2_Data/0_raw_data/future/", bio_path, "_noresm1-m_", experiment, "_r1i1p1_1960-2099-mean_v1.0.nc"))
-    #$X2050.01.01
-    names(bio_raster) <- terra::time(bio_raster)
-    #bio_raster <- bio_raster$`2050-01-01`
-    bio_raster <- terra::subset(bio_raster, future_date)
-    # convert bioclim as per copernicus documentation. for some reason case_when does not work here.     
-    if (bioclim %in% c("bio01", "bio05", "bio06", "bio08", "bio09", "bio10", "bio11")) 
-    {bio_raster <- bio_raster - 273.15
-    } else if (bioclim == "bio12") {bio_raster <- bio_raster*3600*24*365*1000
-    } else if (bioclim %in% c("bio13", "bio14")) {bio_raster <- bio_raster*3600*24*30.5*1000
-    } else if (bioclim %in% c("bio16", "bio17", "bio18", "bio19")) {bio_raster <- bio_raster*3600*24*91.3*1000
-    }
-    
-  }
-  
-  return(bio_raster)
-  rm(bio_raster)
-}
-
 getsoilproperties <- function(variable = "STU_EU_DEPTH_ROOTS") {
   soil_layer <- terra::rast(paste0("2_Data/0_raw_data/soil/", variable, "_4326.tif"))
   return(soil_layer)
