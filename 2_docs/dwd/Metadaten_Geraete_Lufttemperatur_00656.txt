@@ -1,0 +1,7 @@
+Stations_ID;Stationsname;Geo. Laenge [Grad];Geo. Breite [Grad];Stationshoehe [m];Geberhoehe ueber Grund [m];Von_Datum;Bis_Datum;Geraetetyp Name;Messverfahren;eor;
+656;Braunlage;;;;;19310101;19340823;Gerätetyp unbekannt;Temperatur/Feuchtemessung, konv.;eor;
+656;Braunlage;10.61;51.72;575;2;19340824;19351231;Psychrometerthermometer (trocken);Temperatur/Feuchtemessung, konv.;eor;
+656;Braunlage;10.6;51.72;607;2;19360101;20010528;Psychrometerthermometer (trocken);Temperatur/Feuchtemessung, konv.;eor;
+656;Braunlage;10.6;51.72;607.3;2;20010529;20010529;Psychrometerthermometer (trocken);Temperatur/Feuchtemessung, konv.;eor;
+656;Braunlage;10.6;51.72;607.3;2;20010529;20230426;PT 100 (Luft);Temperaturmessung, elektr.;eor;
+generiert: 10.05.2023 --  Deutscher Wetterdienst  --

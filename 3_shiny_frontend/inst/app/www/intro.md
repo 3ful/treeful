@@ -16,4 +16,5 @@ Bäume pflanzen sei gut überlegt. Unser Ranking gibt einen Anhaltspunkt, jedoch
 
 Klimaprojektionen sind allgemein keine Vorhersagen sondern Wahrscheinlichkeiten. Mehr Informationen zu unseren Daten und Methoden sind in unserer Dokumentation zu finden. 
 
+Dieses Projekt wurde vom Bundesministerium für Bildung und Forschung von März 2023 bis September 2023 unter dem [Prototype Fund](https://prototypefund.de/) gefördert. 
 

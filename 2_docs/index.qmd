@@ -1,21 +1,56 @@
+
+<script type="text/plain" cookie-consent="tracking">
+  var _paq = window._paq = window._paq || [];
+  /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+  _paq.push(['trackPageView']);
+  _paq.push(['enableLinkTracking']);
+  (function() {
+    var u="https://matomo.datenlabor.eu/";
+    _paq.push(['setTrackerUrl', u+'matomo.php']);
+    _paq.push(['setSiteId', '11']);
+    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+    g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
+  })();
+</script>
+
 ## About this Book {.unnumbered}
 
-This book is the documentation for Treeful, an R Shiny application helping people plant trees based on species distribution modelling.  
+This book is the documentation [for Treeful](https://app.treeful.de), an R Shiny application helping people plant trees based on species distribution modelling. 
 
-## Contribute {.unnumbered}
+
+::: {.column-margin}
+This project was funded from the German ministry for Education and Research from March 1st 2023 to September 1st 2023. 
+
+![](bmbf_en.jpg)
+:::
 
 ## Who is behind this {.unnumbered}
 
+Two data scientists as part of the Prototype Fund: 
+
 * Jakob Kutsch
-* Christoph Trost
+* [Christoph Trost](https://datenlabor.eu)
 
 ## About this Project and technical Approach
 
-This project was funded from the German ministry for Education and Research from March 1st 2023 to September 1st 2023. The purpose is to build a shiny app that allows user to explore habitat shapes of trees in Europe. These habitat shapes are plots of existing trees from a merged database of close to 9 million trees. We extracted climatic variables present at each tree location. These shapes allow users to compare with their own location, a potential planting site, for the past and future. 
+
+The purpose is to build a shiny app that allows user to explore habitat shapes of trees in Europe. These habitat shapes are plots of existing trees from a merged database of close to 9 million trees. We extracted climatic variables present at each tree location. These shapes allow users to compare with their own location, a potential planting site, for the past and future. 
+
+Here's an example what we mean with tree suitability: The scatter points are tree occurrences, with points from one location in te Harz mountains at different points in time, and 2070 projected. That place has already fallen out of the habitat of picea abies. 
+
+::: {.column-page}
+![](harz_blog.png)
+:::
 
 ## Infrastructure
 
-The docker-compose file 
+The docker-compose file outlines the containers and is a good reference to start. 
+
+```{r}
+#| eval: false
+#| code-fold: true
+#| file: ../docker-compose.yml
+```
 
 ### ETL Container
 
@@ -23,7 +58,7 @@ This container runs through the main script, fetching tree location data, gettin
 
 ### Postgis Database Container
 
-All processed data from the ETL pipeline ends up in here. We chose to also write rasters to postgis, although rasters for projects like this are typically stored on disk. Our final shiny app will never read an entire raster but merely extract values from user locations. 
+All processed data from the ETL pipeline ends up in here in a few tables. We chose not to write rasters to postgis. 
 
 
 ### Shiny Container
@@ -32,7 +67,7 @@ The actual app runs as docker swarm and connects to the Postgis database.
 
 ## Treeful ETL Pipeline: Obtaining and transforming tree occurrence data
 
-This section documents how tree occurrence data is obtained. At the end, we will have our tree locations with the corresponding bioclimatic variables in a postgis database. Additionally we write rasters and a few master data tables into postgis. 
+This section documents how tree occurrence data is obtained. At the end, we will have our tree locations with the corresponding bioclimatic variables in a postgis database. 
 
 ### Get Climate Projection data & other external datasets
 
@@ -55,6 +90,7 @@ To produce reliable climate envelopes we would like to obtain as many trees from
 ::: {.callout-note title="On Sampling"}
 We are not doing any sampling on tree occurrences. This means that small areas with many tree records will produce a higher density in the climate envelopes. In the current state of our app and plots, this does reflect to the user. 
 :::
+
 
 #### Academic data sources
 
@@ -106,7 +142,7 @@ gbif_download <- occ_download(
 
 ### Getting Bioclimatic Variables
 
-We tested [CHELSA](https://chelsa-climate.org/bioclim/), [worldclim](https://www.worldclim.org/data/bioclim.html) and Copernicus CDS to get bioclimatic variables. We prefer Copernicus for their extensive documentation and the convenient time frame of past bioclimatic data, from 1979-2018. This is where we expect that largest overlap with the life span of our trees from the occurrence dataset. 
+We tested [CHELSA](https://chelsa-climate.org/bioclim/), [worldclim](https://www.worldclim.org/data/bioclim.html) and Copernicus CDS to get bioclimatic variables. We prefer Copernicus for their extensive documentation and the convenient time frame of past bioclimatic data, from 1979-2018. This is where we expect the largest overlap with the life span of our trees from the occurrence dataset. 
 
 Our functions `getpastclimate()` and `getfutureclimate()` can theoretically be used to switch bioclimatic data sources but we have not implemented those. These functions are used to read our Copernicus raster files. 
 
@@ -129,30 +165,29 @@ What could and probably should not be done here: CRS-reprojections. Sometimes yo
 
 ### Merging Tree Locations and Bioclimatic Variables
 
-On efficient functions and lots of RAM
-
-### Make Data available to Shiny App
-
-Tables created in this ETL pipeline are written to a PostGIS DB. To make raster files available to shiny you have two (actually more like one) options:
-
-#### Option 1: Writing Raster files to PostGIS DB
-
-The bioclimatic and soil rasters used in this project are several GBs large and usually do not fit into memory. This snipped reads them as raster stack, writes the stack to the PostGIS DB and removes it. 
-
-::: {.callout-warning title="Package rpostgis retired"}
-This section relies on the package rpostgis. Currently, there's no simple other way to write raster data to postGIS from R, neither sf nor terra nor stars. See [this discussion](https://github.com/r-spatial/discuss/issues/58). We therefore switched to the approach below: the Shiny app reads values directly from raster files on disk. Slightly less performant for our use case. 
-:::
+We now have millions of tree locations and rasters of past bioclimatic variables. We extract each bioclimatic variable for each tree location. For that, we first merge all tree data sources into a large simple feature object. 
 
 ```{r}
 #| eval: false
 #| code-fold: true
-#| file: ../1_ETL/3_R/6_write_to_db.R
+#| file: ../1_ETL/3_R/5_extract_bioclimate.R
 ```
 
+What we found to work fastest and least memory intensive is stacking all rasters first and then running terra::extract()
 
-#### Option 2: Mount raster files into Shiny container
+```{r}
+#| eval: false
+  bioclim_stack <- c(
+    getpastclimate(source = "copernicus", bioclim = "bio01"),
+    getpastclimate(source = "copernicus", bioclim = "bio02")
+    ######## etc #####
+    ######## etc #####
+  )
+  
+  tree_dbs <- tree_dbs %>% 
+    mutate(terra::extract(bioclim_stack, ., ID = F)) 
+```
 
-The raster files downloaded from Copernicus CDS can simply be mounted into the Docker container. 
 
 
 ### Enrich Species Master Table 
@@ -183,17 +218,6 @@ We have used the sampled and well documented dataset [EU Forest](https://figshar
 
 ![Histogram of BIO05 of tree occurences](bio5_distribution_trees4f.png)
 
-#### BIO06
-
-![Histogram of BIO06 of tree occurences](bio6_distribution_trees4f.png)
-
-#### BIO08
-
-![Histogram of BIO08 of tree occurences](bio8_distribution_trees4f.png)
-
-#### BIO09
-
-![Histogram of BIO09 of tree occurences](bio9_distribution_trees4f.png)
 
 #### BIO12
 
@@ -210,6 +234,29 @@ We have used the sampled and well documented dataset [EU Forest](https://figshar
 
 :::
 
+
+### Make Raster data available to Shiny App
+
+Tables created in this ETL pipeline are written to a PostGIS DB. To make raster files available to shiny you have two (actually more like one) options:
+
+#### Option 1: Writing Raster files to PostGIS DB
+
+The bioclimatic and soil rasters used in this project are several GBs large and usually do not fit into memory. This snipped reads them as raster stack, writes the stack to the PostGIS DB and removes it. 
+
+::: {.callout-warning title="Package rpostgis retired"}
+This section relies on the package rpostgis. Currently, there's no simple other way to write raster data to postGIS from R, neither sf nor terra nor stars. See [this discussion](https://github.com/r-spatial/discuss/issues/58). We therefore switched to the approach below: the Shiny app reads values directly from raster files on disk. Slightly less performant for our use case. 
+:::
+
+```{r}
+#| eval: false
+#| code-fold: true
+#| file: ../1_ETL/3_R/6_write_to_db.R
+```
+
+
+#### Option 2: Mount raster files into Shiny container
+
+The raster files downloaded from Copernicus CDS can simply be mounted into the Docker container. See our docker-compose for details on this. 
 
 
 
@@ -231,31 +278,32 @@ We use the docker image postgis/postgis and only add raster extension to it with
 
 ### Running the package barebone in a Docker container
 
-This approach means the R process will simply launch the shiny app. For a more robust deployment, use the other options. 
+This approach means the R process will simply launch the shiny app. For a more robust deployment, use Shiny Server. 
 
-Thanks to our Postgis database, the Shiny app itself is rather lightweight, does not need large files to be transferred and only does a minimum of plotting. 
-The docker-compose.yml file specifies that both the backend postgres database and the frontend shiny application will be launched. You could also run them on separate hosts.
-
-* Generate Dockerfile from app. Golem handles this. It is wise to double-check the Dockerfile before buidling. When adding new packages, ensure they're at the end of the Dockerfile in order to leverage build caching. 
+* Generate the Dockerfile from the app. Golem handles this with `golem::add_dockerfile()` but you need to edit the Dockerfile by hand. When adding new packages, ensure they're at the end of the Dockerfile in order to leverage build caching. 
 * **On your host:** clone the repository with git clone `https://github.com/3ful/treeful.git` and move to the directory with `cd ./treeful`
 * Run stack with swarm and compose
   * launch your docker swarm: `docker swarm init`
+  * If this is the first time running, the Postgis DB will be empty and you need to supply a first user password. While ETL is running the Shiny will not find any data. 
   * In order to serve the same image to all nodes you need a docker registry. Create one with: `docker service create --name registry --publish published=5000,target=5000 registry:2`
   * Push images to registry: `docker compose push`
   * Now, deploy your swarm: `docker stack deploy --compose-file docker-compose.yml treeful`
   * Now you can easily scale up your shiny app to 3 replicas with `docker service scale treeful_frontend=3`
   * You can watch visitors of your frontend app with `docker service logs treeful_frontend -f`
-* 
+
 
 ### Running in Shiny Server
 
+This is the better option for serving the app to multiple users. Our Dockerfile in 3_shiny_frontend uses this approach. Important aspects: 
 
-This currently a fairly cumbersome process. One isse is that the docker container installs the R package with the shiny app during build. There, secrets need to be available and the database needs to spun up. 
+* You can use rocker images, such as shiny-verse. 
+* Make the folder /srv/shiny-server readable by user shiny. Otherwise cache folder cannot be written and performance might suffer. 
+* When building the frontend container: **the database container needs to be running** and you need to make sure secrets are mounted and available during the package install. Remember, the shiny app is a package. 
+* `golem::add_shinyserver_file()` will generate an app.R file. Shiny server needs that. 
 
 ### Running in Shinyproxy
 
-We abandoned this option. The main reason was that shinyproxy spins up containers for each user. Since this app requires a fair amount of Ram
-
+We abandoned this option. The main reason was that shinyproxy spins up containers for each user. Since this app requires a fair amount of Ram, it didn't serve our needs. If you need authentication, this is your option. 
 
 
 

@@ -36,14 +36,12 @@ ARG CACHE_DATE=2023-08-22
 RUN rm -rf /srv/shiny-server/*
 COPY ./ /srv/shiny-server/
 COPY treeful_*.tar.gz /app.tar.gz
-#RUN R -e 'remotes::install_local("/app.tar.gz",upgrade="never")'
-#RUN rm /app.tar.gz
 RUN --mount=type=secret,id=postgres_pw \
   --mount=type=secret,id=postgres_host \
   POSTGRES_PW=$( cat /run/secrets/postgres_pw ) \
   POSTGRES_HOST=$( cat /run/secrets/postgres_host ) \
   R -e 'remotes::install_local("/app.tar.gz",upgrade="never")'
-WORKDIR /home/rstudio/treeful/
+RUN chown shiny:shiny /srv/shiny-server
 EXPOSE 3838
 CMD ["/usr/bin/shiny-server"]
 

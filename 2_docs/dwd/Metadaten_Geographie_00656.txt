@@ -1,0 +1,6 @@
+Stations_id;Stationshoehe;Geogr.Breite;Geogr.Laenge;von_datum;bis_datum;Stationsname
+   656;  565.00; 51.7295; 10.6108;18780601;19010131;Braunlage
+   656;  565.00; 51.7207; 10.6093;19010201;19281231;Braunlage
+   656;  575.00; 51.7181; 10.6102;19290101;19351231;Braunlage
+   656;  607.00; 51.7234; 10.6021;19360101;20010528;Braunlage
+   656;  607.30; 51.7234; 10.6021;20010529;        ;Braunlage

@@ -1,0 +1,8 @@
+Stations_ID;Stationsname;Geo. Laenge [Grad];Geo. Breite [Grad];Stationshoehe [m];Geberhoehe ueber Grund [m];Von_Datum;Bis_Datum;Geraetetyp Name;Messverfahren;eor;
+656;Braunlage;10.6;51.72;607;7;19360101;19450508;Sonnenscheinschreiber nach Campbell-Stokes;Sonnenscheinregistrierung, konv.;eor;
+656;Braunlage;10.6;51.72;607;7;19460620;19990908;Sonnenscheinschreiber nach Campbell-Stokes;Sonnenscheinregistrierung, konv.;eor;
+656;Braunlage;10.6;51.72;607;7;19920101;20000830;SONIe Sonnenenergie-Sensor;Sonnenscheindauer, elektr.;eor;
+656;Braunlage;10.6;51.72;607;10;20000831;20010528;SONIe Sonnenenergie-Sensor;Sonnenscheindauer, elektr.;eor;
+656;Braunlage;10.6;51.72;607.3;10;20010529;20090511;SONIe Sonnenenergie-Sensor;Sonnenscheindauer, elektr.;eor;
+656;Braunlage;10.6;51.72;607.3;6;20090515;20200727;SCAPP;Sonnenscheind/Strahlungsmessung, elektr.;eor;
+generiert: 10.05.2023 --  Deutscher Wetterdienst  --

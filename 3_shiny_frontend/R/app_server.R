@@ -82,9 +82,9 @@ app_server <- function(input, output, session) {
   #output$user_location <- DT::renderDT(user_climate_wide() %>% tidyr::pivot_longer(cols = where(is.numeric)) %>% filter(!is.na(value)), server = FALSE)
 
   tree_occurrence <- reactive({
-    waiter <- waiter::Waiter$new(id = "species_plot")
-    waiter$show()
-    on.exit(waiter$hide())
+    #waiter <- waiter::Waiter$new(id = "species_plot")
+    #waiter$show()
+    #on.exit(waiter$hide())
     DBI::dbGetQuery(backend_con, paste0(
       "SELECT * FROM tree_dbs WHERE master_list_name ='", input$select_species, "';"))
   }) %>% bindCache(Sys.Date(), input$select_species)
