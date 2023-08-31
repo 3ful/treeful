@@ -25,7 +25,6 @@ services:
               cpus: '2'
               memory: 1024M
   frontend:
-    frontend:
     build:
       context: "./3_shiny_frontend/"
       secrets:
@@ -33,6 +32,7 @@ services:
           - postgres_host
     image: "127.0.0.1:5000/treeful_frontend:0.0.2"
     volumes:
+      - ./1_ETL/2_Data/1_output/tree_profiles:/srv/shiny-server/treeful/insta/app/tree_profiles
       - ./1_ETL/2_Data/0_raw_data:/srv/shiny-server/treeful/data
     ports:
       - "8080:3838"

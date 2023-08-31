@@ -1,7 +1,7 @@
-# Laurus azorica (Kanarischer Lorbeer)
+# Laurus azorica (Azoren-Lorbeer)
 
 ## Allgemeine Informationen und Vorkommen
-Laurus azorica, auch bekannt als Kanarischer Lorbeer, ist eine immergrüne Pflanze aus der Familie der Lorbeergewächse (Lauraceae). Sie ist in den Azoren, einer Inselgruppe im Atlantischen Ozean, heimisch. Diese Pflanze ist ein endemisches Gewächs, das bedeutet, dass sie nur in dieser spezifischen Region vorkommt.
+Laurus azorica, auch bekannt als Azoren-Lorbeer, ist eine immergrüne Pflanze aus der Familie der Lorbeergewächse (Lauraceae). Sie ist in den Azoren, einer Inselgruppe im Atlantischen Ozean, heimisch. Diese Pflanze ist ein endemisches Gewächs, das bedeutet, dass sie nur in dieser spezifischen Region vorkommt.
 
 ## Allergien
 Es gibt keine bekannten Allergien im Zusammenhang mit Laurus azorica.
@@ -23,7 +23,7 @@ Um optimal zu wachsen, benötigt Laurus azorica eine ausgewogene Versorgung mit 
 Laurus azorica bevorzugt halbschattige bis schattige Standorte. Direkte Sonneneinstrahlung sollte vermieden werden, da dies zu Blattverbrennungen führen kann.
 
 ### Temperaturen
-Die Kanarischer Lorbeer bevorzugt gemäßigte Temperaturen. Sie gedeiht am besten bei Temperaturen zwischen 10°C und 25°C. Frost sollte vermieden werden, da dies die Pflanze schädigen kann.
+Die Azoren-Lorbeer bevorzugt gemäßigte Temperaturen. Sie gedeiht am besten bei Temperaturen zwischen 10°C und 25°C. Frost sollte vermieden werden, da dies die Pflanze schädigen kann.
 
 ### Feuchtigkeit
 Laurus azorica benötigt eine hohe Luftfeuchtigkeit, um gut zu wachsen. Regelmäßiges Besprühen der Blätter mit Wasser oder das Platzieren der Pflanze in der Nähe eines Luftbefeuchters kann helfen, die gewünschte Feuchtigkeit aufrechtzuerhalten. Die Erde sollte gleichmäßig feucht gehalten werden, jedoch keine Staunässe aufweisen.

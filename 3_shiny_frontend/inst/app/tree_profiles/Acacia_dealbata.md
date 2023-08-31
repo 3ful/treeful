@@ -1,7 +1,7 @@
 # Acacia dealbata (Silber-Akazie)
 
 ## Allgemeine Informationen und Vorkommen
-Die Acacia dealbata, auch bekannt als Silber-Akazie, ist ein immergrüner Baum aus der Familie der Hülsenfrüchtler (Fabaceae). Ursprünglich stammt sie aus Australien, wurde jedoch in vielen Teilen der Welt eingeführt und ist mittlerweile in Europa heimisch. Sie wächst in verschiedenen Habitaten wie Wäldern, Gebirgen und Küstengebieten.
+Die Acacia dealbata, auch bekannt als Silber-Akazie, ist ein immergrüner Baum aus der Familie der Hülsenfrüchtler (Fabaceae). Ursprünglich stammt sie aus Australien, wurde jedoch in vielen Teilen der Welt eingeführt.
 
 ## Allergien
 Die Silber-Akazie kann bei manchen Menschen allergische Reaktionen hervorrufen. Die Pollen des Baumes können zu allergischen Symptomen wie Niesen, laufender Nase und tränenden Augen führen. Personen mit empfindlichen Atemwegen sollten daher Vorsicht walten lassen.

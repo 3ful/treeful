@@ -1,7 +1,7 @@
-# Rhamnus lycioides (Zwerg-Kreuzdorn)
+# Rhamnus lycioides (Bocksdornartige-Kreuzdorn)
 
 ## 1. Allgemeine Informationen und Vorkommen
-Rhamnus lycioides, auch bekannt als Zwerg-Kreuzdorn, ist eine Pflanzenart aus der Familie der Kreuzdorngewächse (Rhamnaceae). Diese Pflanze kommt hauptsächlich in Europa vor und ist in verschiedenen Regionen anzutreffen. Sie wächst bevorzugt in trockenen und sonnigen Gebieten.
+Rhamnus lycioides, auch bekannt als Bocksdornartige-Kreuzdorn, ist eine Pflanzenart aus der Familie der Kreuzdorngewächse (Rhamnaceae). Diese Pflanze kommt hauptsächlich in Europa vor und ist in verschiedenen Regionen anzutreffen. Sie wächst bevorzugt in trockenen und sonnigen Gebieten.
 
 ## 2. Allergien
 Es sind keine spezifischen Allergien gegenüber Rhamnus lycioides bekannt. Dennoch können manche Menschen auf bestimmte Pflanzen allergisch reagieren. Bei Unsicherheit sollte ein Allergietest durchgeführt werden.
@@ -16,18 +16,18 @@ Rhamnus lycioides ist in Europa heimisch. Sie kommt in verschiedenen Ländern vo
 Rhamnus lycioides stellt bestimmte Anforderungen an die Wachstumsbedingungen. Hier sind die wichtigsten Faktoren:
 
 ### 5.1 Bodenbedingungen
-Der Zwerg-Kreuzdorn bevorzugt gut durchlässige Böden. Sandige oder lehmige Böden sind geeignet. Staunässe sollte vermieden werden, da dies zu Wurzelfäule führen kann.
+Der Bocksdornartige-Kreuzdorn bevorzugt gut durchlässige Böden. Sandige oder lehmige Böden sind geeignet. Staunässe sollte vermieden werden, da dies zu Wurzelfäule führen kann.
 
 ### 5.2 Nährstoffe
 Rhamnus lycioides benötigt eine ausgewogene Versorgung mit Nährstoffen. Ein mäßiger Gehalt an organischen Stoffen und eine regelmäßige Düngung können das Wachstum fördern.
 
 ### 5.3 Sonnenlicht
-Der Zwerg-Kreuzdorn benötigt viel Sonnenlicht, um optimal zu wachsen. Ein sonniger Standort mit direkter Sonneneinstrahlung ist ideal.
+Der Bocksdornartige-Kreuzdorn benötigt viel Sonnenlicht, um optimal zu wachsen. Ein sonniger Standort mit direkter Sonneneinstrahlung ist ideal.
 
 ### 5.4 Temperaturen
 Rhamnus lycioides ist an gemäßigte Klimazonen angepasst. Die Pflanze verträgt milde Winter und warme Sommer. Extreme Temperaturen sollten vermieden werden.
 
 ### 5.5 Feuchtigkeit
-Der Zwerg-Kreuzdorn ist relativ trockenheitstolerant. Er benötigt keine hohe Luftfeuchtigkeit und verträgt auch längere Trockenperioden. Dennoch sollte die Pflanze regelmäßig bewässert werden, um ein gesundes Wachstum zu gewährleisten.
+Der Bocksdornartige-Kreuzdorn ist relativ trockenheitstolerant. Er benötigt keine hohe Luftfeuchtigkeit und verträgt auch längere Trockenperioden. Dennoch sollte die Pflanze regelmäßig bewässert werden, um ein gesundes Wachstum zu gewährleisten.
 
 Bitte beachten Sie, dass Rhamnus lycioides eine giftige Pflanze ist und Vorsicht geboten ist, insbesondere wenn Kinder oder Haustiere in der Nähe sind.

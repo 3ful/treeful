@@ -1,8 +1,8 @@
-# Pinus radiata (Küsten-Kiefer)
+# Pinus radiata (Monterey-Kiefer)
 
 ## 1. Allgemeine Informationen und Vorkommen
 
-Die Pinus radiata, auch bekannt als Küsten-Kiefer, ist eine Baumart aus der Familie der Kieferngewächse (Pinaceae). Ursprünglich stammt sie aus Kalifornien und Mexiko, wird jedoch heute weltweit in vielen gemäßigten Regionen angebaut. Sie ist vor allem in Plantagen anzutreffen, da sie aufgrund ihres schnellen Wachstums und ihrer Holzeigenschaften eine wichtige wirtschaftliche Bedeutung hat.
+Die Pinus radiata, auch bekannt als Monterey-Kiefer, ist eine Baumart aus der Familie der Kieferngewächse (Pinaceae). Ursprünglich stammt sie aus Kalifornien und Mexiko, wird jedoch heute weltweit in vielen gemäßigten Regionen angebaut. Sie ist vor allem in Plantagen anzutreffen, da sie aufgrund ihres schnellen Wachstums und ihrer Holzeigenschaften eine wichtige wirtschaftliche Bedeutung hat.
 
 ## 2. Allergien
 
@@ -14,7 +14,7 @@ Die Pinus radiata ist für Menschen nicht giftig. Weder der Kontakt mit der Rind
 
 ## 4. Ursprung in Europa
 
-Die Pinus radiata ist keine einheimische Baumart in Europa. Sie wurde im 19. Jahrhundert von europäischen Siedlern nach Europa eingeführt und wird seitdem vor allem in Portugal, Spanien und Frankreich angebaut. Dort findet man sie vor allem in Küstengebieten mit einem milden Klima.
+Die Pinus radiata ist keine einheimische Baumart in Europa. Sie wurde im 19. Jahrhundert von europäischen Siedlern nach Europa eingeführt und wird seitdem vor allem in Portugal, Spanien und Frankreich angebaut. Dort findet man sie vor allem in Montereygebieten mit einem milden Klima.
 
 ## 5. Wachstumsbedingungen
 
@@ -24,7 +24,7 @@ Die Pinus radiata bevorzugt gut durchlässige Böden, die sandig oder lehmig-san
 
 ### 5.2 Nährstoffe
 
-Die Küsten-Kiefer benötigt ausreichend Nährstoffe, insbesondere Stickstoff, Phosphor und Kalium. Eine regelmäßige Düngung mit einem geeigneten Nährstoffgemisch ist empfehlenswert, um ein gesundes Wachstum zu gewährleisten.
+Die Monterey-Kiefer benötigt ausreichend Nährstoffe, insbesondere Stickstoff, Phosphor und Kalium. Eine regelmäßige Düngung mit einem geeigneten Nährstoffgemisch ist empfehlenswert, um ein gesundes Wachstum zu gewährleisten.
 
 ### 5.3 Sonnenlicht
 
@@ -32,7 +32,7 @@ Die Pinus radiata ist eine lichtliebende Baumart und benötigt daher einen sonni
 
 ### 5.4 Temperaturen
 
-Die Küsten-Kiefer bevorzugt gemäßigte bis warme Temperaturen. Sie ist winterhart und verträgt leichte Fröste, jedoch sollten extreme Kälteperioden vermieden werden.
+Die Monterey-Kiefer bevorzugt gemäßigte bis warme Temperaturen. Sie ist winterhart und verträgt leichte Fröste, jedoch sollten extreme Kälteperioden vermieden werden.
 
 ### 5.5 Feuchtigkeit
 

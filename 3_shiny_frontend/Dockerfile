@@ -33,13 +33,17 @@ RUN Rscript -e 'remotes::install_version("DT",upgrade="never", version = "0.28")
 RUN Rscript -e 'remotes::install_version("xfun",upgrade="never", version = "0.40")'
 RUN Rscript -e 'remotes::install_version("bslib",upgrade="never", version = "0.5.0")'
 ARG CACHE_DATE=2023-08-22
-#RUN mkdir /home/rstudio/treeful/
+RUN mkdir /srv/shiny-server/treeful
 COPY ./ /srv/shiny-server/
 COPY treeful_*.tar.gz /app.tar.gz
 #RUN R -e 'remotes::install_local("/app.tar.gz",upgrade="never")'
 #RUN rm /app.tar.gz
+RUN --mount=type=secret,id=postgres_pw \
+  --mount=type=secret,id=postgres_host \
+  POSTGRES_PW=$( cat /run/secrets/postgres_pw ) \
+  POSTGRES_HOST=$( cat /run/secrets/postgres_host ) \
+  R -e 'remotes::install_local("/app.tar.gz",upgrade="never")'
 WORKDIR /home/rstudio/treeful/
 EXPOSE 3838
-#install needs to happen on run, otherwise install fails since docker secrets are not mounted
-#CMD  ["R", "-e", "options('shiny.port'=3838,shiny.host='0.0.0.0');remotes::install_local('/app.tar.gz',upgrade='never');library(treeful);treeful::run_app()"]
-CMD ["R", "-e", "remotes::install_local('/app.tar.gz',upgrade='never')", "/usr/bin/shiny-server"]
+CMD ["/usr/bin/shiny-server"]
+

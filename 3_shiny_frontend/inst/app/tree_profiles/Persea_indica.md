@@ -1,7 +1,7 @@
-# Persea indica (Laurel Tree)
+# Persea indica (Indische Persea)
 
 ## Allgemeine Informationen und Vorkommen
-Persea indica, auch als Lorbeerbaum bekannt, ist eine immergrüne Pflanze, die in Europa heimisch ist. Sie gehört zur Familie der Lorbeergewächse und ist vor allem in den mediterranen Regionen weit verbreitet. Der Lorbeerbaum zeichnet sich durch sein dichtes Laub und seine attraktive Form aus, was ihn zu einer beliebten Zierpflanze macht.
+Persea indica, auch als Indische Persea bekannt, ist eine immergrüne Pflanze, die in Europa heimisch ist. Sie gehört zur Familie der Lorbeergewächse und ist vor allem in den mediterranen Regionen weit verbreitet. Der Lorbeerbaum zeichnet sich durch sein dichtes Laub und seine attraktive Form aus, was ihn zu einer beliebten Zierpflanze macht.
 
 ## Allergien
 Es gibt keine bekannten allergischen Reaktionen auf Persea indica. Menschen mit empfindlicher Haut sollten jedoch vorsichtig sein, da der Kontakt mit den Blättern bei manchen Personen zu Hautreizungen führen kann.
@@ -10,7 +10,7 @@ Es gibt keine bekannten allergischen Reaktionen auf Persea indica. Menschen mit 
 Persea indica ist nicht giftig für Menschen oder Haustiere. Die Früchte des Lorbeerbaums sind jedoch nicht zum Verzehr geeignet und können bei übermäßigem Verzehr zu Magenbeschwerden führen.
 
 ## Heimisch in Europa
-Persea indica ist in Europa beheimatet und wird aufgrund seiner attraktiven Erscheinung oft in Gärten und Parks angepflanzt. In einigen Regionen, wie dem Mittelmeerraum, ist der Lorbeerbaum auch in der freien Natur anzutreffen.
+Die Indische Persea kommt auf den Kanaren-Inseln La Palma, La Gomera, El Hierro, Teneriffa und Gran Canaria sowie auf Madeira endemisch vor und ist ebenfalls auf den Azoren verbreitet. Sie wächst in den Lorbeerwäldern, wo sie auch in größeren Beständen anzutreffen ist.
 
 ## Wachstumsbedingungen
 ### Bodenbedingungen

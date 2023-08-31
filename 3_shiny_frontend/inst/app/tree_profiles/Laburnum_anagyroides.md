@@ -1,4 +1,4 @@
-# Laburnum anagyroides (Goldregen)
+# Laburnum anagyroides (Gemeiner Goldregen)
 
 ## 1. Allgemeine Informationen und Vorkommen
 Der Goldregen (Laburnum anagyroides) ist ein laubabwerfender Baum, der in Europa beheimatet ist. Er gehört zur Familie der Hülsenfrüchtler (Fabaceae) und wird aufgrund seiner auffälligen gelben Blüten oft als Zierpflanze in Gärten und Parks angepflanzt. Der Goldregen ist vor allem in den gemäßigten Klimazonen Europas verbreitet und kommt in verschiedenen Ländern wie Deutschland, Frankreich, Großbritannien und Italien vor.

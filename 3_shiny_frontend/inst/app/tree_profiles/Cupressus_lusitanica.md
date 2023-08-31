@@ -1,7 +1,7 @@
-# Cupressus lusitanica (Zypresse, Portugiesische Zypresse)
+# Cupressus lusitanica (Mexikanische Zypresse)
 
 ## 1. Allgemeine Informationen und Vorkommen
-Die Cupressus lusitanica, auch bekannt als Zypresse oder Portugiesische Zypresse, ist ein immergrüner Baum aus der Familie der Zypressengewächse (Cupressaceae). Ursprünglich stammt sie aus Mittelamerika und kommt dort in den höheren Lagen der Gebirge vor. Heutzutage ist sie jedoch auch in anderen Teilen der Welt, einschließlich Europa, zu finden. 
+Die Cupressus lusitanica, auch bekannt als Mexikanische Zypresse, ist ein immergrüner Baum aus der Familie der Zypressengewächse (Cupressaceae). Ursprünglich stammt sie aus Mittelamerika und kommt dort in den höheren Lagen der Gebirge vor. Heutzutage ist sie jedoch auch in anderen Teilen der Welt, einschließlich Europa, zu finden. 
 
 ## 2. Allergien
 Die Cupressus lusitanica ist bekannt dafür, Allergien auszulösen. Der Pollen der Zypresse kann bei empfindlichen Personen allergische Reaktionen wie Heuschnupfen, tränende Augen und Atembeschwerden verursachen.

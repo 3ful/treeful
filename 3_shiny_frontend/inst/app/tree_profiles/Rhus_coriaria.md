@@ -1,12 +1,10 @@
-# Rhus coriaria (Sumach)
-
-![Image](https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Rhus_coriaria.jpg/320px-Rhus_coriaria.jpg)
+# Rhus coriaria (Gerber-Sumach)
 
 ## 1. Allgemeine Informationen und Vorkommen
-Rhus coriaria, auch bekannt als Sumach, ist eine Pflanzenart aus der Familie der Sumachgewächse (Anacardiaceae). Sie ist in Europa heimisch und kommt hauptsächlich auf trockenen Böden und in sonnigen Gebieten vor. Diese Pflanze kann eine Höhe von bis zu 3 Metern erreichen und hat gefiederte Blätter.
+Rhus coriaria, auch bekannt als Gerber-Sumach, ist eine Pflanzenart aus der Familie der Sumachgewächse (Anacardiaceae). Sie ist in Europa heimisch und kommt hauptsächlich auf trockenen Böden und in sonnigen Gebieten vor. Diese Pflanze kann eine Höhe von bis zu 3 Metern erreichen und hat gefiederte Blätter.
 
 ## 2. Allergien
-Sumach kann bei manchen Menschen allergische Reaktionen hervorrufen. Der Kontakt mit den Blättern oder dem Saft der Pflanze kann Hautausschläge, Juckreiz und Rötungen verursachen. Es wird empfohlen, Vorsichtsmaßnahmen zu treffen und den direkten Kontakt mit der Pflanze zu vermeiden, wenn man allergisch darauf reagiert.
+Gerber-Sumach kann bei manchen Menschen allergische Reaktionen hervorrufen. Der Kontakt mit den Blättern oder dem Saft der Pflanze kann Hautausschläge, Juckreiz und Rötungen verursachen. Es wird empfohlen, Vorsichtsmaßnahmen zu treffen und den direkten Kontakt mit der Pflanze zu vermeiden, wenn man allergisch darauf reagiert.
 
 ## 3. Giftig
 Rhus coriaria ist nicht giftig für den Menschen. Allerdings kann der Verzehr der Früchte zu Magen-Darm-Beschwerden führen. Es wird empfohlen, die Früchte vor dem Verzehr zu kochen oder zu rösten, um eventuelle unerwünschte Wirkungen zu vermeiden.

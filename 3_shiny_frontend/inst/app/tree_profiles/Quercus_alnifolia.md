@@ -1,7 +1,7 @@
 # Quercus alnifolia (Erlenblättrige Eiche)
 
 ## Allgemeine Informationen und Vorkommen
-Die Quercus alnifolia, auch als Erlenblättrige Eiche bekannt, ist eine Laubbaumart aus der Familie der Buchengewächse (Fagaceae). Sie ist in Europa heimisch und kommt vor allem in gemäßigten Klimazonen vor. Diese Eichenart zeichnet sich durch ihre charakteristischen erlenähnlichen Blätter aus, die ihr den Namen "alnifolia" verleihen. Sie kann eine Höhe von bis zu 25 Metern erreichen und bildet eine ausladende Krone.
+Die Quercus alnifolia, auch als Erlenblättrige Eiche bekannt, ist eine Laubbaumart aus der Familie der Buchengewächse (Fagaceae). Diese Eichenart zeichnet sich durch ihre charakteristischen erlenähnlichen Blätter aus, die ihr den Namen "alnifolia" verleihen. Sie kann eine Höhe von bis zu 25 Metern erreichen und bildet eine ausladende Krone.
 
 ## Allergien
 Die Quercus alnifolia kann bei manchen Menschen allergische Reaktionen hervorrufen. Insbesondere Pollenallergiker sollten daher Vorsicht walten lassen, wenn sie sich in der Nähe dieser Eichenart aufhalten.
@@ -10,7 +10,7 @@ Die Quercus alnifolia kann bei manchen Menschen allergische Reaktionen hervorruf
 Es gibt keine Hinweise darauf, dass die Quercus alnifolia giftig ist. Weder ihre Blätter noch ihre Früchte sind für den Menschen oder Tiere schädlich.
 
 ## Heimisch in Europa
-Die Quercus alnifolia ist eine in Europa heimische Baumart. Sie kommt in verschiedenen Ländern vor, darunter Deutschland, Frankreich, Italien und Spanien. In diesen Regionen ist sie ein natürlicher Bestandteil der heimischen Wälder und wird auch in Parks und Gärten als Zierbaum angepflanzt.
+Die Quercus alnifolia ist auf der Mittelmeerinsel Zypern heimisch. Die Art gehört zur endemischen Flora der Insel und kommt ausschließlich auf eruptiven Gesteinen des Troodos-Gebirges vor. 
 
 ## Wachstumsbedingungen
 Die Quercus alnifolia stellt bestimmte Anforderungen an ihre Wachstumsbedingungen. Folgende Faktoren spielen eine wichtige Rolle:
