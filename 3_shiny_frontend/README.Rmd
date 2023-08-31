@@ -23,34 +23,15 @@ The goal of treeful is to ...
 
 ## Installation
 
-You can install the development version of treeful from [GitHub](https://github.com/) with:
+This shiny app is developed as R package. Installing by itself will not be of much use, the entire ETL pipeline needs to be run first for all tree occurrence data points. See [our docs](https://docs.treeful.de) for more info. 
 
-``` r
-# install.packages("devtools")
-devtools::install_github("3ful/treeful")
-```
 
-## Example
+![](../2_docs/screenshot1.png)
 
-This is a basic example which shows you how to solve a common problem:
+![](../2_docs/screenshot2.png) 
 
-```{r example}
-library(treeful)
-## basic example code
-```
+![](../2_docs/screenshot3.png)
 
-What is special about using `README.Rmd` instead of just `README.md`? You can include R chunks like so:
+![](../2_docs/harz_blog.png)
 
-```{r cars}
-summary(cars)
-```
 
-You'll still need to render `README.Rmd` regularly, to keep `README.md` up-to-date. `devtools::build_readme()` is handy for this.
-
-You can also embed plots, for example:
-
-```{r pressure, echo = FALSE}
-plot(pressure)
-```
-
-In that case, don't forget to commit and push the resulting figure files, so they display on GitHub and CRAN.

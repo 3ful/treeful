@@ -30,7 +30,7 @@
 #library(ggtext)
 
 shinyOptions(cache = cachem::cache_mem(max_size = 500e6))
-Sys.setenv("POSTGRES_PW" = read_lines("/run/secrets/postgres_pw"))
+#Sys.setenv("POSTGRES_PW" = read_lines("/run/secrets/postgres_pw"))
 #Sys.setenv("POSTGRES_HOST" = read_lines("/run/secrets/postgres_host"))
 Sys.setenv("POSTGRES_DB" = "treeful-test")
 

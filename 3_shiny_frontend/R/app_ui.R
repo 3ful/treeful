@@ -130,9 +130,6 @@ golem_add_external_resources <- function() {
   add_resource_path(
     'assets', app_sys('app/assets')
   )
-  add_resource_path(
-    'profiles', app_sys("app/tree_profiles")
-  )
 
 
   tags$head(
