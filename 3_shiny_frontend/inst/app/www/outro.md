@@ -1,6 +1,6 @@
 ## Disclaimer
 
-Wir verwenden angesehene und praxis-erprobte Datenquellen und Paradigmen der Datenwissenschaften. Unser Quellcode ist öffentlich einsehbar. Jedoch können wir keine Garantie abgeben, dass Daten vollständig zu allen relevanten Bäumen verfügbar sind. 
+Wir verwenden angesehene und praxis-erprobte Datenquellen und Paradigmen der Datenwissenschaften. [Unser Quellcode ist öffentlich](https://github.com/3ful/treeful) einsehbar. Jedoch können wir keine Garantie abgeben, dass Daten vollständig zu allen relevanten Bäumen verfügbar sind. Unser Ranking bildet Perzentile [aus diesem Datensatz](https://doi.org/10.6084/m9.figshare.c.3288407.v1) und dient als Orientierung.
 
 ## Datenquellen
 

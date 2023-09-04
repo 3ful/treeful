@@ -1,6 +1,6 @@
 Package: treeful
 Title: Treeful
-Version: 0.0.3.0
+Version: 0.0.4.0
 Authors@R: person('Christoph', 'Trost', email = 'post@datenlabor.eu', role = c('cre', 'aut'))
 Description: PKG_DESC.
 License: MIT + file LICENSE
