@@ -19,7 +19,7 @@ onStop(function() {
   pool::poolClose(backend_con)
 })
 
-species <- DBI::dbGetQuery(backend_con, paste0("SELECT * FROM tree_master_list")) %>%
+species <- DBI::dbGetQuery(backend_con, paste0("SELECT latin_name, gbif_taxo_id, n, descr_de, url, image_url, water_body FROM tree_master_list")) %>%
   dplyr::arrange(latin_name)
 
 # function to extract all biovars from raster files on disk for user location, projection scenario and future date
@@ -111,7 +111,8 @@ make_explorer_cards <- function(tree_image = image_url, tree_descr = species, gb
 
 
 
-make_cards <- function(tree_index = rowid, tree_image = image_url, tree_descr = species, gbif = gbif_taxo_id, wikipedia = url, score = summed_score) {
+make_cards <- function(tree_index = rowid, tree_image = image_url, tree_descr = species, gbif = gbif_taxo_id, wikipedia = url,
+                       score = summed_score, water = water_body) {
   tree_descr <- str_replace_all(tree_descr, "\\s", "_")
 
   card(
@@ -119,7 +120,7 @@ make_cards <- function(tree_index = rowid, tree_image = image_url, tree_descr = 
     full_screen = T,
     card_header(
       tags$b(paste0("Rang ", tree_index)), tags$em(paste0(": ", score, "/1386  |  ")),
-      if (!is.na(water_body)) {tags$em("💧 Bevorzugt Standort am Wasser")}
+      if (!is.na(water)) {tags$em("💧 Bevorzugt Standort am Wasser")}
 
 
 

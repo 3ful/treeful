@@ -30,7 +30,7 @@
 # library(ggtext)
 
 shinyOptions(cache = cachem::cache_mem(max_size = 500e6))
-#Sys.setenv("POSTGRES_PW" = read_lines("/run/secrets/postgres_pw"))
+Sys.setenv("POSTGRES_PW" = read_lines("/run/secrets/postgres_pw"))
 Sys.setenv("POSTGRES_HOST" = read_lines("/run/secrets/postgres_host"))
 Sys.setenv("POSTGRES_DB" = "treeful-test")
 
@@ -58,6 +58,13 @@ app_server <- function(input, output, session) {
   })
 
   observeEvent(input$nextpage, {
+    validate(
+      need(input$map_click, "Bitte Standort auf der Karte wählen!")
+    )
+    updateTabsetPanel(session = session, inputId = "mainNavbar", selected = "visualizeTab")
+  })
+
+  observeEvent(input$lastpage, {
     validate(
       need(input$map_click, "Bitte Standort auf der Karte wählen!")
     )
@@ -132,7 +139,7 @@ app_server <- function(input, output, session) {
 
     make_explorer_cards(
       tree_descr = select_steckbrief$tree_descr, tree_image = select_steckbrief$tree_image,
-      gbif = select_steckbrief$gbif_taxo_id, wikipedia = select_steckbrief$wikipedia
+      gbif = select_steckbrief$gbif, wikipedia = select_steckbrief$wikipedia
     )
   })
 
@@ -143,7 +150,7 @@ app_server <- function(input, output, session) {
     purrr::pmap(
       .l = dplyr::select(ranking(),
         tree_index = rowid, tree_image = image_url, tree_descr = species,
-        gbif = gbif_taxo_id, wikipedia = url, score = summed_score
+        gbif = gbif_taxo_id, wikipedia = url, score = summed_score, water = water_body
       ),
       .f = make_cards
     )
@@ -200,6 +207,8 @@ app_server <- function(input, output, session) {
         strip.text = element_text(color = "white"),
         axis.title.y = element_text(size = 18),
         axis.title.x = element_text(size = 18),
+        axis.text.x = element_text(size = 14, face = "bold", color = "white"),
+        axis.text.y = element_text(size = 14, face = "bold", color = "white"),
         legend.position = "bottom"
       )
   })
@@ -266,6 +275,8 @@ app_server <- function(input, output, session) {
         strip.text = element_text(color = "white"),
         axis.title.y = element_text(size = 18),
         axis.title.x = element_text(size = 18),
+        axis.text.x = element_text(size = 14, face = "bold", color = "white"),
+        axis.text.y = element_text(size = 14, face = "bold", color = "white"),
         legend.position = "bottom"
       )
   })

@@ -46,7 +46,11 @@ app_ui <- function(request) {
             width = 6,
             leafletOutput("map", height = "600px"),
             shiny::br(),
-            actionButton(inputId = "nextpage", label = "Baumranking erkunden")
+            fluidRow(
+            column(width = 6, actionButton(inputId = "nextpage", label = "Bäume selbst entdecken")
+            ),
+            column(width = 6, actionButton(inputId = "lastpage", label = "Direkt zum Ranking"))
+            )
           )
           # column(width = 4,
           #

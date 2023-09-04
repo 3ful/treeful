@@ -1,6 +1,6 @@
 
-Für jede Baumart kannst du hier die Wohlfühlzone des Baums erkunden. Die Wolke in den Grafiken zeigt wo der Baum vorkommt, je nachdem welche Klima-Variablen ausgewählt sind. 
+Für jede Baumart kannst du hier die Wohlfühlzone des Baums erkunden. Die Wolke in den Grafiken zeigt wo der Baum vorkommt, je nachdem welche Klima-Variablen ausgewählt sind. Der eigene Ort sollte in Zukunft immer innerhalb der Wolke liegen.
 
 Sinnvolle Kombinationen der Variablen:
-* BIO01 (Jahresdurchschnittstemperatur) und BIO12 (Jahresniederschlag)
-* BIO05 (Temperatur im wärmsten Monat) und BIO14 (Niederschlag im tockensten Monat)
+* Jahresdurchschnittstemperatur und Jahresniederschlag (in mm)
+* Temperatur im wärmsten Monat und Niederschlag im tockensten Monat (in mm)

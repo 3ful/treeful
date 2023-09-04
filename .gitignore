@@ -7,6 +7,7 @@ blastula.json
 1_ETL/0_secrets/
 .Rapp.history
 1_ETL/2_Data/1_output/*
+3_shiny_frontend/data/
 1_ETL/2_Data/0_raw_data/tree_cadastres/*json
 1_ETL/2_Data/0_raw_data/past
 1_ETL/2_Data/0_raw_data/future
